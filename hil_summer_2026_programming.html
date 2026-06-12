@@ -281,6 +281,40 @@
     color: var(--ink);
   }
 
+  .leads-section {
+  border-top: 1px solid var(--rule);
+  padding-bottom: 16px;
+}
+
+.leads-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 12px 24px 0;
+}
+
+.lead-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lead-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  background: var(--cream); /* fallback while image loads */
+}
+
+.lead-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
   /* ── ENTRY SECTION ── */
   .entry-section {
     padding: 16px 24px 20px;
@@ -494,7 +528,7 @@
             <li><strong>Primer</strong> — async, self-paced email journey for solo exploration</li>
             <li><strong>Sprint</strong> — sequenced cohort: kickoff → field work → check-in → showcase</li>
             <li><strong>Hackathon</strong> — two-part: build prototype → return with customer feedback</li>
-            <li><strong>Office hours</strong> — drop-in peer + advisor facilitation</li>
+            <li><strong> Themed Office hours</strong> — drop-in peer + advisor facilitation</li>
           </ul>
         </div>
         <div class="grid-col">
@@ -519,7 +553,7 @@
       <div class="entry-section">
         <div class="entry-left">
           <p class="entry-label">Entry model — supported activation</p>
-          <p class="entry-desc">Open access, but founders may need guidance to find the right starting point (Primer vs. Sprint). .</p>
+          <p class="entry-desc">Open access, but founders may need guidance to find the right starting point (Primer vs. Sprint).</p>
         </div>
         <div class="entry-flow">
           <p class="entry-label">User Journey</p>
@@ -534,6 +568,23 @@
           <span class="flow-step">Keep warm if disengaged</span>
         </div>
       </div>
+      <div class="leads-section">
+  <p class="col-heading" style="padding: 16px 24px 0;">👤 Programmatic Lead(s)</p>
+  <div class="leads-row">
+    <div class="lead-item">
+      <img src="images/becca-xiong.jpg" alt="Becca Xiong" class="lead-avatar">
+      <span class="lead-name">Becca Xiong</span>
+    </div>
+    <div class="lead-item">
+      <img src="images/peter-gladstone.jpg" alt="Peter Gladstone" class="lead-avatar">
+      <span class="lead-name">Peter Gladstone</span>
+    </div>
+    <div class="lead-item">
+      <img src="images/phil-green.jpg" alt="Phil Green" class="lead-avatar">
+      <span class="lead-name">Phil Green</span>
+    </div>
+  </div>
+</div>
     </div>
   </div>
 
@@ -587,7 +638,7 @@
       <div class="entry-section">
         <div class="entry-left">
           <p class="entry-label">Entry model — supported activation + selection</p>
-          <p class="entry-desc">Requires application, review, and personal interview. The team actively manages every step.</p>
+          <p class="entry-desc">Requires application, review, and personal interview. The team actively manages every step. </p>
         </div>
         <div class="entry-flow">
           <p class="entry-label">User Journey</p>
@@ -657,7 +708,7 @@
       <div class="entry-section">
         <div class="entry-left">
           <p class="entry-label">Entry model — supported activation + selection</p>
-          <p class="entry-desc">Cohort selected before summer begins. Orientation launches the experience. Weekly rhythm creates accountability + predictability. Culminates in a pitch that determines LLX advancement.</p>
+          <p class="entry-desc">Cohort selected before summer begins. Orientation launches the experience. Weekly rhythm creates accountability + predictability.</p>
         </div>
         <div class="entry-flow">
           <p class="entry-label">User Journey</p>
@@ -724,12 +775,11 @@
       <div class="entry-section">
         <div class="entry-left">
           <p class="entry-label">Entry model — independent activation</p>
-          <p class="entry-desc">Register and show up. No follow-up cadence required from the team. Each event is self-contained — there's no arc to track. The team's job is logistics and marketing, not member management.</p>
+          <p class="entry-desc">Register and show up. No follow-up cadence required from the team. Each event is self-contained. The team's job is logistics and marketing, not member management.</p>
         </div>
         <div class="entry-flow">
           <p class="entry-label">User Journey</p>
-          <p class="entry-label">Entry model — independent activation</p>
-          <span class="flow-step">See event (website / email)</span>
+          <span class="flow-step">Discover event</span>
           <span class="flow-arrow">→</span>
           <span class="flow-step">Register</span>
           <span class="flow-arrow">→</span>
