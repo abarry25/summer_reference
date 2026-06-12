@@ -225,6 +225,162 @@
 
   .card-header.open .chevron { transform: rotate(180deg); }
 
+  /* ── HOW TO USE BUTTON ── */
+.how-to-use-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 100;
+  background: var(--ink);
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transition: background .15s;
+}
+.how-to-use-btn:hover { background: #333; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--cream);
+  border-radius: 14px;
+  width: min(680px, 90vw);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+  padding: 24px 28px 16px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.modal-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.modal-close {
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--ink-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .12s;
+}
+.modal-close:hover { background: white; }
+
+.modal-body {
+  padding: 20px 28px 28px;
+  overflow-y: auto;
+  font-size: 13px;
+  color: var(--ink-mid);
+  line-height: 1.65;
+}
+
+.modal-body h3 {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 20px 0 8px;
+}
+.modal-body h3:first-child { margin-top: 0; }
+
+.modal-body p { margin-bottom: 10px; }
+
+.modal-body ul {
+  padding-left: 16px;
+  margin-bottom: 10px;
+}
+.modal-body ul li { margin-bottom: 4px; }
+
+.modal-body strong { color: var(--ink); font-weight: 600; }
+
+/* ── LOGIC BAR TOOLTIPS ── */
+.logic-item { position: relative; }
+
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: default;
+  margin-left: 4px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  background: var(--ink);
+  color: white;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 10px 14px;
+  border-radius: 8px;
+  width: 220px;
+  z-index: 50;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 16px;
+  border: 6px solid transparent;
+  border-top-color: var(--ink);
+}
+
+.logic-item:hover .tooltip { display: block; }
+
   /* ── CARD BODY ── */
   .card-body {
     display: none;
@@ -517,23 +673,31 @@
 <div class="logic-bar">
   <div class="logic-item">
     <span class="logic-num">How people find and get in</span>
-    <span class="logic-name">Entry</span>
-    <span class="logic-desc">i.e the newsletter → eventbrite</span>
+    <span class="logic-name">Entry <span class="info-icon">i</span>
+      <span class="tooltip">How founders discover and access a program — from seeing a newsletter to completing an Eventbrite registration.</span>
+    </span>
+    <span class="logic-desc">i.e. the newsletter → Eventbrite</span>
   </div>
   <div class="logic-item">
     <span class="logic-num">Where the experience lives</span>
-    <span class="logic-name">Container</span>
-    <span class="logic-desc">i.e founder fundamentals </span>
+    <span class="logic-name">Container <span class="info-icon">i</span>
+      <span class="tooltip">The program bucket that holds a set of related experiences — e.g. Founder Fundamentals groups all early-stage learning together.</span>
+    </span>
+    <span class="logic-desc">i.e. Founder Fundamentals</span>
   </div>
   <div class="logic-item">
     <span class="logic-num">What founders learn</span>
-    <span class="logic-name">Content</span>
-    <span class="logic-desc">i.e customer discovery</span>
+    <span class="logic-name">Content <span class="info-icon">i</span>
+      <span class="tooltip">The topics, skills, and knowledge areas covered within a container — e.g. customer discovery, fundraising, AI tools.</span>
+    </span>
+    <span class="logic-desc">i.e. customer discovery</span>
   </div>
   <div class="logic-item">
     <span class="logic-num">How learning is facilitated</span>
-    <span class="logic-name">Delivery</span>
-    <span class="logic-desc">i.e async email learning series</span>
+    <span class="logic-name">Delivery <span class="info-icon">i</span>
+      <span class="tooltip">The format used to deliver support — e.g. async email series, cohort sprint, drop-in office hours, live workshop.</span>
+    </span>
+    <span class="logic-desc">i.e. async email learning series</span>
   </div>
 </div>
 
@@ -1159,6 +1323,50 @@ function toggle(header, id) {
   }
 }
 </script>
+<!-- Sticky button -->
+<button class="how-to-use-btn" onclick="document.getElementById('howToUseModal').classList.add('open')">
+  🧭 How to use this page
+</button>
 
+<!-- Modal -->
+<div class="modal-overlay" id="howToUseModal" onclick="if(event.target===this) this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">How to Use This Tool</span>
+      <button class="modal-close" onclick="document.getElementById('howToUseModal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p>This reference is designed to help staff understand how the Harvard Innovation Labs ecosystem fits together and how founders move through it. It is not a calendar, event listing, or operational checklist — it's a shared framework for understanding our programs, audiences, and pathways.</p>
+
+      <h3>What You'll Find Here</h3>
+      <p>Each programming container includes: <strong>Purpose</strong>, <strong>Entry Model</strong>, <strong>Delivery Mechanisms</strong>, <strong>Content Areas</strong>, <strong>Target Audience</strong>, <strong>Founder Journey</strong>, and <strong>Program Ownership</strong>.</p>
+
+      <h3>Marketing & Communications</h3>
+      <p>Use this to understand and communicate the overall i-lab story. Key questions: What is each program's purpose? How do programs connect? Who is the intended audience? What outcomes should messaging emphasize?</p>
+
+      <h3>Programs Team</h3>
+      <p>Use this to guide founders toward the right resources. Key questions: Where should I direct a founder based on their stage? What support exists for a specific need? Which containers are open-access vs. application-based?</p>
+
+      <h3>Operations Team</h3>
+      <p>Use this to understand ownership, dependencies, and delivery structures. Key questions: Which staff are involved? How is each program delivered? What operational support may be required?</p>
+
+      <h3>New Staff</h3>
+      <p>Start by reviewing the ecosystem overview, then explore each container, follow the founder journey sections, and review ownership to understand team roles.</p>
+
+      <h3>How to Navigate</h3>
+      <p><strong>By Founder Need —</strong> Start with a founder's challenge, identify the right container, review delivery mechanisms.<br>
+      <strong>By Program Container —</strong> Start with a program area, review its audience and delivery model, explore connections to other containers.</p>
+
+      <h3>Important Note</h3>
+      <p>This reference describes system and structure — not day-to-day schedules. Specific dates and deadlines should be confirmed through current planning resources. Think of this as a map of the ecosystem, not the schedule. 🧭</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.getElementById('howToUseModal').classList.remove('open');
+  });
+</script>
 </body>
 </html>
