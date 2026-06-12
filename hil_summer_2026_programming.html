@@ -13,17 +13,19 @@
     --ink-mid: #444;
     --ink-light: #888;
     --ink-faint: #C8C4BC;
-    --green: #1D6B4E;
-    --green-light: #E6F2EC;
-    --amber: #8A5000;
-    --amber-light: #FDF0DC;
-    --purple: #3D2F8A;
-    --purple-light: #EEECF9;
-    --teal: #0A5C5C;
-    --teal-light: #E3F2F2;
+    --green: #bad84f;
+    --green-light: #bad84f;
+    --amber: #DA7E3B;
+    --amber-light: #f2d9c6;
+    --purple: #aa4066;
+    --purple-light: #e2bbc9;
+    --teal: #6388cb;
+    --teal-light: #cfddf7;
     --coral: #7A2E1A;
     --coral-light: #FBEDE8;
     --rule: #E2DDD6;
+    --blue: #62b7d7;
+    --blue-light: #c2ecfc;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -472,6 +474,10 @@
   .theme-coral .card-icon { background: var(--coral-light); color: var(--coral); }
   .theme-coral .entry-badge { background: var(--coral-light); color: var(--coral); }
 
+  .theme-blue .color-strip { background: var(--blue); }
+  .theme-blue .card-icon { background: var(--blue-light); color: var(--blue; }
+  .theme-blue .entry-badge { background: var(--blue-light); color: var(--blue); }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 780px) {
     header, main, .legend, footer { padding-left: 20px; padding-right: 20px; }
@@ -711,7 +717,7 @@
   </div>
 
     <!-- SOCIAL IMPACT FELLOWSHIP FUND-->
-  <div class="container-card theme-amber">
+  <div class="container-card theme-blue">
     <div class="card-header" onclick="toggle(this, 'siff')" aria-expanded="false">
       <div class="color-strip"></div>
       <div class="card-header-inner">
