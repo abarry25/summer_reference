@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harvard Innovation Labs — Summer 2026 Programming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F4EF;
+    --ink: #1A1A1A;
+    --ink-mid: #444;
+    --ink-light: #888;
+    --ink-faint: #C8C4BC;
+    --green: #1D6B4E;
+    --green-light: #E6F2EC;
+    --amber: #8A5000;
+    --amber-light: #FDF0DC;
+    --purple: #3D2F8A;
+    --purple-light: #EEECF9;
+    --teal: #0A5C5C;
+    --teal-light: #E3F2F2;
+    --coral: #7A2E1A;
+    --coral-light: #FBEDE8;
+    --rule: #E2DDD6;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--rule);
+    padding: 48px 60px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+
+  .header-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -.01em;
+  }
+
+  .header-sub {
+    font-size: 14px;
+    color: var(--ink-mid);
+    max-width: 560px;
+    margin-top: 4px;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 20px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .meta-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--ink-mid);
+    border: 1px solid var(--rule);
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: white;
+  }
+
+  /* ── LOGIC BAR ── */
+  .logic-bar {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 32px 60px 0;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    background: white;
+    overflow: hidden;
+  }
+
+  .logic-item {
+    flex: 1;
+    padding: 14px 16px;
+    border-right: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .logic-item:last-child { border-right: none; }
+
+  .logic-num {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .logic-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .logic-desc {
+    font-size: 11px;
+    color: var(--ink-light);
+    line-height: 1.4;
+  }
+
+  /* ── MAIN ── */
+  main {
+    padding: 32px 60px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* ── CONTAINER CARDS ── */
+  .container-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    display: grid;
+    grid-template-columns: 5px 1fr auto;
+    cursor: pointer;
+    transition: background .12s;
+    user-select: none;
+  }
+
+  .card-header:hover .card-header-inner { background: #FAFAF8; }
+  .card-header.open .card-header-inner { background: #FAFAF8; }
+
+  .color-strip { width: 5px; flex-shrink: 0; }
+
+  .card-header-inner {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    grid-column: 2 / 4;
+    transition: background .12s;
+  }
+
+  .card-left { display: flex; align-items: center; gap: 14px; }
+
+  .card-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .card-titles { display: flex; flex-direction: column; gap: 2px; }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -.01em;
+  }
+
+  .card-tagline {
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+
+  .card-right { display: flex; align-items: center; gap: 10px; }
+
+  .entry-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: .01em;
+  }
+
+  .chevron {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-light);
+    transition: transform .2s;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .card-header.open .chevron { transform: rotate(180deg); }
+
+  /* ── CARD BODY ── */
+  .card-body {
+    display: none;
+    border-top: 1px solid var(--rule);
+  }
+
+  .card-body.open { display: block; }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .grid-col {
+    padding: 20px 24px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .grid-col:last-child { border-right: none; }
+
+  .col-heading {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .item-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+
+  .item-list li {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 13px;
+    color: var(--ink-mid);
+    line-height: 1.45;
+  }
+
+  .item-list li::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--ink-faint);
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  .item-list li strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ── ENTRY SECTION ── */
+  .entry-section {
+    padding: 16px 24px 20px;
+    background: #FAFAF8;
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .entry-left { flex: 1; min-width: 200px; }
+
+  .entry-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+
+  .entry-desc {
+    font-size: 12px;
+    color: var(--ink-mid);
+    line-height: 1.55;
+    max-width: 400px;
+  }
+
+  .entry-flow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 2;
+    padding-top: 22px;
+  }
+
+  .flow-step {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    padding: 5px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    background: white;
+    white-space: nowrap;
+  }
+
+  .flow-arrow {
+    color: var(--ink-faint);
+    font-size: 13px;
+    font-weight: 300;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    margin: 32px 60px 0;
+    padding: 16px 20px;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    background: white;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .legend-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+  }
+
+  .legend-items { display: flex; gap: 20px; flex-wrap: wrap; }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--ink-mid);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    margin: 48px 60px 0;
+    padding: 20px 0;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-left {
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+
+  .footer-note {
+    font-size: 11px;
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+
+  /* ── COLOR THEMES ── */
+  .theme-green .color-strip { background: var(--green); }
+  .theme-green .card-icon { background: var(--green-light); color: var(--green); }
+  .theme-green .entry-badge { background: var(--green-light); color: var(--green); }
+
+  .theme-amber .color-strip { background: var(--amber); }
+  .theme-amber .card-icon { background: var(--amber-light); color: var(--amber); }
+  .theme-amber .entry-badge { background: var(--amber-light); color: var(--amber); }
+
+  .theme-purple .color-strip { background: var(--purple); }
+  .theme-purple .card-icon { background: var(--purple-light); color: var(--purple); }
+  .theme-purple .entry-badge { background: var(--purple-light); color: var(--purple); }
+
+  .theme-teal .color-strip { background: var(--teal); }
+  .theme-teal .card-icon { background: var(--teal-light); color: var(--teal); }
+  .theme-teal .entry-badge { background: var(--teal-light); color: var(--teal); }
+
+  .theme-coral .color-strip { background: var(--coral); }
+  .theme-coral .card-icon { background: var(--coral-light); color: var(--coral); }
+  .theme-coral .entry-badge { background: var(--coral-light); color: var(--coral); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 780px) {
+    header, main, .legend, footer { padding-left: 20px; padding-right: 20px; }
+    .logic-bar { margin-left: 20px; margin-right: 20px; flex-direction: column; }
+    .logic-item { border-right: none; border-bottom: 1px solid var(--rule); }
+    .logic-item:last-child { border-bottom: none; }
+    .card-grid { grid-template-columns: 1fr; }
+    .grid-col { border-right: none; border-bottom: 1px solid var(--rule); }
+    .grid-col:last-child { border-bottom: none; }
+    .entry-badge { display: none; }
+    .card-right { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="header-eyebrow">Harvard Innovation Labs · Summer 2026</p>
+  <h1 class="header-title">Summer Programming<br>System Reference</h1>
+  <p class="header-sub">Five containers. Each with its own delivery mechanisms, content, and entry model. How we help founders learn, connect, build, and grow.</p>
+  <div class="header-meta">
+    <span class="meta-chip">📅 June – August 2026</span>
+    <span class="meta-chip">📍 Cambridge, MA + Virtual</span>
+    <span class="meta-chip">🎯 20+ programs and events</span>
+  </div>
+</header>
+
+<!-- Logic Architecture Bar -->
+<div class="logic-bar">
+  <div class="logic-item">
+    <span class="logic-num">Framework</span>
+    <span class="logic-name">Entry</span>
+    <span class="logic-desc">How people find and get in</span>
+  </div>
+  <div class="logic-item">
+    <span class="logic-num">Framework</span>
+    <span class="logic-name">Container</span>
+    <span class="logic-desc">Where learning happens</span>
+  </div>
+  <div class="logic-item">
+    <span class="logic-num">Framework</span>
+    <span class="logic-name">Content</span>
+    <span class="logic-desc">What founders learn</span>
+  </div>
+  <div class="logic-item">
+    <span class="logic-num">Framework</span>
+    <span class="logic-name">Delivery</span>
+    <span class="logic-desc">How learning is facilitated</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- FOUNDER FUNDAMENTALS -->
+  <div class="container-card theme-green">
+    <div class="card-header" onclick="toggle(this, 'ff')" aria-expanded="false">
+      <div class="color-strip"></div>
+      <div class="card-header-inner">
+        <div class="card-left">
+          <div class="card-icon">🌱</div>
+          <div class="card-titles">
+            <span class="card-title">Founder Fundamentals</span>
+            <span class="card-tagline">Validate your idea — customer discovery, experimentation, early skill-building</span>
+          </div>
+        </div>
+        <div class="card-right">
+          <span class="entry-badge">Entry: intentional activation</span>
+          <span class="chevron">▾</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body" id="ff">
+      <div class="card-grid">
+        <div class="grid-col">
+          <p class="col-heading">⚙️ Delivery mechanisms</p>
+          <ul class="item-list">
+            <li><strong>Primer</strong> — async, self-paced email journey for solo exploration</li>
+            <li><strong>Sprint</strong> — sequenced cohort: kickoff → field work → check-in → showcase</li>
+            <li><strong>Hackathon</strong> — two-part: build prototype → return with customer feedback</li>
+            <li><strong>Office hours</strong> — drop-in peer + advisor facilitation</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">📚 Content this summer</p>
+          <ul class="item-list">
+            <li><strong>Customer discovery</strong> — interviews,assumption testing,validation</li>
+            <li><strong>AI agent development</strong> — B2C concept-to-test with AI tools </li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">👥 Who it's for</p>
+          <ul class="item-list">
+            <li>Pre-product and idea-stage founders</li>
+            <li>Students actively exploring a venture</li>
+            <li>Open membership — requires sign-up or sprint registration</li>
+            <li>Primer and Sprint serve different commitment levels</li>
+          </ul>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-left">
+          <p class="entry-label">Entry model — intentional activation</p>
+          <p class="entry-desc">Open access, but founders need guidance to find the right starting point (Primer vs. Sprint). The team helps members activate and maintains a keep-warm loop for those who disengage early.</p>
+        </div>
+        <div class="entry-flow">
+          <span class="flow-step">Discover (website / staff)</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Register for right program</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Activate (kickoff / first email)</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Engage in content</span>
+            <span class="flow-arrow">→</span>
+          <span class="flow-step">Keep warm if disengaged</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VENTURE INCUBATION -->
+  <div class="container-card theme-amber">
+    <div class="card-header" onclick="toggle(this, 'vi')" aria-expanded="false">
+      <div class="color-strip"></div>
+      <div class="card-header-inner">
+        <div class="card-left">
+          <div class="card-icon">🏛️</div>
+          <div class="card-titles">
+            <span class="card-title">Venture Incubation</span>
+            <span class="card-tagline">Milestone-gated progression — pitches, advancement, advisor accountability</span>
+          </div>
+        </div>
+        <div class="card-right">
+          <span class="entry-badge">Entry: intentional activation + selection</span>
+          <span class="chevron">▾</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body" id="vi">
+      <div class="card-grid">
+        <div class="grid-col">
+          <p class="col-heading">⚙️ Delivery mechanisms</p>
+          <ul class="item-list">
+            <li><strong>Application pipeline</strong> — structured review, interview, and selection process</li>
+            <li><strong>Milestone check-ins</strong> — regular advisor meetings tied to venture progress gates</li>
+            <li><strong>Internal pitches</strong> — advancement pitches to panel at milestone junctions</li>
+            <li><strong>Advancement ceremonies</strong> — cohort recognition events open to all members</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">📚 Content this summer</p>
+          <ul class="item-list">
+            <li><strong>Venture milestones</strong> — what progress looks like at each stage of the VIP</li>
+            <li><strong>Personalized advisor feedback</strong> — content shaped by each venture's specific needs</li>
+            <li><strong>Advancement Ceremony</strong> — open to all members, celebration</li>
+            <li><strong>Advancement Panel</strong> —  pitch panel</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">👥 Who it's for</p>
+          <ul class="item-list">
+            <li>Selected cohort members</li>
+            <li>Founders actively working toward defined venture milestones</li>
+            <li>People ready for focused program commitment</li>
+          </ul>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-left">
+          <p class="entry-label">Entry model — intentional activation + selection</p>
+          <p class="entry-desc">Requires application, review, personal interview, and payment. The team actively manages every step. There is an explicit "not yet" path with re-entry options for founders who aren't selected.</p>
+        </div>
+        <div class="entry-flow">
+          <span class="flow-step">Application</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Review + interview</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Selection</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Onboarding + orientation</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Milestone progression</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCELERATION -->
+  <div class="container-card theme-purple">
+    <div class="card-header" onclick="toggle(this, 'acc')" aria-expanded="false">
+      <div class="color-strip"></div>
+      <div class="card-header-inner">
+        <div class="card-left">
+          <div class="card-icon">🚀</div>
+          <div class="card-titles">
+            <span class="card-title">Acceleration</span>
+            <span class="card-tagline">Cohort-based company building — workshops, clinics, lunches, pitch event</span>
+          </div>
+        </div>
+        <div class="card-right">
+          <span class="entry-badge">Entry: intentional activation + selection</span>
+          <span class="chevron">▾</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body" id="acc">
+      <div class="card-grid">
+        <div class="grid-col">
+          <p class="col-heading">⚙️ Delivery mechanisms</p>
+          <ul class="item-list">
+            <li><strong>Workshops</strong> — weekly virtual sessions, cohort-only curriculum</li>
+            <li><strong>Clinics</strong> — targeted deep-dives on specific venture challenges</li>
+            <li><strong>Board meeting check-ins</strong> — structured advisor accountability touchpoints</li>
+            <li><strong>Community lunches</strong> — weekly in-person gathering</li>
+            <li><strong>Pitch event</strong> — 5-day jury pitch</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">📚 Content this summer</p>
+          <ul class="item-list">
+            <li><strong>Company building curriculum</strong> — weekly workshop topics across 6+ sessions</li>
+            <li><strong>Fundraising + growth</strong> — embedded throughout cohort programming</li>
+            <li><strong>Pitch preparation</strong> — cumulative, building toward jury event</li>
+            <li><strong>Peer learning</strong> — alumni + student founders in same cohort</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">👥 Who it's for</p>
+          <ul class="item-list">
+            <li>Summer Accelerator cohort — alumni and student founders</li>
+            <li>Founders pursuing the LLX (Launch Lab X) pathway</li>
+            <li>Highest-intensity container in the summer set</li>
+            <li>Led by Joanna Furgiuele + Rym Baouendi</li>
+          </ul>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-left">
+          <p class="entry-label">Entry model — intentional activation + selection</p>
+          <p class="entry-desc">Cohort selected before summer begins. Orientation launches the experience. Weekly rhythm creates accountability. Culminates in a jury pitch that determines LLX advancement — the highest-stakes gate in summer programming.</p>
+        </div>
+        <div class="entry-flow">
+          <span class="flow-step">Selection + orientation</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Weekly workshops + lunches</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Board meeting check-ins</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Pitch event → LLX decision</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VENTURE GROWTH -->
+  <div class="container-card theme-teal">
+    <div class="card-header" onclick="toggle(this, 'vg')" aria-expanded="false">
+      <div class="color-strip"></div>
+      <div class="card-header-inner">
+        <div class="card-left">
+          <div class="card-icon">📈</div>
+          <div class="card-titles">
+            <span class="card-title">Venture Growth</span>
+            <span class="card-tagline">Expert talks, accelerator pathways, open workshops — register and show up</span>
+          </div>
+        </div>
+        <div class="card-right">
+          <span class="entry-badge">Entry: minimal activation</span>
+          <span class="chevron">▾</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body" id="vg">
+      <div class="card-grid">
+        <div class="grid-col">
+          <p class="col-heading">⚙️ Delivery mechanisms</p>
+          <ul class="item-list">
+            <li><strong>Founder talks</strong> — expert-led lunch conversations + live Q&amp;A</li>
+            <li><strong>Accelerator info sessions</strong> — direct pipeline to YC and Techstars</li>
+            <li><strong>Open workshops</strong> — single-session, skill-based</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">📚 Content this summer</p>
+          <ul class="item-list">
+            <li><strong>Fundraising</strong> — Allison Byers</li>
+            <li><strong>Accelerator Info Sessions</strong> — YC + Techstars sessions</li>
+            <li><strong>AI for communications</strong> — PRStack toolkit</li>
+            <li><strong>MVP feedback</strong> — peer product testing</li>
+            <li><strong>Scaling an AI startup</strong> — Brian Elliott + Murph Vandervelde (Blitzy)</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">👥 Who it's for</p>
+          <ul class="item-list">
+            <li>Open membership — all member types welcome</li>
+            <li>Best fit for post-idea, post-MVP founders</li>
+            <li>No prior program participation required</li>
+            <li>Highest reach, lowest operational overhead of any container</li>
+          </ul>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-left">
+          <p class="entry-label">Entry model — minimal activation</p>
+          <p class="entry-desc">Register and show up. No follow-up cadence required from the team. Each event is self-contained — there's no arc to track. The team's job is logistics and marketing, not member management.</p>
+        </div>
+        <div class="entry-flow">
+          <span class="flow-step">See event (website / email)</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Register</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Attend</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPEN COMMUNITY -->
+  <div class="container-card theme-coral">
+    <div class="card-header" onclick="toggle(this, 'oc')" aria-expanded="false">
+      <div class="color-strip"></div>
+      <div class="card-header-inner">
+        <div class="card-left">
+          <div class="card-icon">🤝</div>
+          <div class="card-titles">
+            <span class="card-title">Open Community</span>
+            <span class="card-tagline">Social events, peer circles, co-founder connections — the glue of the summer</span>
+          </div>
+        </div>
+        <div class="card-right">
+          <span class="entry-badge">Entry: minimal activation</span>
+          <span class="chevron">▾</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body" id="oc">
+      <div class="card-grid">
+        <div class="grid-col">
+          <p class="col-heading">⚙️ Delivery mechanisms</p>
+          <ul class="item-list">
+            <li><strong>Social events</strong> — Member Appreciation, Summer Launch Party at Felipe's </li>
+            <li><strong>Pitch + connect</strong> — Founder/Joiner Pizza + Pitch</li>
+            <li><strong>Peer circles</strong> — Founder Circles in-person + virtual</li>
+            <li><strong>Problem-solving sessions</strong> — structured peer exchange, no prep needed</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">📚 Content this summer</p>
+          <ul class="item-list">
+            <li><strong>Peer learning</strong> — content emerges from the room, not a curriculum</li>
+            <li><strong>Network building</strong> — co-founder matching, collaborator + joiner connections</li>
+            <li><strong>Community identity</strong> — belonging, shared experience, i-lab culture</li>
+            <li>Ashley Olafsen leads all community events</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">👥 Who it's for</p>
+          <ul class="item-list">
+            <li>All members, all stages, all programs</li>
+            <li>Life Lab residents, LLX, Climate Circle cohorts</li>
+            <li>Solo founders actively seeking co-founders or collaborators</li>
+            <li>Anyone who just wants to be in the room</li>
+          </ul>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-left">
+          <p class="entry-label">Entry model — minimal activation</p>
+          <p class="entry-desc">Register and show up. The value is in the room itself — peer energy, serendipitous connections, informal conversation. No follow-up needed. This container is the connective tissue between all other containers.</p>
+        </div>
+        <div class="entry-flow">
+          <span class="flow-step">See event (website / email)</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Register</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Attend</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Legend -->
+<div class="legend" style="margin: 0 60px 32px;">
+  <span class="legend-label">Entry model</span>
+  <div class="legend-items">
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #1D6B4E;"></div>
+      Intentional activation — team guides members, follows up to keep engaged
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #3D2F8A;"></div>
+      Intentional activation + selection — application, review, team-managed onboarding
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #7A2E1A;"></div>
+      Minimal activation — register and show up, no follow-up required
+    </div>
+  </div>
+</div>
+
+<footer style="margin: 0 60px; padding: 20px 0 60px;">
+  <span class="footer-left">Harvard Innovation Labs · Summer 2026 Programming Reference</span>
+  <span class="footer-note">Blitzy Founder Talk and Advancement Panel dates unconfirmed as of June 2026</span>
+</footer>
+
+<script>
+function toggle(header, id) {
+  const body = document.getElementById(id);
+  const isOpen = body.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.card-header').forEach(h => {
+    h.classList.remove('open');
+    h.setAttribute('aria-expanded', 'false');
+  });
+
+  if (!isOpen) {
+    body.classList.add('open');
+    header.classList.add('open');
+    header.setAttribute('aria-expanded', 'true');
+  }
+}
+</script>
+
+</body>
+</html>
