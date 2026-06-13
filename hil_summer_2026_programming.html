@@ -8,24 +8,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #F7F4EF;
-    --ink: #1A1A1A;
-    --ink-mid: #444;
-    --ink-light: #888;
-    --ink-faint: #C8C4BC;
-    --green: #bad84f;
-    --green-light: #f2fad5;
-    --amber: #DA7E3B;
-    --amber-light: #f2d9c6;
-    --purple: #aa4066;
-    --purple-light: #e2bbc9;
-    --teal: #6388cb;
-    --teal-light: #cfddf7;
-    --coral: #7A2E1A;
-    --coral-light: #FBEDE8;
-    --rule: #E2DDD6;
-    --blue: #62b7d7;
-    --blue-light: #c2ecfc;
+  --cream: #EBEAE3;
+  --ink: #000000;
+  --ink-mid: #444;
+  --ink-light: #888;
+  --ink-faint: #D1D1D1;
+  --green: #84A873;
+  --green-light: #C1F4A8;
+  --amber: #FFAE63;
+  --amber-light: #FFD6AD;
+  --purple: #7482E8;
+  --purple-light: #ABB4FF;
+  --teal: #7482E8;
+  --teal-light: #ABB4FF;
+  --coral: #711213;
+  --coral-light: #FFC7C8;
+  --rule: #D1D1D1;
+  --blue: #7482E8;
+  --blue-light: #ABB4FF;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,7 +33,7 @@
   body {
     background: var(--cream);
     color: var(--ink);
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 16px;
     line-height: 1.6;
     min-height: 100vh;
@@ -57,7 +57,7 @@
   }
 
   .header-title {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'DM Serif Display', Georgia, serif;
     font-size: clamp(28px, 4vw, 42px);
     font-weight: 700;
     color: var(--ink);
@@ -250,7 +250,7 @@
   bottom: 28px;
   right: 28px;
   z-index: 100;
-  background: #FF3131;
+  background: #EA3D3E;
   color: white;
   font-size: 12px;
   font-weight: 500;
@@ -264,7 +264,7 @@
   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
   transition: background .15s;
 }
-.how-to-use-btn:hover { background: #333; }
+.how-to-use-btn:hover { background:  #711213; }
 
 /* ── MODAL ── */
 .modal-overlay {
@@ -658,7 +658,7 @@
   .theme-coral .entry-badge { background: var(--coral-light); color: var(--coral); }
 
   .theme-blue .color-strip { background: var(--blue); }
-  .theme-blue .card-icon { background: var(--blue-light); color: var(--blue;) }
+.theme-blue .card-icon { background: var(--blue-light); color: var(--blue); }
   .theme-blue .entry-badge { background: var(--blue-light); color: var(--blue); }
 
   /* ── RESPONSIVE ── */
