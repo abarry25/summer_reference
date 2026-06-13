@@ -1391,40 +1391,94 @@ document.addEventListener('keydown', e => {
 <div class="modal-overlay" id="howToUseModal" onclick="if(event.target===this) this.classList.remove('open')">
   <div class="modal">
     <div class="modal-header">
-      <span class="modal-title">How to Use This Tool</span>
+      <div>
+        <span class="modal-title">How to Use This Tool</span>
+        <p style="font-size:13px; color:var(--ink-light); margin-top:6px;">A shared framework for understanding i-lab programs, audiences, and pathways.</p>
+      </div>
       <button class="modal-close" onclick="document.getElementById('howToUseModal').classList.remove('open')">✕</button>
     </div>
     <div class="modal-body">
-      <p>This reference is designed to help staff understand how the Harvard Innovation Labs ecosystem fits together and how founders move through it. It is not a calendar, event listing, or operational checklist — it's a shared framework for understanding our programs, audiences, and pathways.</p>
 
-      <h3>What You'll Find Here</h3>
-      <p>Each programming container includes: <strong>Purpose</strong>, <strong>Entry Model</strong>, <strong>Delivery Mechanisms</strong>, <strong>Content Areas</strong>, <strong>Target Audience</strong>, <strong>Founder Journey</strong>, and <strong>Program Ownership</strong>.</p>
+      <!-- Intro callout -->
+      <div style="background:white; border:1px solid var(--rule); border-radius:10px; padding:14px 16px; margin-bottom:20px;">
+        <p style="margin:0; font-size:13px; color:var(--ink-mid);">This is not a calendar, event listing, or operational checklist — it's a <strong>map of the ecosystem</strong>. Use it to understand how programs connect, how founders move through them, and where your team fits in. 🧭</p>
+      </div>
 
-<h3>How to Navigate</h3>
-      <p><strong>By Founder Need —</strong> Start with a founder's challenge, question, or need, identify the right container, review delivery mechanisms and Best For sections.<br>
-      <h4>Questions to ask founders</h4>
+      <!-- What you'll find -->
+      <h3>What You'll Find in Each Container</h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px;">
+        <div style="background:white; border:1px solid var(--rule); border-radius:8px; padding:10px 14px; font-size:12px; color:var(--ink-mid);"><strong style="color:var(--ink); display:block; margin-bottom:2px;">Entry Model</strong>How founders get access</div>
+        <div style="background:white; border:1px solid var(--rule); border-radius:8px; padding:10px 14px; font-size:12px; color:var(--ink-mid);"><strong style="color:var(--ink); display:block; margin-bottom:2px;">Delivery Mechanisms</strong>Formats used to deliver support</div>
+        <div style="background:white; border:1px solid var(--rule); border-radius:8px; padding:10px 14px; font-size:12px; color:var(--ink-mid);"><strong style="color:var(--ink); display:block; margin-bottom:2px;">Content Areas</strong>Topics and skills covered</div>
+        <div style="background:white; border:1px solid var(--rule); border-radius:8px; padding:10px 14px; font-size:12px; color:var(--ink-mid);"><strong style="color:var(--ink); display:block; margin-bottom:2px;">Target Audience</strong>Who the container is designed for</div>
+        <div style="background:white; border:1px solid var(--rule); border-radius:8px; padding:10px 14px; font-size:12px; color:var(--ink-mid);"><strong style="color:var(--ink); display:block; margin-bottom:2px;">Founder Journey</strong>How participants engage and progress</div>
+        <div style="background:white; border:1px solid var(--rule); border-radius:8px; padding:10px 14px; font-size:12px; color:var(--ink-mid);"><strong style="color:var(--ink); display:block; margin-bottom:2px;">Program Ownership</strong>Staff and stakeholders involved</div>
+      </div>
 
-<ul>
-    <li> What stage are you at? </li>
-     <li>  Do you have a product yet? </li>
-     <li>  Are you looking for a cohort or self-paced support? </li>
-     <li>  How many hours a week can you commit?</li>
-     <li>  Have you heard of or participated in any of our programs before? </li>
-     <li> Are you looking for something structured or flexible? </li>
-    <li> Do you need funding, community, or curriculum?</li>
-</ul>
+      <!-- UX Experience -->
+      <h3>Member Experience Tags</h3>
+      <p style="margin-bottom:12px;">Each container is tagged with the experiences our Member Experience team has identified as most important. Look for these tags under each container title.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Supported</span>
+        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Satisfied</span>
+        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Belonging</span>
+        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Value</span>
+        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Inspired</span>
+        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Empowered</span>
+        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Motivated to return</span>
+        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Joyful</span>
+        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Candor & vulnerability</span>
+        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Curious</span>
+        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Challenged</span>
+        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Seriousicity</span>
+      </div>
+      <p style="font-size:12px; color:var(--ink-light); margin-bottom:20px;">Tags reflect the intended emotional and experiential outcomes for members in each container — not a checklist, but a north star for program design and delivery.</p>
 
-      <p><strong>For Internal Use —</strong> Start with an operational, technical, or marketing need, identify the Program Lead(s), review entry and delivery model, explore connections to other containers.</p>
-     <h4>Internal Questions You Might Have:</h4>
-<ul>
-     <li> Who do I coordinate with on an upcoming program? </li>
-     <li> Will participants need member login access for a program? </li>
-     <li> What's the difference between Venture Incubation and Acceleration?</li>
-     <li> Where will Program Staff be focused this summer?</li>
-</ul>
-    
-      <h3>Important Note</h3>
-      <p>This reference describes system and structure — not day-to-day schedules. Specific dates and deadlines should be confirmed through current planning resources. Think of this as a map of the ecosystem, not the schedule. 🧭</p>
+      <!-- How to Navigate -->
+      <h3>How to Navigate</h3>
+
+      <!-- By Founder Need -->
+      <div style="background:white; border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin-bottom:10px;">
+        <div style="padding:12px 16px; border-bottom:1px solid var(--rule);">
+          <strong style="font-size:13px; color:var(--ink);">By Founder Need</strong>
+          <p style="font-size:12px; color:var(--ink-light); margin-top:3px; margin-bottom:0;">Start with a founder's challenge or goal → identify the right container → review delivery mechanisms.</p>
+        </div>
+        <div style="padding:12px 16px;">
+          <p style="font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:8px;">Questions to ask founders</p>
+          <ul style="padding-left:16px; font-size:12px; color:var(--ink-mid); display:flex; flex-direction:column; gap:4px;">
+            <li>What stage are you at?</li>
+            <li>Do you have a product yet?</li>
+            <li>Are you looking for a cohort or self-paced support?</li>
+            <li>How many hours a week can you commit?</li>
+            <li>Have you heard of or participated in any of our programs before?</li>
+            <li>Are you looking for something structured or flexible?</li>
+            <li>Do you need funding, community, or curriculum?</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- For Internal Use -->
+      <div style="background:white; border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin-bottom:20px;">
+        <div style="padding:12px 16px; border-bottom:1px solid var(--rule);">
+          <strong style="font-size:13px; color:var(--ink);">For Internal Use</strong>
+          <p style="font-size:12px; color:var(--ink-light); margin-top:3px; margin-bottom:0;">Start with an operational, technical, or marketing need → identify the Program Lead → review entry and delivery model.</p>
+        </div>
+        <div style="padding:12px 16px;">
+          <p style="font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:8px;">Internal questions you might have</p>
+          <ul style="padding-left:16px; font-size:12px; color:var(--ink-mid); display:flex; flex-direction:column; gap:4px;">
+            <li>Who do I coordinate with on an upcoming program?</li>
+            <li>Will participants need member login access for a program?</li>
+            <li>What's the difference between Venture Incubation and Acceleration?</li>
+            <li>Where will Program Staff be focused this summer?</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Important Note -->
+      <div style="background:var(--amber-light); border:1px solid #e8c9a8; border-radius:10px; padding:14px 16px;">
+        <p style="margin:0; font-size:12px; color:var(--amber);">⚠️ <strong>Important:</strong> This reference describes system and structure — not day-to-day schedules. Specific dates and deadlines should be confirmed through current planning resources.</p>
+      </div>
+
     </div>
   </div>
 </div>
