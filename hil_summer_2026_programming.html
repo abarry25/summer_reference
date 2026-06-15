@@ -94,6 +94,111 @@
     background: white;
   }
 
+  /* ── SEARCH ── */
+.search-bar-wrap {
+  margin: 24px 60px 0;
+  position: relative;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 10px 16px;
+  transition: border-color .15s;
+}
+
+.search-bar:focus-within {
+  border-color: #EA3D3E;
+}
+
+.search-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  background: transparent;
+}
+
+.search-bar input::placeholder {
+  color: var(--ink-faint);
+}
+
+.search-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-faint);
+  font-size: 13px;
+  padding: 0;
+  line-height: 1;
+}
+
+.search-clear:hover { color: var(--ink); }
+
+.search-results {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  z-index: 150;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.search-result-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+  transition: background .1s;
+}
+
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--cream); }
+
+.search-result-container {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 3px;
+}
+
+.search-result-text {
+  font-size: 13px;
+  color: var(--ink-mid);
+  line-height: 1.4;
+}
+
+.search-result-text mark {
+  background: #FFF3B0;
+  color: var(--ink);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.search-no-results {
+  padding: 20px 16px;
+  font-size: 13px;
+  color: var(--ink-light);
+  text-align: center;
+}
+
   /* ── LOGIC BAR ── */
   .logic-bar {
     display: flex;
@@ -696,6 +801,14 @@
     <span class="meta-chip">🎯 20+ programs and events</span>
   </div>
 </header>
+  <div class="search-bar-wrap">
+  <div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="siteSearch" placeholder="Search programs, topics, keywords… e.g. pitch, virtual, community" autocomplete="off">
+    <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;">✕</button>
+  </div>
+  <div class="search-results" id="searchResults" style="display:none;"></div>
+</div>
 
 <!-- Logic Architecture Bar -->
 <div class="logic-bar">
@@ -1369,6 +1482,94 @@
 </footer>
 
 <script>
+  function initSearch() {
+  const input = document.getElementById('siteSearch');
+  const results = document.getElementById('searchResults');
+  const clearBtn = document.getElementById('searchClear');
+
+  input.addEventListener('input', () => {
+    const query = input.value.trim().toLowerCase();
+    clearBtn.style.display = query ? 'block' : 'none';
+
+    if (query.length < 2) {
+      results.style.display = 'none';
+      return;
+    }
+
+    // Gather all searchable content from cards
+    const matches = [];
+    document.querySelectorAll('.container-card').forEach(card => {
+      const containerName = card.querySelector('.card-title')?.textContent || '';
+      const bodyId = card.querySelector('.card-body')?.id;
+
+      card.querySelectorAll('.item-list li, .entry-desc, .card-tagline, .flow-step').forEach(el => {
+        const text = el.textContent.trim();
+        if (text.toLowerCase().includes(query)) {
+          matches.push({ containerName, bodyId, text });
+        }
+      });
+    });
+
+    if (matches.length === 0) {
+      results.innerHTML = `<div class="search-no-results">No results for "<strong>${input.value}</strong>"</div>`;
+    } else {
+      results.innerHTML = matches.map(m => `
+        <div class="search-result-item" onclick="jumpTo('${m.bodyId}')">
+          <div class="search-result-container">${m.containerName}</div>
+          <div class="search-result-text">${highlight(m.text, query)}</div>
+        </div>
+      `).join('');
+    }
+
+    results.style.display = 'block';
+  });
+
+  // Close results when clicking outside
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.search-bar-wrap')) {
+      results.style.display = 'none';
+    }
+  });
+}
+
+function highlight(text, query) {
+  const regex = new RegExp(`(${query})`, 'gi');
+  return text.replace(regex, '<mark>$1</mark>');
+}
+
+function jumpTo(bodyId) {
+  const body = document.getElementById(bodyId);
+  const header = body?.previousElementSibling;
+  if (!body || !header) return;
+
+  // Close all, open target
+  document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.card-header').forEach(h => {
+    h.classList.remove('open');
+    h.setAttribute('aria-expanded', 'false');
+  });
+
+  body.classList.add('open');
+  header.classList.add('open');
+  header.setAttribute('aria-expanded', 'true');
+
+  // Scroll to it
+  body.closest('.container-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Close results
+  document.getElementById('searchResults').style.display = 'none';
+  document.getElementById('siteSearch').value = '';
+  document.getElementById('searchClear').style.display = 'none';
+}
+
+function clearSearch() {
+  document.getElementById('siteSearch').value = '';
+  document.getElementById('searchResults').style.display = 'none';
+  document.getElementById('searchClear').style.display = 'none';
+}
+
+// Initialize on load
+initSearch();
 function toggle(header, id) {
   const body = document.getElementById(id);
   const isOpen = body.classList.contains('open');
