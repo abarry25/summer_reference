@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Venture Stack Builder</title>
+  <style>
+    body { font-family: sans-serif; display: flex; gap: 24px; padding: 24px; }
+    .column { flex: 1; }
+    h2 { margin-top: 0; }
+
+    .layer-palette, .persona {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fafafa;
+    }
+
+    .layer-pill {
+      display: inline-block;
+      padding: 6px 10px;
+      margin: 4px;
+      border-radius: 999px;
+      background: #e3f2fd;
+      border: 1px solid #90caf9;
+      cursor: grab;
+      font-size: 14px;
+    }
+
+    .drop-zone {
+      min-height: 40px;
+      border: 1px dashed #bbb;
+      border-radius: 6px;
+      padding: 6px;
+      margin-top: 4px;
+      background: #fff;
+    }
+
+    .drop-zone.highlight {
+      border-color: #1976d2;
+      background: #e3f2fd;
+    }
+
+    .zone-label {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Palette -->
+  <div class="column">
+    <div class="layer-palette">
+      <h2>Layer Palette</h2>
+
+      <h3>Layer 1 – Core Stage</h3>
+      <div class="layer-pill" draggable="true" data-layer-type="core" data-layer-id="incubation">
+        Incubation
+      </div>
+      <div class="layer-pill" draggable="true" data-layer-type="core" data-layer-id="acceleration">
+        Acceleration
+      </div>
+
+      <h3>Layer 2 – Modules</h3>
+      <div class="layer-pill" draggable="true" data-layer-type="module" data-layer-id="siff">
+        SIFF
+      </div>
+      <div class="layer-pill" draggable="true" data-layer-type="module" data-layer-id="venture_growth">
+        Venture Growth
+      </div>
+      <div class="layer-pill" draggable="true" data-layer-type="module" data-layer-id="community">
+        Community
+      </div>
+      <div class="layer-pill" draggable="true" data-layer-type="module" data-layer-id="fundamentals">
+        Founder Fundamentals
+      </div>
+    </div>
+  </div>
+
+  <!-- Personas -->
+  <div class="column">
+    <h2>Personas</h2>
+
+    <div class="persona" data-persona-id="aisha">
+      <h3>Aisha – Early-Stage Founder</h3>
+
+      <div class="zone-label">Core Stage (Layer 1 – only one)</div>
+      <div class="drop-zone core-zone"></div>
+
+      <div class="zone-label">Modules (Layer 2 – stackable)</div>
+      <div class="drop-zone module-zone"></div>
+    </div>
+
+    <br>
+
+    <div class="persona" data-persona-id="luis">
+      <h3>Luis – Scaling Founder</h3>
+
+      <div class="zone-label">Core Stage (Layer 1 – only one)</div>
+      <div class="drop-zone core-zone"></div>
+
+      <div class="zone-label">Modules (Layer 2 – stackable)</div>
+      <div class="drop-zone module-zone"></div>
+    </div>
+  </div>
+
+<script>
+  let dragged = null;
+
+  document.querySelectorAll('.layer-pill').forEach(el => {
+    el.addEventListener('dragstart', e => {
+      dragged = e.target;
+      e.dataTransfer.setData('text/plain', JSON.stringify({
+        id: e.target.dataset.layerId,
+        type: e.target.dataset.layerType,
+        label: e.target.textContent.trim()
+      }));
+    });
+  });
+
+  document.querySelectorAll('.drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => {
+      e.preventDefault();
+      zone.classList.add('highlight');
+    });
+
+    zone.addEventListener('dragleave', () => {
+      zone.classList.remove('highlight');
+    });
+
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('highlight');
+
+      const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+      const isCoreZone = zone.classList.contains('core-zone');
+
+      // Rule: only core layers in core zone, only modules in module zone
+      if (isCoreZone && data.type !== 'core') return;
+      if (!isCoreZone && data.type !== 'module') return;
+
+      // Rule: only one core layer per persona
+      if (isCoreZone) {
+        zone.innerHTML = ''; // clear existing
+      }
+
+      const pill = document.createElement('div');
+      pill.className = 'layer-pill';
+      pill.textContent = data.label;
+      zone.appendChild(pill);
+    });
+  });
+</script>
+
+</body>
+</html>
