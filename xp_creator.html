@@ -89,6 +89,40 @@ body {
 .top-nav-right a:hover {
   border-bottom-color: var(--blue);
 }
+
+    /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--rule);
+    padding: 48px 60px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+
+  .header-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -.01em;
+  }
+
+  .header-sub {
+    font-size: 14px;
+    color: var(--ink-mid);
+    max-width: 560px;
+    margin-top: 4px;
+  }
+
   
 /* ── PAGE ── */
 .page-wrap {
