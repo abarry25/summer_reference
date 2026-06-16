@@ -499,6 +499,14 @@ body {
 </div>
   </div>
 
+    <div class="summary" id="summary">Pick a persona or drag programs into the stack to build a founder journey.</div>
+  <div class="sb-actions">
+    <button class="btn" onclick="clearStack()">Clear stack</button>
+    <button class="btn btn-primary" onclick="copyStack()" style="margin-left:auto">Copy stack summary</button>
+  </div>
+  <div class="copied" id="copied"></div>
+
+
   <div class="sb-main">
     <div>
       <div class="col-label">Available programs</div>
@@ -555,14 +563,6 @@ body {
       <div class="toast" id="toast"></div>
     </div>
   </div>
-
-  <div class="summary" id="summary">Pick a persona or drag programs into the stack to build a founder journey.</div>
-  <div class="sb-actions">
-    <button class="btn" onclick="clearStack()">Clear stack</button>
-    <button class="btn btn-primary" onclick="copyStack()" style="margin-left:auto">Copy stack summary</button>
-  </div>
-  <div class="copied" id="copied"></div>
-
 </div>
 
 <script>
