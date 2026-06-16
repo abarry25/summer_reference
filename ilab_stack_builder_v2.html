@@ -1,0 +1,241 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.sb{font-family:var(--font-sans);padding:1rem 0}
+.sb-top{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.pb{padding:8px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-secondary);font-size:12px;cursor:pointer;text-align:left;transition:all .15s}
+.pb:hover{background:var(--color-background-secondary)}
+.pb.active{border-color:var(--color-border-primary);background:var(--color-background-secondary)}
+.pb .pbn{font-size:13px;font-weight:500;color:var(--color-text-primary);display:block;margin-bottom:2px}
+.sb-main{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.col-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:8px}
+.bank{min-height:60px;border:0.5px dashed var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:8px;display:flex;flex-direction:column;gap:6px}
+.bank.dov{border-color:var(--color-border-primary);background:var(--color-background-secondary)}
+.level-block{margin-bottom:6px}
+.level-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.level-pip{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
+.level-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.level-rule{font-size:11px;color:var(--color-text-tertiary)}
+.zone{min-height:44px;border:0.5px dashed var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:4px;display:flex;flex-direction:column;gap:4px;transition:all .15s}
+.zone.dov{border-color:var(--color-border-primary);background:var(--color-background-secondary)}
+.zone.blocked{border-color:transparent;background:var(--color-background-secondary);opacity:.5;cursor:not-allowed}
+.zone-hint{font-size:11px;color:var(--color-text-tertiary);padding:6px 8px}
+.pc{padding:9px 12px;border-radius:var(--border-radius-md);cursor:grab;user-select:none;border:0.5px solid transparent;position:relative;transition:opacity .15s}
+.pc:active{cursor:grabbing;opacity:.7}
+.pc .pcn{font-size:13px;font-weight:500}
+.pc .pcs{font-size:11px;margin-top:1px}
+.pc .pcr{position:absolute;top:7px;right:8px;background:none;border:none;cursor:pointer;font-size:13px;opacity:.35;color:var(--color-text-primary);line-height:1;padding:2px}
+.pc .pcr:hover{opacity:.8}
+.base-block{padding:10px 12px;border-radius:var(--border-radius-md);border:0.5px solid #A32D2D;background:#FCEBEB;margin-bottom:4px}
+.base-block .pcn{font-size:13px;font-weight:500;color:#791F1F}
+.base-block .pcs{font-size:11px;color:#A32D2D;margin-top:1px}
+.toast{font-size:12px;color:var(--color-text-danger);padding:4px 0;min-height:18px;margin-top:2px}
+.summary{margin-top:14px;padding:12px 14px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);font-size:13px;color:var(--color-text-secondary);min-height:44px}
+.summary strong{color:var(--color-text-primary);font-weight:500}
+.sb-actions{display:flex;gap:8px;margin-top:10px}
+</style>
+
+<div class="sb">
+<h2 class="sr-only">i-lab journey stack builder with level rules</h2>
+
+<div style="margin-bottom:12px">
+  <div class="col-label" style="margin-bottom:6px">Start with a persona</div>
+  <div class="sb-top">
+    <button class="pb" onclick="loadPersona('explorer')"><span class="pbn">Early explorer</span>Idea stage, needs validation first</button>
+    <button class="pb" onclick="loadPersona('builder')"><span class="pbn">Active builder</span>Post-idea, ready for milestones</button>
+    <button class="pb" onclick="loadPersona('impact')"><span class="pbn">Social impact founder</span>Mission-driven, needs funding</button>
+    <button class="pb" onclick="loadPersona('custom')"><span class="pbn">Build your own</span>Drag programs to build a stack</button>
+  </div>
+</div>
+
+<div class="sb-main">
+  <div>
+    <div class="col-label">Available programs</div>
+    <div class="bank" id="bank" ondragover="ov(event,'bank')" ondragleave="ol(event,'bank')" ondrop="od(event,'bank')"></div>
+  </div>
+  <div>
+    <div class="col-label">Your stack</div>
+
+    <div class="level-block">
+      <div class="level-header">
+        <div class="level-pip" style="background:#FCEBEB;color:#A32D2D">0</div>
+        <span class="level-title">Membership</span>
+        <span class="level-rule">— base for all, always required</span>
+      </div>
+      <div class="base-block">
+        <div class="pcn">Membership</div>
+        <div class="pcs">Everyone starts here</div>
+      </div>
+    </div>
+
+    <div class="level-block">
+      <div class="level-header">
+        <div class="level-pip" style="background:#EEEDFE;color:#534AB7">1</div>
+        <span class="level-title">Track</span>
+        <span class="level-rule">— pick one, selection required</span>
+      </div>
+      <div class="zone" id="zone-l1" ondragover="ov(event,'zone-l1')" ondragleave="ol(event,'zone-l1')" ondrop="od(event,'zone-l1')">
+        <div class="zone-hint">Drop Incubation or Acceleration here</div>
+      </div>
+    </div>
+
+    <div class="level-block">
+      <div class="level-header">
+        <div class="level-pip" style="background:#EAF3DE;color:#3B6D11">3</div>
+        <span class="level-title">Add-ons</span>
+        <span class="level-rule">— supported activation, stack as many as you like</span>
+      </div>
+      <div class="zone" id="zone-l3" ondragover="ov(event,'zone-l3')" ondragleave="ol(event,'zone-l3')" ondrop="od(event,'zone-l3')">
+        <div class="zone-hint">Drop SIFF or Founder Fundamentals here</div>
+      </div>
+    </div>
+
+    <div class="level-block">
+      <div class="level-header">
+        <div class="level-pip" style="background:#FAECE7;color:#993C1D">4</div>
+        <span class="level-title">Community</span>
+        <span class="level-rule">— independent activation, always open</span>
+      </div>
+      <div class="zone" id="zone-l4" ondragover="ov(event,'zone-l4')" ondragleave="ol(event,'zone-l4')" ondrop="od(event,'zone-l4')">
+        <div class="zone-hint">Drop Venture Growth or Open Community here</div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+
+<div class="summary" id="summary">Pick a persona or drag programs into the stack to build a founder journey.</div>
+<div class="sb-actions">
+  <button onclick="clearStack()">Clear stack</button>
+  <button onclick="shareStack()" style="margin-left:auto">Ask Claude about this stack ↗</button>
+</div>
+</div>
+
+<script>
+const PROGS = [
+  {id:'vi',  name:'Venture Incubation',    sub:'Milestone-gated, advisor accountability', bg:'#FAEEDA', bd:'#854F0B', tx:'#633806', level:'l1'},
+  {id:'acc', name:'Acceleration',          sub:'Cohort-based company building',            bg:'#EEEDFE', bd:'#534AB7', tx:'#3C3489', level:'l1'},
+  {id:'ff',  name:'Founder Fundamentals',  sub:'Customer discovery, early skill-building', bg:'#EAF3DE', bd:'#3B6D11', tx:'#27500A', level:'l3'},
+  {id:'siff',name:'SIFF',                  sub:'Social impact funding + pitch coaching',   bg:'#E6F1FB', bd:'#185FA5', tx:'#0C447C', level:'l3'},
+  {id:'vg',  name:'Venture Growth',        sub:'Talks, workshops, open access',            bg:'#cbcafa', bd:'#232262', tx:'#232262', level:'l4'},
+  {id:'oc',  name:'Open Community',        sub:'Events, peer circles, co-founder matching',bg:'#FAECE7', bd:'#993C1D', tx:'#712B13', level:'l4'},
+];
+
+const ZONE_RULES = {
+  'zone-l1': {levels:['l1'], max:1,    hint:'Only Incubation or Acceleration — pick one'},
+  'zone-l3': {levels:['l3'], max:99,   hint:'Only SIFF or Founder Fundamentals'},
+  'zone-l4': {levels:['l4'], max:99,   hint:'Only Venture Growth or Open Community'},
+  'bank':    {levels:['l1','l3','l4'], max:99, hint:''},
+};
+
+const PERSONAS = {
+  explorer:{zones:{'zone-l1':[],'zone-l3':['ff'],'zone-l4':['oc']}, summary:'Start with <strong>Founder Fundamentals</strong> to validate your idea, then plug into <strong>Open Community</strong> to find peers and co-founders. Add a Level 1 track once you have something to milestone.'},
+  builder: {zones:{'zone-l1':['vi'],'zone-l3':[],'zone-l4':['oc','vg']}, summary:'<strong>Venture Incubation</strong> provides the milestone structure, <strong>Venture Growth</strong> gives access to expert talks and workshops, and <strong>Open Community</strong> keeps you connected throughout.'},
+  impact:  {zones:{'zone-l1':['vi'],'zone-l3':['siff','ff'],'zone-l4':['oc']}, summary:'<strong>Venture Incubation</strong> as the base track, <strong>SIFF</strong> layered on for pitch coaching and funding, <strong>Founder Fundamentals</strong> if early validation is still needed, and <strong>Open Community</strong> for belonging.'},
+  custom:  {zones:{'zone-l1':[],'zone-l3':[],'zone-l4':[]}, summary:'Drag programs into the stack to build a custom journey.'},
+};
+
+let state = {bank:PROGS.map(p=>p.id),'zone-l1':[],'zone-l3':[],'zone-l4':[]};
+let dragging=null, dragFrom=null;
+
+function prog(id){return PROGS.find(p=>p.id===id)}
+
+function makeCard(pid, zoneId){
+  const p=prog(pid);
+  const el=document.createElement('div');
+  el.className='pc';
+  el.draggable=true;
+  el.dataset.id=pid;
+  el.style.cssText=`background:${p.bg};border-color:${p.bd}`;
+  el.innerHTML=`<div class="pcn" style="color:${p.tx}">${p.name}</div><div class="pcs" style="color:${p.bd}">${p.sub}</div>${zoneId!=='bank'?`<button class="pcr" onclick="removeCard('${pid}','${zoneId}')">✕</button>`:''}`;
+  el.addEventListener('dragstart',e=>{dragging=pid;dragFrom=zoneId;e.dataTransfer.effectAllowed='move';});
+  el.addEventListener('dragend',()=>{dragging=null;dragFrom=null;});
+  return el;
+}
+
+function render(){
+  ['bank','zone-l1','zone-l3','zone-l4'].forEach(zid=>{
+    const el=document.getElementById(zid);
+    el.querySelectorAll('.pc').forEach(c=>c.remove());
+    state[zid].forEach(pid=>el.appendChild(makeCard(pid,zid)));
+  });
+  updateSummary();
+}
+
+function toast(msg,dur=2200){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.textContent='',dur);
+}
+
+function ov(e,zid){
+  e.preventDefault();
+  if(!dragging||dragFrom===zid)return;
+  const rule=ZONE_RULES[zid];
+  const p=prog(dragging);
+  if(rule&&rule.levels&&!rule.levels.includes(p.level))return;
+  document.getElementById(zid)?.classList.add('dov');
+}
+function ol(e,zid){document.getElementById(zid)?.classList.remove('dov');}
+
+function od(e,toZone){
+  e.preventDefault();
+  document.getElementById(toZone)?.classList.remove('dov');
+  if(!dragging||!dragFrom||dragFrom===toZone)return;
+  const p=prog(dragging);
+  const rule=ZONE_RULES[toZone];
+  if(rule.levels&&!rule.levels.includes(p.level)){toast(`${p.name} doesn't belong at this level`);return;}
+  if(rule.max&&state[toZone].length>=rule.max){toast(rule.hint||'This level is full');return;}
+  state[dragFrom]=state[dragFrom].filter(x=>x!==dragging);
+  state[toZone]=[...state[toZone],dragging];
+  render();
+}
+
+function removeCard(pid,fromZone){
+  state[fromZone]=state[fromZone].filter(x=>x!==pid);
+  state.bank=[...state.bank,pid];
+  render();
+}
+
+function clearStack(){
+  const all=Object.values(state).flat();
+  state={bank:all,'zone-l1':[],'zone-l3':[],'zone-l4':[]};
+  document.querySelectorAll('.pb').forEach(b=>b.classList.remove('active'));
+  render();
+}
+
+function loadPersona(key){
+  const p=PERSONAS[key];
+  const used=[...p.zones['zone-l1'],...p.zones['zone-l3'],...p.zones['zone-l4']];
+  state={bank:PROGS.map(x=>x.id).filter(id=>!used.includes(id)),'zone-l1':[...p.zones['zone-l1']],'zone-l3':[...p.zones['zone-l3']],'zone-l4':[...p.zones['zone-l4']]};
+  document.querySelectorAll('.pb').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.pb')[['explorer','builder','impact','custom'].indexOf(key)]?.classList.add('active');
+  document.getElementById('summary').innerHTML=p.summary;
+  render();
+}
+
+function updateSummary(){
+  const l1=state['zone-l1'].map(id=>prog(id)?.name).filter(Boolean);
+  const l3=state['zone-l3'].map(id=>prog(id)?.name).filter(Boolean);
+  const l4=state['zone-l4'].map(id=>prog(id)?.name).filter(Boolean);
+  if(!l1.length&&!l3.length&&!l4.length){document.getElementById('summary').innerHTML='Pick a persona or drag programs into the stack to build a founder journey.';return;}
+  let parts=['<strong>Membership</strong>'];
+  if(l1.length)parts.push(...l1.map(n=>`<strong>${n}</strong>`));
+  if(l3.length)parts.push(...l3.map(n=>`<strong>${n}</strong>`));
+  if(l4.length)parts.push(...l4.map(n=>`<strong>${n}</strong>`));
+  document.getElementById('summary').innerHTML='Stack: '+parts.join(' → ');
+}
+
+function shareStack(){
+  const l1=state['zone-l1'].map(id=>prog(id)?.name).filter(Boolean);
+  const l3=state['zone-l3'].map(id=>prog(id)?.name).filter(Boolean);
+  const l4=state['zone-l4'].map(id=>prog(id)?.name).filter(Boolean);
+  const all=[...l1,...l3,...l4];
+  const msg=all.length?`I've built this i-lab stack: Membership → ${all.join(' → ')}. What kind of founder does this journey suit best and what should they focus on in each program?`:`Tell me more about how the i-lab stacking model works.`;
+  sendPrompt(msg);
+}
+
+render();
+</script>
