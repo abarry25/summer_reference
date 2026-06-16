@@ -148,27 +148,38 @@ body {
   cursor: pointer;
   text-align: left;
   transition: all .15s;
+  position: relative;
 }
 
-.pb:hover {
-  background: #f5f5f3;
-  border-color: #888;
+.pb .pb-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  background: #1A1A1A;
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.6;
+  padding: 10px 14px;
+  border-radius: 8px;
+  width: 220px;
+  z-index: 50;
+  pointer-events: none;
+  white-space: normal;
 }
 
-.pb.active {
-  border-color: #000;
-  background: #f5f5f3;
-  color: #000;
+.pb .pb-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 16px;
+  border: 6px solid transparent;
+  border-top-color: #1A1A1A;
 }
 
-.pb .pbn {
-  font-size: 13px;
-  font-weight: 500;
-  color: #000;
+.pb:hover .pb-tooltip {
   display: block;
-  margin-bottom: 2px;
 }
-
 /* ── MAIN LAYOUT ── */
 .sb-main {
   display: grid;
@@ -414,12 +425,40 @@ body {
 
   <div style="margin-bottom:16px">
     <div class="col-label" style="margin-bottom:8px">Start with a persona</div>
-    <div class="sb-top">
-      <button class="pb" onclick="loadPersona('explorer')"><span class="pbn">Early explorer</span>Idea stage, needs validation first</button>
-      <button class="pb" onclick="loadPersona('builder')"><span class="pbn">Active builder</span>Post-idea, ready for milestones</button>
-      <button class="pb" onclick="loadPersona('impact')"><span class="pbn">Social impact founder</span>Mission-driven, needs funding</button>
-      <button class="pb" onclick="loadPersona('custom')"><span class="pbn">Build your own</span>Drag programs to build a stack</button>
-    </div>
+<div class="sb-top">
+  <button class="pb" onclick="loadPersona('exploring')">
+    <span class="pbn">Exploring & Validating</span>
+    Low commitment, open access
+    <span class="pb-tooltip">
+      <strong style="color:#fff;display:block;margin-bottom:4px">Personas in this cluster</strong>
+      Curious Window Shopper · Motivated First-Time Founder
+    </span>
+  </button>
+  <button class="pb" onclick="loadPersona('building')">
+    <span class="pbn">Building & Milestoning</span>
+    Ready for structure and milestones
+    <span class="pb-tooltip">
+      <strong style="color:#fff;display:block;margin-bottom:4px">Personas in this cluster</strong>
+      Full Time Founder · The Scaler · Deep Tech Pioneer · Health Care + Life Sci Visionary
+    </span>
+  </button>
+  <button class="pb" onclick="loadPersona('impact')">
+    <span class="pbn">Impact & Funding</span>
+    Mission-driven, needs funding pathway
+    <span class="pb-tooltip">
+      <strong style="color:#fff;display:block;margin-bottom:4px">Personas in this cluster</strong>
+      Mission-Driven Social Innovator · Global Changemaker
+    </span>
+  </button>
+  <button class="pb" onclick="loadPersona('specialist')">
+    <span class="pbn">Specialist & Flexible</span>
+    Independent, engages on own terms
+    <span class="pb-tooltip">
+      <strong style="color:#fff;display:block;margin-bottom:4px">Personas in this cluster</strong>
+      Subject Matter Expert · The Remote Worker
+    </span>
+  </button>
+</div>
   </div>
 
   <div class="sb-main">
@@ -506,10 +545,22 @@ const ZONE_RULES = {
 };
 
 const PERSONAS = {
-  explorer:{zones:{'zone-l1':[],'zone-l3':['ff'],'zone-l4':['oc']}, summary:'Start with <strong>Founder Fundamentals</strong> to validate your idea, then plug into <strong>Open Community</strong> to find peers and co-founders. Add a Level 1 track once you have something to milestone.'},
-  builder: {zones:{'zone-l1':['vi'],'zone-l3':[],'zone-l4':['oc','vg']}, summary:'<strong>Venture Incubation</strong> provides the milestone structure, <strong>Venture Growth</strong> gives access to expert talks and workshops, and <strong>Open Community</strong> keeps you connected throughout.'},
-  impact:  {zones:{'zone-l1':['vi'],'zone-l3':['siff','ff'],'zone-l4':['oc']}, summary:'<strong>Venture Incubation</strong> as the base track, <strong>SIFF</strong> layered on for pitch coaching and funding, <strong>Founder Fundamentals</strong> if early validation is still needed, and <strong>Open Community</strong> for belonging.'},
-  custom:  {zones:{'zone-l1':[],'zone-l3':[],'zone-l4':[]}, summary:'Drag programs into the stack to build a custom journey.'},
+  exploring: {
+    zones: {'zone-l1':[], 'zone-l3':['ff'], 'zone-l4':['oc']},
+    summary: '<strong>Founder Fundamentals</strong> to validate the idea and build early skills, plus <strong>Open Community</strong> for peer connection and co-founder matching. No Level 1 track yet — these founders need to explore before committing to a structured program.'
+  },
+  building: {
+    zones: {'zone-l1':['vi'], 'zone-l3':[], 'zone-l4':['vg','oc']},
+    summary: '<strong>Venture Incubation</strong> provides the milestone structure these founders are ready for. <strong>Venture Growth</strong> adds expert talks and workshops, and <strong>Open Community</strong> keeps them connected to the wider ecosystem.'
+  },
+  impact: {
+    zones: {'zone-l1':['vi'], 'zone-l3':['siff'], 'zone-l4':['oc']},
+    summary: '<strong>Venture Incubation</strong> as the milestone base, <strong>SIFF</strong> layered on for social impact pitch coaching and funding, and <strong>Open Community</strong> for belonging and network. SIFF and Incubation are the strongest pairing in the model.'
+  },
+  specialist: {
+    zones: {'zone-l1':[], 'zone-l3':[], 'zone-l4':['vg','oc']},
+    summary: 'No Level 1 track required — <strong>Venture Growth</strong> and <strong>Open Community</strong> are both independently activated, so these founders can engage deeply on their own schedule without a selection process or weekly commitment.'
+  },
 };
 
 let state = {bank:PROGS.map(p=>p.id),'zone-l1':[],'zone-l3':[],'zone-l4':[]};
