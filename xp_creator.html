@@ -7,9 +7,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-  
-  :root {
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── ROOT VARIABLES ── */
+:root {
   --cream: #EBEAE3;
   --ink: #000000;
   --ink-mid: #444;
@@ -26,19 +31,21 @@
   --coral: #711213;
   --coral-light: #FFC7C8;
   --rule: #D1D1D1;
-  --blue:  #4A90C4;
-  --blue-light:#cee5f7 ;
-  }
+  --blue: #4A90C4;
+  --blue-light: #cee5f7;
+}
 
-  
-    body {
-    background: var(--cream);
-    color: var(--ink);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
+/* ── BODY ── */
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── NAV ── */
 .top-nav {
   position: sticky;
   top: 0;
@@ -64,71 +71,322 @@
   color: #888;
 }
 
-  .top-nav-right a {
+.top-nav-right a {
   margin-left: 20px;
   text-decoration: none;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: .12em;
   text-transform: uppercase;
- color: #888;
+  color: #888;
 }
 
 .top-nav-right a:hover {
   border-bottom-color: var(--blue);
 }
 
-.page-wrap{max-width:900px;margin:0 auto;padding:40px 24px 80px}
+/* ── PAGE ── */
+.page-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
 
-.page-header{margin-bottom:32px}
-.page-eyebrow{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:#888;margin-bottom:8px}
-.page-title{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(24px,3vw,36px);color:#000;line-height:1.15;margin-bottom:8px}
-.page-sub{font-size:14px;color:#444;max-width:520px;line-height:1.6}
+.page-header {
+  margin-bottom: 32px;
+}
 
-.sb-top{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
-.col-label{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:8px}
-.pb{padding:10px 12px;border:0.5px solid #D1D1D1;border-radius:8px;background:#fff;color:#888;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:left;transition:all .15s}
-.pb:hover{background:#f5f5f3;border-color:#888}
-.pb.active{border-color:#000;background:#f5f5f3;color:#000}
-.pb .pbn{font-size:13px;font-weight:500;color:#000;display:block;margin-bottom:2px}
+.page-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 8px;
+}
 
-.sb-main{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.page-title {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(24px, 3vw, 36px);
+  color: #000;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
 
-.bank{min-height:80px;border:0.5px dashed #D1D1D1;border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:6px;background:#fff}
-.bank.dov{border-color:#EA3D3E;background:#fff9f9}
+.page-sub {
+  font-size: 14px;
+  color: #444;
+  max-width: 520px;
+  line-height: 1.6;
+}
 
-.level-block{margin-bottom:8px}
-.level-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.level-pip{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
-.level-title{font-size:12px;font-weight:500;color:#000}
-.level-rule{font-size:11px;color:#888}
+/* ── PERSONA BUTTONS ── */
+.sb-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+}
 
-.zone{min-height:48px;border:0.5px dashed #D1D1D1;border-radius:8px;padding:4px;display:flex;flex-direction:column;gap:4px;transition:all .15s;background:#fff}
-.zone.dov{border-color:#EA3D3E;background:#fff9f9}
-.zone-hint{font-size:11px;color:#aaa;padding:8px 8px}
+.col-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 8px;
+}
 
-.pc{padding:9px 12px;border-radius:8px;cursor:grab;user-select:none;border:0.5px solid transparent;position:relative;transition:opacity .15s}
-.pc:active{cursor:grabbing;opacity:.7}
-.pc .pcn{font-size:13px;font-weight:500}
-.pc .pcs{font-size:11px;margin-top:1px}
-.pc .pcr{position:absolute;top:7px;right:8px;background:none;border:none;cursor:pointer;font-size:13px;opacity:.35;color:#000;line-height:1;padding:2px;font-family:'DM Sans',sans-serif}
-.pc .pcr:hover{opacity:.8}
+.pb {
+  padding: 10px 12px;
+  border: 0.5px solid #D1D1D1;
+  border-radius: 8px;
+  background: #fff;
+  color: #888;
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  text-align: left;
+  transition: all .15s;
+}
 
-.base-block{padding:10px 12px;border-radius:8px;border:0.5px solid #A32D2D;background:#FCEBEB;margin-bottom:4px}
-.base-block .pcn{font-size:13px;font-weight:500;color:#791F1F}
-.base-block .pcs{font-size:11px;color:#A32D2D;margin-top:1px}
+.pb:hover {
+  background: #f5f5f3;
+  border-color: #888;
+}
 
-.toast{font-size:12px;color:#EA3D3E;padding:4px 0;min-height:18px;margin-top:2px}
-.summary{margin-top:16px;padding:14px 16px;border-radius:8px;background:#fff;border:0.5px solid #D1D1D1;font-size:13px;color:#444;min-height:48px;line-height:1.6}
-.summary strong{color:#000;font-weight:500}
+.pb.active {
+  border-color: #000;
+  background: #f5f5f3;
+  color: #000;
+}
 
-.sb-actions{display:flex;gap:8px;margin-top:12px}
-.btn{padding:8px 16px;border:0.5px solid #D1D1D1;border-radius:20px;background:#fff;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;color:#444;transition:all .15s}
-.btn:hover{background:#f5f5f3;border-color:#888}
-.btn-primary{background:#EA3D3E;color:#fff;border-color:#EA3D3E}
-.btn-primary:hover{background:#711213;border-color:#711213}
+.pb .pbn {
+  font-size: 13px;
+  font-weight: 500;
+  color: #000;
+  display: block;
+  margin-bottom: 2px;
+}
 
-.copied{font-size:12px;color:#3B6D11;padding:4px 0;min-height:18px;margin-top:4px}
+/* ── MAIN LAYOUT ── */
+.sb-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* ── BANK ── */
+.bank {
+  min-height: 80px;
+  border: 0.5px dashed #D1D1D1;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #fff;
+}
+
+.bank.dov {
+  border-color: #EA3D3E;
+  background: #fff9f9;
+}
+
+/* ── LEVEL BLOCKS ── */
+.level-block {
+  margin-bottom: 8px;
+}
+
+.level-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.level-pip {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.level-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #000;
+}
+
+.level-rule {
+  font-size: 11px;
+  color: #888;
+}
+
+/* ── DROP ZONES ── */
+.zone {
+  min-height: 48px;
+  border: 0.5px dashed #D1D1D1;
+  border-radius: 8px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all .15s;
+  background: #fff;
+}
+
+.zone.dov {
+  border-color: #EA3D3E;
+  background: #fff9f9;
+}
+
+.zone-hint {
+  font-size: 11px;
+  color: #aaa;
+  padding: 8px;
+}
+
+/* ── PROGRAM CARDS ── */
+.pc {
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: grab;
+  user-select: none;
+  border: 0.5px solid transparent;
+  position: relative;
+  transition: opacity .15s;
+}
+
+.pc:active {
+  cursor: grabbing;
+  opacity: .7;
+}
+
+.pc .pcn {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.pc .pcs {
+  font-size: 11px;
+  margin-top: 1px;
+}
+
+.pc .pcr {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: .35;
+  color: #000;
+  line-height: 1;
+  padding: 2px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.pc .pcr:hover {
+  opacity: .8;
+}
+
+/* ── BASE BLOCK ── */
+.base-block {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 0.5px solid #A32D2D;
+  background: #FCEBEB;
+  margin-bottom: 4px;
+}
+
+.base-block .pcn {
+  font-size: 13px;
+  font-weight: 500;
+  color: #791F1F;
+}
+
+.base-block .pcs {
+  font-size: 11px;
+  color: #A32D2D;
+  margin-top: 1px;
+}
+
+/* ── FEEDBACK ── */
+.toast {
+  font-size: 12px;
+  color: #EA3D3E;
+  padding: 4px 0;
+  min-height: 18px;
+  margin-top: 2px;
+}
+
+.copied {
+  font-size: 12px;
+  color: #3B6D11;
+  padding: 4px 0;
+  min-height: 18px;
+  margin-top: 4px;
+}
+
+/* ── SUMMARY ── */
+.summary {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: #fff;
+  border: 0.5px solid #D1D1D1;
+  font-size: 13px;
+  color: #444;
+  min-height: 48px;
+  line-height: 1.6;
+}
+
+.summary strong {
+  color: #000;
+  font-weight: 500;
+}
+
+/* ── ACTIONS ── */
+.sb-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: 0.5px solid #D1D1D1;
+  border-radius: 20px;
+  background: #fff;
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  color: #444;
+  transition: all .15s;
+}
+
+.btn:hover {
+  background: #f5f5f3;
+  border-color: #888;
+}
+
+.btn-primary {
+  background: #EA3D3E;
+  color: #fff;
+  border-color: #EA3D3E;
+}
+
+.btn-primary:hover {
+  background: #711213;
+  border-color: #711213;
+}
 </style>
 </head>
 <body>
