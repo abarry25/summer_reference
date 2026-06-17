@@ -82,8 +82,6 @@
 .top-nav-right a:hover {
   border-bottom-color: var(--blue);
 }
-  
-
 
   /* ── HEADER ── */
   header {
@@ -376,7 +374,7 @@
 
   .card-header.open .chevron { transform: rotate(180deg); }
 
-<---- UX TAGS ---> 
+/* ── UX TAGS ── */
   .ux-tags {
   display: flex;
   flex-wrap: wrap;
@@ -739,7 +737,7 @@
 
   /* ── LEGEND ── */
   .legend {
-    margin: 32px 60px 0;
+    margin: 32px 60px;
     padding: 16px 20px;
     border: 1px solid var(--rule);
     border-radius: 10px;
@@ -827,8 +825,171 @@
   .theme-coral .entry-badge { background: var(--coral-light); color: var(--coral); }
 
   .theme-blue .color-strip { background: var(--blue); }
-.theme-blue .card-icon { background: var(--blue-light); color: var(--blue); }
+  .theme-blue .card-icon { background: var(--blue-light); color: var(--blue); }
   .theme-blue .entry-badge { background: var(--blue-light); color: var(--blue); }
+
+  /* ══════════════════════════════════════════════
+     ── PROGRAMS ROW SECTION (NEW) ──
+  ══════════════════════════════════════════════ */
+
+  .programs-row-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 12px;
+  }
+
+  .containers-section-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+  }
+
+  /* ── Horizontal card row ── */
+  .programs-hflex {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .program-hcard {
+    flex: 1;
+    min-width: 0;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow .15s;
+    user-select: none;
+  }
+
+  .program-hcard:hover {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+
+  /* Active ring per theme */
+  .program-hcard.phc-active.theme-coral  { box-shadow: 0 0 0 2px var(--coral); }
+  .program-hcard.phc-active.theme-purple { box-shadow: 0 0 0 2px var(--purple); }
+  .program-hcard.phc-active.theme-green  { box-shadow: 0 0 0 2px var(--green); }
+  .program-hcard.phc-active.theme-teal   { box-shadow: 0 0 0 2px var(--teal); }
+  .program-hcard.phc-active.theme-amber  { box-shadow: 0 0 0 2px var(--amber); }
+  .program-hcard.phc-active.theme-blue   { box-shadow: 0 0 0 2px var(--blue); }
+
+  .phcard-layout {
+    display: flex;
+    height: 100%;
+  }
+
+  .phcard-strip {
+    width: 5px;
+    flex-shrink: 0;
+  }
+
+  .phcard-content {
+    flex: 1;
+    min-width: 0;
+    padding: 16px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    transition: background .12s;
+  }
+
+  .program-hcard:hover .phcard-content,
+  .program-hcard.phc-active .phcard-content { background: #FAFAF8; }
+
+  .phcard-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .phcard-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .phcard-chevron {
+    color: var(--ink-light);
+    font-size: 12px;
+    transition: transform .2s;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .phcard-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -.01em;
+    margin-bottom: 4px;
+  }
+
+  .phcard-tagline {
+    font-size: 11px;
+    color: var(--ink-light);
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .phcard-footer {
+    margin-top: 12px;
+  }
+
+  .phcard-badge {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    line-height: 1.5;
+  }
+
+  /* Theme rules for horizontal phcards */
+  .theme-coral .phcard-strip  { background: var(--coral); }
+  .theme-coral .phcard-icon   { background: var(--coral-light); color: var(--coral); }
+  .theme-coral .phcard-badge  { background: var(--coral-light); color: var(--coral); }
+
+  .theme-purple .phcard-strip { background: var(--purple); }
+  .theme-purple .phcard-icon  { background: var(--purple-light); color: var(--purple); }
+  .theme-purple .phcard-badge { background: var(--purple-light); color: var(--purple); }
+
+  .theme-green .phcard-strip  { background: var(--green); }
+  .theme-green .phcard-icon   { background: var(--green-light); color: var(--green); }
+  .theme-green .phcard-badge  { background: var(--green-light); color: var(--green); }
+
+  .theme-teal .phcard-strip   { background: var(--teal); }
+  .theme-teal .phcard-icon    { background: var(--teal-light); color: var(--teal); }
+  .theme-teal .phcard-badge   { background: var(--teal-light); color: var(--teal); }
+
+  /* ── Full-width detail panels ── */
+  .ppanel {
+    display: none;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 12px;
+  }
+
+  /* Coloured top accent matching the active card */
+  .ppanel.theme-coral  { border-top: 3px solid var(--coral); }
+  .ppanel.theme-purple { border-top: 3px solid var(--purple); }
+  .ppanel.theme-green  { border-top: 3px solid var(--green); }
+  .ppanel.theme-teal   { border-top: 3px solid var(--teal); }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 780px) {
@@ -841,11 +1002,16 @@
     .grid-col:last-child { border-bottom: none; }
     .entry-badge { display: none; }
     .card-right { gap: 6px; }
+    /* Programs row responsive */
+    .programs-hflex { flex-direction: column; }
+    .phcard-badge { display: none; }
+    .search-bar-wrap { margin-left: 20px; margin-right: 20px; }
   }
 </style>
 </head>
 <body>
-    <!-- Universal Top Nav -->
+
+  <!-- Universal Top Nav -->
   <nav class="top-nav">
     <div class="top-nav-inner">
       <div class="top-nav-left">
@@ -868,7 +1034,8 @@
     <span class="meta-chip">🎯 20+ programs and events</span>
   </div>
 </header>
-  <div class="search-bar-wrap">
+
+<div class="search-bar-wrap">
   <div class="search-bar">
     <span class="search-icon">🔍</span>
     <input type="text" id="siteSearch" placeholder="Search programs, topics, keywords… e.g. pitch, virtual, community" autocomplete="off">
@@ -920,34 +1087,122 @@
     </div>
   </div>
 </div>
-  
+
 <main>
 
-   <!-- MEMBERSHIP -->
-  <div class="container-card theme-coral">
-    <div class="card-header" onclick="toggle(this, 'M')" aria-expanded="false">
-      <div class="color-strip"></div>
-      <div class="card-header-inner">
-        <div class="card-left">
-          <div class="card-icon">🔑</div>
-          <div class="card-titles">
-            <span class="card-title">Membership</span>
-            <span class="card-tagline">Students start here — Membership unlocks everything the Harvard Innovation Labs has to offer.</span>
-            <div class="ux-tags">
-  <span class="ux-tag">Supported</span>
-  <span class="ux-tag">Empowered</span>
-  <span class="ux-tag">Curious</span>
-              <span class="ux-tag">Motivated to return</span>
-</div>
+  <!-- ══════════════════════════════════════════════
+       PROGRAMS ROW — Membership · LLX · Life Lab · Climate Circle
+  ══════════════════════════════════════════════ -->
+  <div class="programs-row-section">
+    <p class="programs-row-eyebrow">Programs</p>
+
+    <div class="programs-hflex">
+
+      <!-- ── Membership card ── -->
+      <div class="program-hcard theme-coral"
+           data-panel-id="ppanel-membership"
+           onclick="togglePHCard('ppanel-membership', this)">
+        <div class="phcard-layout">
+          <div class="phcard-strip"></div>
+          <div class="phcard-content">
+            <div class="phcard-top">
+              <div class="phcard-icon">🔑</div>
+              <span class="phcard-chevron">▾</span>
+            </div>
+            <div class="phcard-title">Membership</div>
+            <div class="phcard-tagline">Students start here — unlocks everything at the Harvard Innovation Labs</div>
+            <div class="ux-tags" style="margin-top:8px;">
+              <span class="ux-tag">Supported</span>
+              <span class="ux-tag">Empowered</span>
+              <span class="ux-tag">Curious</span>
+            </div>
+            <div class="phcard-footer">
+              <span class="phcard-badge">Entry: supported activation</span>
+            </div>
           </div>
         </div>
-        <div class="card-right">
-          <span class="entry-badge">Entry: supported activation</span>
-          <span class="chevron">▾</span>
+      </div>
+
+      <!-- ── Launch Lab X card ── -->
+      <div class="program-hcard theme-purple"
+           data-panel-id="ppanel-llx"
+           onclick="togglePHCard('ppanel-llx', this)">
+        <div class="phcard-layout">
+          <div class="phcard-strip"></div>
+          <div class="phcard-content">
+            <div class="phcard-top">
+              <div class="phcard-icon">⚡</div>
+              <span class="phcard-chevron">▾</span>
+            </div>
+            <div class="phcard-title">Launch Lab X</div>
+            <div class="phcard-tagline">Harvard's flagship post-accelerator residency — equity-free, intensive company building</div>
+            <div class="ux-tags" style="margin-top:8px;">
+              <span class="ux-tag">Challenged</span>
+              <span class="ux-tag">Empowered</span>
+              <span class="ux-tag">Focused</span>
+            </div>
+            <div class="phcard-footer">
+              <span class="phcard-badge">Entry: supported activation + selection</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="card-body" id="M">
+
+      <!-- ── Life Lab card ── -->
+      <div class="program-hcard theme-green"
+           data-panel-id="ppanel-lifelab"
+           onclick="togglePHCard('ppanel-lifelab', this)">
+        <div class="phcard-layout">
+          <div class="phcard-strip"></div>
+          <div class="phcard-content">
+            <div class="phcard-top">
+              <div class="phcard-icon">🧬</div>
+              <span class="phcard-chevron">▾</span>
+            </div>
+            <div class="phcard-title">Life Lab</div>
+            <div class="phcard-tagline">Life sciences coworking, community, and expert programming for bio/health founders</div>
+            <div class="ux-tags" style="margin-top:8px;">
+              <span class="ux-tag">Inspired</span>
+              <span class="ux-tag">Belonging</span>
+              <span class="ux-tag">Supported</span>
+            </div>
+            <div class="phcard-footer">
+              <span class="phcard-badge">Entry: supported activation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Climate Circle card ── -->
+      <div class="program-hcard theme-teal"
+           data-panel-id="ppanel-climate"
+           onclick="togglePHCard('ppanel-climate', this)">
+        <div class="phcard-layout">
+          <div class="phcard-strip"></div>
+          <div class="phcard-content">
+            <div class="phcard-top">
+              <div class="phcard-icon">🌍</div>
+              <span class="phcard-chevron">▾</span>
+            </div>
+            <div class="phcard-title">Climate Circle</div>
+            <div class="phcard-tagline">Cohort for climate tech and sustainability founders — peer accountability and expert speakers</div>
+            <div class="ux-tags" style="margin-top:8px;">
+              <span class="ux-tag">Inspired</span>
+              <span class="ux-tag">Belonging</span>
+              <span class="ux-tag">Challenged</span>
+            </div>
+            <div class="phcard-footer">
+              <span class="phcard-badge">Entry: supported activation + selection</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.programs-hflex -->
+
+
+    <!-- ══ MEMBERSHIP PANEL ══ -->
+    <div class="ppanel theme-coral" id="ppanel-membership">
       <div class="card-grid">
         <div class="grid-col">
           <p class="col-heading">⚙️ Delivery mechanisms</p>
@@ -957,15 +1212,14 @@
             <li><strong>Newsletter Subscription</strong> — weekly newsletter cadence with resource information</li>
             <li><strong>Slack Community</strong> — access to Slack community for curated channels and communication</li>
             <li><strong>Co-working space</strong> — access to the co-working location</li>
-            
           </ul>
         </div>
         <div class="grid-col">
           <p class="col-heading">✅ Eligibility</p>
           <ul class="item-list">
-            <li><strong>Harvard Student(s)</strong> — Current Harvard students</li>
-             <li><strong>Recent Graduates with Bonus Semester</strong> — Harvard Grads of May 2026 who participated in Membership during the Fall and/or Spring.</li>
-            <li><strong>Registered Team Members</strong> — listed team members of Harvard Team Lead ventures in Membership </li>
+            <li><strong>Harvard Students</strong> — Current Harvard students</li>
+            <li><strong>Recent Graduates with Bonus Semester</strong> — Harvard Grads of May 2026 who participated in Membership during the Fall and/or Spring</li>
+            <li><strong>Registered Team Members</strong> — listed team members of Harvard Team Lead ventures in Membership</li>
           </ul>
         </div>
         <div class="grid-col">
@@ -997,35 +1251,233 @@
           <span class="flow-step">Keep warm if disengaged</span>
         </div>
       </div>
-    <div class="leads-section">
-  <div class="leads-left">
-    <p class="leads-label">Programmatic Lead(s)</p>
-    <div class="leads-row">
-      <div class="lead-item">
-        <img src="images/101524_Hi_Alexa_4_web.jpg-2.webp" alt="Alexa Barry" class="lead-avatar">
-        <span class="lead-name">Lexi</span>
-      </div>
-    </div>
-  </div>
-  <div class="leads-right">
-    <p class="leads-label">Programmatic Facilitators</p>
-    <div class="leads-row">
-     
+      <div class="leads-section">
+        <div class="leads-left">
+          <p class="leads-label">Programmatic Lead(s)</p>
+          <div class="leads-row">
             <div class="lead-item">
-        <img src="images/032426_Lauren_Koppel_1.jpg.webp" alt="Lauren Koppelson" class="lead-avatar">
-        <span class="lead-name">Lauren</span>
-      </div>
-          <div class="lead-item">
-        <img src="images/102224_Hi_Ashley_13_web.jpg.webp" alt="Ashley Olafsen" class="lead-avatar">
-        <span class="lead-name">Ashley</span>
-      </div>
-       </div>
+              <img src="images/101524_Hi_Alexa_4_web.jpg-2.webp" alt="Alexa Barry" class="lead-avatar">
+              <span class="lead-name">Lexi</span>
+            </div>
+          </div>
+        </div>
+        <div class="leads-right">
+          <p class="leads-label">Programmatic Facilitators</p>
+          <div class="leads-row">
+            <div class="lead-item">
+              <img src="images/032426_Lauren_Koppel_1.jpg.webp" alt="Lauren Koppelson" class="lead-avatar">
+              <span class="lead-name">Lauren</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/102224_Hi_Ashley_13_web.jpg.webp" alt="Ashley Olafsen" class="lead-avatar">
+              <span class="lead-name">Ashley</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+
+
+    <!-- ══ LAUNCH LAB X PANEL ══ -->
+    <div class="ppanel theme-purple" id="ppanel-llx">
+      <div class="card-grid">
+        <div class="grid-col">
+          <p class="col-heading">⚙️ Delivery mechanisms</p>
+          <ul class="item-list">
+            <li><strong>Residency access</strong> — dedicated workspace and i-lab resources, year-round</li>
+            <li><strong>Advisor network</strong> — continued access to the full i-lab advisor community</li>
+            <li><strong>Board meeting check-ins</strong> — structured accountability with senior advisors</li>
+            <li><strong>Demo Day</strong> — culminating pitch event for investors and partners</li>
+            <li><strong>Alumni community</strong> — connections to the broader Harvard innovation ecosystem</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">📚 Content this summer</p>
+          <ul class="item-list">
+            <li><strong>Fundraising strategy</strong> — investor relationships, deck refinement, term sheet navigation</li>
+            <li><strong>Scaling operations</strong> — team building, hiring strategy, and product development</li>
+            <li><strong>Pitch preparation</strong> — cumulative coaching building toward Demo Day</li>
+            <li><strong>Peer cohort learning</strong> — alumni and student founders building alongside each other</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">👥 Who it's for</p>
+          <ul class="item-list">
+            <li>Harvard-connected founders selected at the Summer Accelerator pitch event</li>
+            <li>Alumni and student founders pursuing high-growth ventures</li>
+            <li>Founders raising or preparing to raise a pre-seed or seed round</li>
+            <li>Highest-commitment program — full-time venture focus expected</li>
+            <li>Led by Joanna Furgiuele + Rym Baouendi</li>
+          </ul>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-left">
+          <p class="entry-label">Entry model — supported activation + selection</p>
+          <p class="entry-desc">Selection occurs at the Summer Accelerator pitch event. LLX residency begins after a successful pitch and team onboarding process led by the i-lab team.</p>
+        </div>
+        <div class="entry-flow">
+          <p class="entry-label">User Journey</p>
+          <span class="flow-step">Summer Accelerator pitch</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">LLX selection decision</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Onboarding</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Residency begins</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Demo Day</span>
+        </div>
+      </div>
+      <div class="leads-section">
+        <div class="leads-left">
+          <p class="leads-label">Programmatic Lead(s)</p>
+          <div class="leads-row">
+            <div class="lead-item">
+              <img src="images/022525_Rym_6_web.jpg.webp" alt="Rym" class="lead-avatar">
+              <span class="lead-name">Rym</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/031825_Joanna_1_web.jpg.webp" alt="Joanna" class="lead-avatar">
+              <span class="lead-name">Joanna</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+
+
+    <!-- ══ LIFE LAB PANEL ══ -->
+    <div class="ppanel theme-green" id="ppanel-lifelab">
+      <div class="card-grid">
+        <div class="grid-col">
+          <p class="col-heading">⚙️ Delivery mechanisms</p>
+          <ul class="item-list">
+            <li><strong>Dedicated coworking space</strong> — life sciences-specific work environment</li>
+            <li><strong>Expert seminars</strong> — industry leaders in biotech, health, and medicine</li>
+            <li><strong>Advisor office hours</strong> — life sciences mentors and domain experts</li>
+            <li><strong>Peer cohort community</strong> — co-located life sciences founders in residence</li>
+            <li><strong>Industry connections</strong> — links to Boston biotech ecosystem and capital networks</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">📚 Content this summer</p>
+          <ul class="item-list">
+            <li><strong>Translational science</strong> — from research to venture, technology transfer</li>
+            <li><strong>Regulatory pathways</strong> — FDA, clinical trials, IP considerations for life sciences</li>
+            <li><strong>Life sciences funding</strong> — grants, NIH, biotech VCs, and angels</li>
+            <li><strong>Team building</strong> — co-founder and scientific advisory board formation</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">👥 Who it's for</p>
+          <ul class="item-list">
+            <li>Founders working in biotech, health tech, medicine, and life sciences</li>
+            <li>Researchers translating scientific discoveries into ventures</li>
+            <li>Students and alumni with a life sciences focus</li>
+            <li>Founders who benefit from co-location with a dedicated life sciences peer community</li>
+          </ul>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-left">
+          <p class="entry-label">Entry model — supported activation</p>
+          <p class="entry-desc">Life Lab participants apply through a streamlined intake process. The team identifies fit and connects residents with relevant advisors and peers from day one.</p>
+        </div>
+        <div class="entry-flow">
+          <p class="entry-label">User Journey</p>
+          <span class="flow-step">Application</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Review + intake</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Residency onboarding</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Engage in content + community</span>
+        </div>
+      </div>
+      <div class="leads-section">
+        <div class="leads-left">
+          <p class="leads-label">Programmatic Lead(s)</p>
+          <div class="leads-row">
+            <div class="lead-item">
+              <img src="images/011725_Julia_Berman_14-Edit-2_web.jpg.webp" alt="Julia Berman" class="lead-avatar">
+              <span class="lead-name">Julia</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ CLIMATE CIRCLE PANEL ══ -->
+    <div class="ppanel theme-teal" id="ppanel-climate">
+      <div class="card-grid">
+        <div class="grid-col">
+          <p class="col-heading">⚙️ Delivery mechanisms</p>
+          <ul class="item-list">
+            <li><strong>Cohort sessions</strong> — weekly structured peer learning and accountability</li>
+            <li><strong>Expert speaker series</strong> — climate investors, founders, scientists, and policy experts</li>
+            <li><strong>Advisor office hours</strong> — sustainability-focused mentors and domain experts</li>
+            <li><strong>Community connections</strong> — links to Harvard's broader climate and sustainability ecosystem</li>
+            <li><strong>Showcase event</strong> — culminating cohort presentation</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">📚 Content this summer</p>
+          <ul class="item-list">
+            <li><strong>Climate technology</strong> — energy, mobility, food systems, carbon solutions</li>
+            <li><strong>Impact measurement</strong> — metrics, reporting frameworks, B-Corp considerations</li>
+            <li><strong>Climate funding landscape</strong> — climate VCs, government grants, impact investors</li>
+            <li><strong>Systems thinking</strong> — policy, market, and technology levers for climate</li>
+          </ul>
+        </div>
+        <div class="grid-col">
+          <p class="col-heading">👥 Who it's for</p>
+          <ul class="item-list">
+            <li>Founders with climate, sustainability, or clean energy ventures</li>
+            <li>Students exploring the intersection of business and environmental impact</li>
+            <li>Founders who benefit from a structured, values-aligned peer community</li>
+            <li>All stages welcome — from idea-stage to post-revenue</li>
+          </ul>
+        </div>
+      </div>
+      <div class="entry-section">
+        <div class="entry-left">
+          <p class="entry-label">Entry model — supported activation + selection</p>
+          <p class="entry-desc">Climate Circle cohort members are selected through a short application. The team curates the cohort to ensure strong peer chemistry and diverse climate focus areas.</p>
+        </div>
+        <div class="entry-flow">
+          <p class="entry-label">User Journey</p>
+          <span class="flow-step">Application</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Selection</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Cohort kickoff</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Weekly sessions + community</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">Showcase event</span>
+        </div>
+      </div>
+      <div class="leads-section">
+        <div class="leads-left">
+          <p class="leads-label">Programmatic Lead(s)</p>
+          <div class="leads-row">
+            <div class="lead-item">
+              <img src="images/101524_Hi_Alexa_4_web.jpg-2.webp" alt="Alexa Barry" class="lead-avatar">
+              <span class="lead-name">Lexi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.programs-row-section -->
+
+
+  <!-- ══ CONTAINERS SECTION LABEL ══ -->
+  <p class="containers-section-eyebrow">Program Containers</p>
+
 
   <!-- FOUNDER FUNDAMENTALS -->
   <div class="container-card theme-green">
@@ -1038,11 +1490,11 @@
             <span class="card-title">Founder Fundamentals</span>
             <span class="card-tagline">Validate your idea — customer discovery, experimentation, early skill-building</span>
             <div class="ux-tags">
-  <span class="ux-tag">Supported</span>
-  <span class="ux-tag">Empowered</span>
-  <span class="ux-tag">Curious</span>
+              <span class="ux-tag">Supported</span>
+              <span class="ux-tag">Empowered</span>
+              <span class="ux-tag">Curious</span>
               <span class="ux-tag">Motivated to return</span>
-</div>
+            </div>
           </div>
         </div>
         <div class="card-right">
@@ -1056,17 +1508,17 @@
         <div class="grid-col">
           <p class="col-heading">⚙️ Delivery mechanisms</p>
           <ul class="item-list">
-            <li><strong><a href="https://innovationlabs.harvard.edu/how-to/customer-validation-2" target="_blank">Primer</a></strong> — async, self-paced email journey for solo exploration</li>            
+            <li><strong><a href="https://innovationlabs.harvard.edu/how-to/customer-validation-2" target="_blank">Primer</a></strong> — async, self-paced email journey for solo exploration</li>
             <li><strong><a href="https://innovationlabs.harvard.edu/how-to/customer-discovery-sprint" target="_blank">Sprint</a></strong> — sequenced cohort: kickoff → field work → check-in → showcase</li>
             <li><strong>Hackathon</strong> — two-part: build prototype → return with customer feedback</li>
-            <li><strong> Themed Office hours</strong> — drop-in peer + advisor facilitation</li>
+            <li><strong>Themed Office hours</strong> — drop-in peer + advisor facilitation</li>
           </ul>
         </div>
         <div class="grid-col">
           <p class="col-heading">📚 Content this summer</p>
           <ul class="item-list">
-            <li><strong>Customer discovery</strong> — interviews,assumption testing,validation</li>
-            <li><strong>AI agent development</strong> — B2C concept-to-test with AI tools </li>
+            <li><strong>Customer discovery</strong> — interviews, assumption testing, validation</li>
+            <li><strong>AI agent development</strong> — B2C concept-to-test with AI tools</li>
           </ul>
         </div>
         <div class="grid-col">
@@ -1095,47 +1547,46 @@
           <span class="flow-step">Activate</span>
           <span class="flow-arrow">→</span>
           <span class="flow-step">Engage in content</span>
-            <span class="flow-arrow">→</span>
+          <span class="flow-arrow">→</span>
           <span class="flow-step">Keep warm if disengaged</span>
         </div>
       </div>
-    <div class="leads-section">
-  <div class="leads-left">
-    <p class="leads-label">Programmatic Lead(s)</p>
-    <div class="leads-row">
-      <div class="lead-item">
-        <img src="images/031125_Tom_Samph_web_1.jpg.webp" alt="Tom Samph" class="lead-avatar">
-        <span class="lead-name">Tom</span>
+      <div class="leads-section">
+        <div class="leads-left">
+          <p class="leads-label">Programmatic Lead(s)</p>
+          <div class="leads-row">
+            <div class="lead-item">
+              <img src="images/031125_Tom_Samph_web_1.jpg.webp" alt="Tom Samph" class="lead-avatar">
+              <span class="lead-name">Tom</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/101524_Hi_Alexa_4_web.jpg-2.webp" alt="Alexa Barry" class="lead-avatar">
+              <span class="lead-name">Lexi</span>
+            </div>
+          </div>
+        </div>
+        <div class="leads-right">
+          <p class="leads-label">Programmatic Facilitators</p>
+          <div class="leads-row">
+            <div class="lead-item">
+              <img src="images/102224_Hi_Phil_5_web.jpg.webp" alt="Phil Green" class="lead-avatar">
+              <span class="lead-name">Phil</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/102224_Hi_Pete_24_web.jpg.webp" alt="Peter Gladstone" class="lead-avatar">
+              <span class="lead-name">Pete</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/102224_Hi_Ashley_13_web.jpg.webp" alt="Ashley Olafsen" class="lead-avatar">
+              <span class="lead-name">Ashley</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/102224_Hi_Becca_14_web.jpg.webp" alt="Becca Xiong" class="lead-avatar">
+              <span class="lead-name">Becca</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="lead-item">
-        <img src="images/101524_Hi_Alexa_4_web.jpg-2.webp" alt="Alexa Barry" class="lead-avatar">
-        <span class="lead-name">Lexi</span>
-      </div>
-    </div>
-  </div>
-  <div class="leads-right">
-    <p class="leads-label">Programmatic Facilitators</p>
-    <div class="leads-row">
-      <div class="lead-item">
-        <img src="images/102224_Hi_Phil_5_web.jpg.webp" alt="Phil Green" class="lead-avatar">
-        <span class="lead-name">Phil</span>
-      </div>
-      <div class="lead-item">
-        <img src="images/102224_Hi_Pete_24_web.jpg.webp" alt="Peter Gladstone" class="lead-avatar">
-        <span class="lead-name">Pete</span>
-              </div>
-          <div class="lead-item">
-        <img src="images/102224_Hi_Ashley_13_web.jpg.webp" alt="Ashley Olafsen" class="lead-avatar">
-        <span class="lead-name">Ashley</span>
-      </div>
-      <div class="lead-item">
-        <img src="images/102224_Hi_Becca_14_web.jpg.webp" alt="Becca Xiong" class="lead-avatar">
-        <span class="lead-name">Becca</span>
-      </div>
-      </div>
-    </div>
-  </div>
-</div>
     </div>
   </div>
 
@@ -1150,12 +1601,11 @@
             <span class="card-title">Venture Incubation</span>
             <span class="card-tagline">Milestone-gated progression — pitches, advancement, advisor accountability</span>
             <div class="ux-tags">
-  <span class="ux-tag">Supported</span>
-  <span class="ux-tag">Satisfied</span>
-  <span class="ux-tag">Challenged</span>
-               <span class="ux-tag">Focused</span>
-          
-</div>
+              <span class="ux-tag">Supported</span>
+              <span class="ux-tag">Satisfied</span>
+              <span class="ux-tag">Challenged</span>
+              <span class="ux-tag">Focused</span>
+            </div>
           </div>
         </div>
         <div class="card-right">
@@ -1181,7 +1631,7 @@
             <li><strong>Venture milestones</strong> — what progress looks like at each stage of the VIP</li>
             <li><strong>Personalized advisor feedback</strong> — content shaped by each venture's specific needs</li>
             <li><strong>Advancement Ceremony</strong> — open to all members, celebration</li>
-            <li><strong>Advancement Panel</strong> —  pitch panel</li>
+            <li><strong>Advancement Panel</strong> — pitch panel</li>
           </ul>
         </div>
         <div class="grid-col">
@@ -1189,14 +1639,14 @@
           <ul class="item-list">
             <li>Selected cohort members</li>
             <li>Founders actively working toward defined venture milestones</li>
-             <li>Founders able to commit to 3-7 hrs/wk of work</li>
+            <li>Founders able to commit to 3-7 hrs/wk of work</li>
           </ul>
         </div>
       </div>
       <div class="entry-section">
         <div class="entry-left">
           <p class="entry-label">Entry model — supported activation + selection</p>
-          <p class="entry-desc">Requires application, review, and personal interview. The team actively manages every step. </p>
+          <p class="entry-desc">Requires application, review, and personal interview. The team actively manages every step.</p>
         </div>
         <div class="entry-flow">
           <p class="entry-label">User Journey</p>
@@ -1211,21 +1661,21 @@
           <span class="flow-step">Milestone progression</span>
         </div>
       </div>
-    <div class="leads-section">
-  <div class="leads-left">
-    <p class="leads-label">Programmatic Lead(s)</p>
-    <div class="leads-row">
-      <div class="lead-item">
-        <img src="images/031125_Tom_Samph_web_1.jpg.webp" alt="Tom Samph" class="lead-avatar">
-        <span class="lead-name">Tom</span>
+      <div class="leads-section">
+        <div class="leads-left">
+          <p class="leads-label">Programmatic Lead(s)</p>
+          <div class="leads-row">
+            <div class="lead-item">
+              <img src="images/031125_Tom_Samph_web_1.jpg.webp" alt="Tom Samph" class="lead-avatar">
+              <span class="lead-name">Tom</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  </div>
-    </div>
-  </div>
 
-    <!-- SOCIAL IMPACT FELLOWSHIP FUND-->
+  <!-- SOCIAL IMPACT FELLOWSHIP FUND -->
   <div class="container-card theme-blue">
     <div class="card-header" onclick="toggle(this, 'siff')" aria-expanded="false">
       <div class="color-strip"></div>
@@ -1234,14 +1684,13 @@
           <div class="card-icon">💸</div>
           <div class="card-titles">
             <span class="card-title">Social Impact Fellowship Fund (SIFF)</span>
-            <span class="card-tagline">Milestone-gated progression — pitches, advancement, advisor caoching</span>
+            <span class="card-tagline">Milestone-gated progression — pitches, advancement, advisor coaching</span>
             <div class="ux-tags">
-  <span class="ux-tag">Supported</span>
-  <span class="ux-tag">Added Value</span>
-  <span class="ux-tag">Inspired</span>
-                <span class="ux-tag">Joyful</span>
-            
-</div>
+              <span class="ux-tag">Supported</span>
+              <span class="ux-tag">Added Value</span>
+              <span class="ux-tag">Inspired</span>
+              <span class="ux-tag">Joyful</span>
+            </div>
           </div>
         </div>
         <div class="card-right">
@@ -1259,15 +1708,15 @@
             <li><strong>Coaching</strong> — regular advisor meetings directed at personal pitch coaching</li>
             <li><strong>Design consultation</strong> — regular staff meetings for deck design support</li>
             <li><strong>Internal pitches</strong> — advancement pitches to panel at milestone junctions</li>
-            <li><strong>Funding</strong> — operationaly efficient financial processing</li>
-              <li><strong>Promotion</strong> — curated promotions tied to i-lab branding</li>
+            <li><strong>Funding</strong> — operationally efficient financial processing</li>
+            <li><strong>Promotion</strong> — curated promotions tied to i-lab branding</li>
           </ul>
         </div>
         <div class="grid-col">
           <p class="col-heading">📚 Content this summer</p>
           <ul class="item-list">
-            <li><strong>Personalized advisor coaching </strong> — content shaped by each venture's specific needs</li>
-            <li><strong>Pitch Day Competition</strong> — pitch panel infront of external judges</li>
+            <li><strong>Personalized advisor coaching</strong> — content shaped by each venture's specific needs</li>
+            <li><strong>Pitch Day Competition</strong> — pitch panel in front of external judges</li>
           </ul>
         </div>
         <div class="grid-col">
@@ -1275,14 +1724,14 @@
           <ul class="item-list">
             <li>Selected cohort members within social impact</li>
             <li>Founders actively working toward defined venture milestones</li>
-             <li>Founders able to commit to ~10 hrs/wk of work + coaching sessions</li>
+            <li>Founders able to commit to ~10 hrs/wk of work + coaching sessions</li>
           </ul>
         </div>
       </div>
       <div class="entry-section">
         <div class="entry-left">
           <p class="entry-label">Entry model — supported activation + selection</p>
-          <p class="entry-desc">Requires application, review, and personal interview. The team actively manages every step. </p>
+          <p class="entry-desc">Requires application, review, and personal interview. The team actively manages every step.</p>
         </div>
         <div class="entry-flow">
           <p class="entry-label">User Journey</p>
@@ -1297,38 +1746,38 @@
           <span class="flow-step">Pitch Day</span>
         </div>
       </div>
-    <div class="leads-section">
-  <div class="leads-left">
-    <p class="leads-label">Programmatic Lead(s)</p>
-    <div class="leads-row">
-      <div class="lead-item">
-        <img src="images/rebekah_emanuel41.jpg.webp" alt="Rebekah Emanuel" class="lead-avatar">
-        <span class="lead-name">Rebekah</span>
-      </div>
+      <div class="leads-section">
+        <div class="leads-left">
+          <p class="leads-label">Programmatic Lead(s)</p>
+          <div class="leads-row">
             <div class="lead-item">
-        <img src="images/032426_Lauren_Koppel_1.jpg.webp" alt="Lauren Koppelson" class="lead-avatar">
-        <span class="lead-name">Lauren</span>
+              <img src="images/rebekah_emanuel41.jpg.webp" alt="Rebekah Emanuel" class="lead-avatar">
+              <span class="lead-name">Rebekah</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/032426_Lauren_Koppel_1.jpg.webp" alt="Lauren Koppelson" class="lead-avatar">
+              <span class="lead-name">Lauren</span>
+            </div>
+          </div>
+        </div>
+        <div class="leads-right">
+          <p class="leads-label">Programmatic Facilitators</p>
+          <div class="leads-row">
+            <div class="lead-item">
+              <img src="images/102224_Hi_Phil_5_web.jpg.webp" alt="Phil Green" class="lead-avatar">
+              <span class="lead-name">Phil</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/011725_Julia_Berman_14-Edit-2_web.jpg.webp" alt="Julia Berman" class="lead-avatar">
+              <span class="lead-name">Julia</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/101524_Hi_Alexa_4_web.jpg-2.webp" alt="Alexa Barry" class="lead-avatar">
+              <span class="lead-name">Lexi</span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-       <div class="leads-right">
-    <p class="leads-label">Programmatic Facilitators</p>
-    <div class="leads-row">
-      <div class="lead-item">
-        <img src="images/102224_Hi_Phil_5_web.jpg.webp" alt="Phil Green" class="lead-avatar">
-        <span class="lead-name">Phil</span>
-      </div>
-      <div class="lead-item">
-        <img src="images/011725_Julia_Berman_14-Edit-2_web.jpg.webp" alt="Julia Berman" class="lead-avatar">
-        <span class="lead-name">Julia</span>
-              </div>
-          <div class="lead-item">
-        <img src="images/101524_Hi_Alexa_4_web.jpg-2.webp" alt="Alexa Barry" class="lead-avatar">
-        <span class="lead-name">Lexi</span>
-      </div>
-      </div>
-    </div>
-  </div>
     </div>
   </div>
 
@@ -1343,12 +1792,11 @@
             <span class="card-title">Acceleration</span>
             <span class="card-tagline">Cohort-based company building — workshops, clinics, lunches, pitch event</span>
             <div class="ux-tags">
-  <span class="ux-tag">Empowered</span>
-  <span class="ux-tag">Challenged</span>
-  <span class="ux-tag">Inspired</span>
+              <span class="ux-tag">Empowered</span>
+              <span class="ux-tag">Challenged</span>
+              <span class="ux-tag">Inspired</span>
               <span class="ux-tag">Focused</span>
-      
-</div>
+            </div>
           </div>
         </div>
         <div class="card-right">
@@ -1404,21 +1852,21 @@
           <span class="flow-step">Pitch event → LLX decision</span>
         </div>
       </div>
-          <div class="leads-section">
-  <div class="leads-left">
-    <p class="leads-label">Programmatic Lead(s)</p>
-    <div class="leads-row">
-      <div class="lead-item">
-        <img src="images/022525_Rym_6_web.jpg.webp" alt="Rym" class="lead-avatar">
-        <span class="lead-name">Rym</span>
+      <div class="leads-section">
+        <div class="leads-left">
+          <p class="leads-label">Programmatic Lead(s)</p>
+          <div class="leads-row">
+            <div class="lead-item">
+              <img src="images/022525_Rym_6_web.jpg.webp" alt="Rym" class="lead-avatar">
+              <span class="lead-name">Rym</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/031825_Joanna_1_web.jpg.webp" alt="Joanna" class="lead-avatar">
+              <span class="lead-name">Joanna</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="lead-item">
-        <img src="images/031825_Joanna_1_web.jpg.webp" alt="Joanna" class="lead-avatar">
-        <span class="lead-name">Joanna</span>
-      </div>
-    </div>
-  </div>
-  </div>
     </div>
   </div>
 
@@ -1433,11 +1881,11 @@
             <span class="card-title">Venture Growth</span>
             <span class="card-tagline">Expert talks, accelerator pathways, open workshops — register and show up</span>
             <div class="ux-tags">
-  <span class="ux-tag">Inspired</span>
-  <span class="ux-tag">Curious</span>
-  <span class="ux-tag">Added Value</span>
+              <span class="ux-tag">Inspired</span>
+              <span class="ux-tag">Curious</span>
+              <span class="ux-tag">Added Value</span>
               <span class="ux-tag">Belonging</span>
-</div>
+            </div>
           </div>
         </div>
         <div class="card-right">
@@ -1490,46 +1938,46 @@
           <span class="flow-step">Attend</span>
         </div>
       </div>
-         <div class="leads-section">
-  <div class="leads-left">
-    <p class="leads-label">Programmatic Lead(s)</p>
-    <div class="leads-row">
-      <div class="lead-item">
-        <img src="images/031125_Tom_Samph_web_1.jpg.webp" alt="Tom Samph" class="lead-avatar">
-        <span class="lead-name">Tom</span>
-      </div>
-      <div class="lead-item">
-        <img src="images/101524_Hi_Alexa_4_web.jpg-2.webp" alt="Alexa Barry" class="lead-avatar">
-        <span class="lead-name">Lexi</span>
-      </div>
-    </div>
-  </div>
-  <div class="leads-right">
-    <p class="leads-label">Programmatic Facilitators</p>
-    <div class="leads-row">
-      <div class="lead-item">
-        <img src="images/102224_Hi_Phil_5_web.jpg.webp" alt="Phil Green" class="lead-avatar">
-        <span class="lead-name">Phil</span>
-      </div>
-      <div class="lead-item">
-        <img src="images/102224_Hi_Pete_24_web.jpg.webp" alt="Peter Gladstone" class="lead-avatar">
-        <span class="lead-name">Pete</span>
-              </div>
+      <div class="leads-section">
+        <div class="leads-left">
+          <p class="leads-label">Programmatic Lead(s)</p>
+          <div class="leads-row">
             <div class="lead-item">
-        <img src="images/102725_Julien_web_1_2025-10-27-162645_mvhh.jpg-2.webp" alt="Julien Pham" class="lead-avatar">
-        <span class="lead-name">Julien</span>
-              </div>
-          <div class="lead-item">
-        <img src="images/102224_Hi_Ashley_13_web.jpg.webp" alt="Ashley Olafsen" class="lead-avatar">
-        <span class="lead-name">Ashley</span>
+              <img src="images/031125_Tom_Samph_web_1.jpg.webp" alt="Tom Samph" class="lead-avatar">
+              <span class="lead-name">Tom</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/101524_Hi_Alexa_4_web.jpg-2.webp" alt="Alexa Barry" class="lead-avatar">
+              <span class="lead-name">Lexi</span>
+            </div>
+          </div>
+        </div>
+        <div class="leads-right">
+          <p class="leads-label">Programmatic Facilitators</p>
+          <div class="leads-row">
+            <div class="lead-item">
+              <img src="images/102224_Hi_Phil_5_web.jpg.webp" alt="Phil Green" class="lead-avatar">
+              <span class="lead-name">Phil</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/102224_Hi_Pete_24_web.jpg.webp" alt="Peter Gladstone" class="lead-avatar">
+              <span class="lead-name">Pete</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/102725_Julien_web_1_2025-10-27-162645_mvhh.jpg-2.webp" alt="Julien Pham" class="lead-avatar">
+              <span class="lead-name">Julien</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/102224_Hi_Ashley_13_web.jpg.webp" alt="Ashley Olafsen" class="lead-avatar">
+              <span class="lead-name">Ashley</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/1729786786578.jpeg" alt="Alex Parks" class="lead-avatar">
+              <span class="lead-name">Alex</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="lead-item">
-        <img src="images/1729786786578.jpeg" alt="Alex Parks" class="lead-avatar">
-        <span class="lead-name">Alex</span>
-      </div>
-      </div>
-    </div>
-  </div>
     </div>
   </div>
 
@@ -1544,12 +1992,11 @@
             <span class="card-title">Open Community</span>
             <span class="card-tagline">Social events, peer circles, co-founder connections — the glue of the summer</span>
             <div class="ux-tags">
-  <span class="ux-tag">Joyful</span>
-  <span class="ux-tag">Belonging</span>
-  <span class="ux-tag">Candor</span>
+              <span class="ux-tag">Joyful</span>
+              <span class="ux-tag">Belonging</span>
+              <span class="ux-tag">Candor</span>
               <span class="ux-tag">Motivated to Return</span>
-      
-</div>
+            </div>
           </div>
         </div>
         <div class="card-right">
@@ -1563,7 +2010,7 @@
         <div class="grid-col">
           <p class="col-heading">⚙️ Delivery mechanisms</p>
           <ul class="item-list">
-            <li><strong>Social events</strong> — Member Appreciation, Summer Launch Party at Felipe's </li>
+            <li><strong>Social events</strong> — Member Appreciation, Summer Launch Party at Felipe's</li>
             <li><strong>Pitch + connect</strong> — Founder/Joiner Pizza + Pitch</li>
             <li><strong>Peer circles</strong> — Founder Circles in-person + virtual</li>
             <li><strong>Problem-solving sessions</strong> — structured peer exchange, no prep needed</li>
@@ -1601,51 +2048,50 @@
           <span class="flow-step">Attend</span>
         </div>
       </div>
-        <div class="leads-section">
-  <div class="leads-left">
-    <p class="leads-label">Programmatic Lead(s)</p>
-    <div class="leads-row">
-       <div class="lead-item">
-        <img src="images/102224_Hi_Ashley_13_web.jpg.webp" alt="Ashley Olafsen" class="lead-avatar">
-        <span class="lead-name">Ashley</span>
+      <div class="leads-section">
+        <div class="leads-left">
+          <p class="leads-label">Programmatic Lead(s)</p>
+          <div class="leads-row">
+            <div class="lead-item">
+              <img src="images/102224_Hi_Ashley_13_web.jpg.webp" alt="Ashley Olafsen" class="lead-avatar">
+              <span class="lead-name">Ashley</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/101524_Hi_Alexa_4_web.jpg-2.webp" alt="Alexa Barry" class="lead-avatar">
+              <span class="lead-name">Lexi</span>
+            </div>
+          </div>
+        </div>
+        <div class="leads-right">
+          <p class="leads-label">Programmatic Supporters</p>
+          <div class="leads-row">
+            <div class="lead-item">
+              <img src="images/072225_Allegra_Headshot_04_web.jpg.webp" alt="Allegra Thomas" class="lead-avatar">
+              <span class="lead-name">Allegra</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/042126_Joy_Headshot_web.jpg.webp" alt="Joy" class="lead-avatar">
+              <span class="lead-name">Joy</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/102224_Hi_Emma_18_web.jpg.webp" alt="Emma Sikora" class="lead-avatar">
+              <span class="lead-name">Emma</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/031825_Joanna_1_web.jpg.webp" alt="Joanna" class="lead-avatar">
+              <span class="lead-name">Joanna</span>
+            </div>
+            <div class="lead-item">
+              <img src="images/102224_Hi_Becca_14_web.jpg.webp" alt="Becca Xiong" class="lead-avatar">
+              <span class="lead-name">Becca</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="lead-item">
-        <img src="images/101524_Hi_Alexa_4_web.jpg-2.webp" alt="Alexa Barry" class="lead-avatar">
-        <span class="lead-name">Lexi</span>
-      </div>
-    </div>
-  </div>
-  <div class="leads-right">
-    <p class="leads-label">Programmatic Supporters</p>
-    <div class="leads-row">
-      <div class="lead-item">
-        <img src="images/072225_Allegra_Headshot_04_web.jpg.webp" alt="Allegra Thomas" class="lead-avatar">
-        <span class="lead-name">Allegra</span>
-              </div>
-         <div class="lead-item">
-        <img src="images/042126_Joy_Headshot_web.jpg.webp" alt="Joy" class="lead-avatar">
-        <span class="lead-name">Joy</span>
-              </div>
-          <div class="lead-item">
-        <img src="images/102224_Hi_Emma_18_web.jpg.webp" alt="Emma Sikora" class="lead-avatar">
-        <span class="lead-name">Emma</span>
-      </div>
-         <div class="lead-item">
-        <img src="images/031825_Joanna_1_web.jpg.webp" alt="Joanna" class="lead-avatar">
-        <span class="lead-name">Joanna</span>
-      </div>
-      <div class="lead-item">
-        <img src="images/102224_Hi_Becca_14_web.jpg.webp" alt="Becca Xiong" class="lead-avatar">
-        <span class="lead-name">Becca</span>
-      </div>
-      </div>
-    </div>
-  </div>
     </div>
   </div>
 
 </main>
-
 
 <footer style="margin: 0 60px; padding: 20px 0 60px;">
   <span class="footer-left">Harvard Innovation Labs · Summer 2026 Programming Reference</span>
@@ -1653,8 +2099,8 @@
 </footer>
 
 <script>
-  function initSearch() {
-  const input = document.getElementById('siteSearch');
+function initSearch() {
+  const input   = document.getElementById('siteSearch');
   const results = document.getElementById('searchResults');
   const clearBtn = document.getElementById('searchClear');
 
@@ -1662,44 +2108,63 @@
     const query = input.value.trim().toLowerCase();
     clearBtn.style.display = query ? 'block' : 'none';
 
-    if (query.length < 2) {
-      results.style.display = 'none';
-      return;
-    }
+    if (query.length < 2) { results.style.display = 'none'; return; }
 
-    // Gather all searchable content from cards
     const matches = [];
+
+    // ── Search container cards ──
     document.querySelectorAll('.container-card').forEach(card => {
       const containerName = card.querySelector('.card-title')?.textContent || '';
       const bodyId = card.querySelector('.card-body')?.id;
-
       card.querySelectorAll('.item-list li, .entry-desc, .card-tagline, .flow-step').forEach(el => {
         const text = el.textContent.trim();
         if (text.toLowerCase().includes(query)) {
-          matches.push({ containerName, bodyId, text });
+          matches.push({ containerName, bodyId, text, isPH: false });
         }
       });
+    });
+
+    // ── Search programs row (phcards + panels) ──
+    document.querySelectorAll('.program-hcard').forEach(card => {
+      const panelId = card.dataset.panelId;
+      const containerName = card.querySelector('.phcard-title')?.textContent || '';
+
+      // title + tagline in the card header
+      [card.querySelector('.phcard-title'), card.querySelector('.phcard-tagline')].forEach(el => {
+        if (!el) return;
+        const text = el.textContent.trim();
+        if (text.toLowerCase().includes(query)) {
+          matches.push({ containerName, bodyId: panelId, text, isPH: true });
+        }
+      });
+
+      // panel body content
+      const panel = document.getElementById(panelId);
+      if (panel) {
+        panel.querySelectorAll('.item-list li, .entry-desc, .flow-step').forEach(el => {
+          const text = el.textContent.trim();
+          if (text.toLowerCase().includes(query)) {
+            matches.push({ containerName, bodyId: panelId, text, isPH: true });
+          }
+        });
+      }
     });
 
     if (matches.length === 0) {
       results.innerHTML = `<div class="search-no-results">No results for "<strong>${input.value}</strong>"</div>`;
     } else {
       results.innerHTML = matches.map(m => `
-        <div class="search-result-item" onclick="jumpTo('${m.bodyId}')">
+        <div class="search-result-item" onclick="jumpTo('${m.bodyId}', ${m.isPH})">
           <div class="search-result-container">${m.containerName}</div>
           <div class="search-result-text">${highlight(m.text, query)}</div>
         </div>
       `).join('');
     }
-
     results.style.display = 'block';
   });
 
-  // Close results when clicking outside
   document.addEventListener('click', e => {
-    if (!e.target.closest('.search-bar-wrap')) {
-      results.style.display = 'none';
-    }
+    if (!e.target.closest('.search-bar-wrap')) results.style.display = 'none';
   });
 }
 
@@ -1708,26 +2173,41 @@ function highlight(text, query) {
   return text.replace(regex, '<mark>$1</mark>');
 }
 
-function jumpTo(bodyId) {
-  const body = document.getElementById(bodyId);
-  const header = body?.previousElementSibling;
-  if (!body || !header) return;
+function jumpTo(bodyId, isPH) {
+  if (isPH) {
+    // Open the matching phcard panel
+    const panel = document.getElementById(bodyId);
+    const card  = document.querySelector(`[data-panel-id="${bodyId}"]`);
+    if (!panel || !card) return;
 
-  // Close all, open target
-  document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
-  document.querySelectorAll('.card-header').forEach(h => {
-    h.classList.remove('open');
-    h.setAttribute('aria-expanded', 'false');
-  });
+    document.querySelectorAll('.ppanel').forEach(p => p.style.display = 'none');
+    document.querySelectorAll('.program-hcard').forEach(c => c.classList.remove('phc-active'));
+    document.querySelectorAll('.phcard-chevron').forEach(ch => ch.style.transform = '');
 
-  body.classList.add('open');
-  header.classList.add('open');
-  header.setAttribute('aria-expanded', 'true');
+    panel.style.display = 'block';
+    card.classList.add('phc-active');
+    const chev = card.querySelector('.phcard-chevron');
+    if (chev) chev.style.transform = 'rotate(180deg)';
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  // Scroll to it
-  body.closest('.container-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    // Open the matching container card
+    const body   = document.getElementById(bodyId);
+    const header = body?.previousElementSibling;
+    if (!body || !header) return;
 
-  // Close results
+    document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.card-header').forEach(h => {
+      h.classList.remove('open');
+      h.setAttribute('aria-expanded', 'false');
+    });
+
+    body.classList.add('open');
+    header.classList.add('open');
+    header.setAttribute('aria-expanded', 'true');
+    body.closest('.container-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   document.getElementById('searchResults').style.display = 'none';
   document.getElementById('siteSearch').value = '';
   document.getElementById('searchClear').style.display = 'none';
@@ -1739,10 +2219,9 @@ function clearSearch() {
   document.getElementById('searchClear').style.display = 'none';
 }
 
-// Initialize on load
-initSearch();
+// ── Toggle for container cards ──
 function toggle(header, id) {
-  const body = document.getElementById(id);
+  const body   = document.getElementById(id);
   const isOpen = body.classList.contains('open');
 
   document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
@@ -1758,9 +2237,30 @@ function toggle(header, id) {
   }
 }
 
+// ── Toggle for programs row panels ──
+function togglePHCard(panelId, card) {
+  const panel   = document.getElementById(panelId);
+  const wasOpen = card.classList.contains('phc-active');
+
+  // Close all
+  document.querySelectorAll('.ppanel').forEach(p => p.style.display = 'none');
+  document.querySelectorAll('.program-hcard').forEach(c => c.classList.remove('phc-active'));
+  document.querySelectorAll('.phcard-chevron').forEach(ch => ch.style.transform = '');
+
+  // Open if it wasn't already open
+  if (!wasOpen) {
+    panel.style.display = 'block';
+    card.classList.add('phc-active');
+    const chev = card.querySelector('.phcard-chevron');
+    if (chev) chev.style.transform = 'rotate(180deg)';
+  }
+}
+
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') document.getElementById('howToUseModal').classList.remove('open');
 });
+
+initSearch();
 </script>
 
 <!-- Sticky button -->
@@ -1780,12 +2280,10 @@ document.addEventListener('keydown', e => {
     </div>
     <div class="modal-body">
 
-      <!-- Intro callout -->
       <div style="background:white; border:1px solid var(--rule); border-radius:10px; padding:14px 16px; margin-bottom:20px;">
         <p style="margin:0; font-size:13px; color:var(--ink-mid);">This is not a calendar, event listing, or operational checklist — it's a <strong>map of the ecosystem</strong>. Use it to understand how programs connect, how founders move through them, and where your team fits in. 🧭</p>
       </div>
 
-      <!-- What you'll find -->
       <h3>What You'll Find in Each Container</h3>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px;">
         <div style="background:white; border:1px solid var(--rule); border-radius:8px; padding:10px 14px; font-size:12px; color:var(--ink-mid);"><strong style="color:var(--ink); display:block; margin-bottom:2px;">Entry Model</strong>How founders get access</div>
@@ -1796,9 +2294,8 @@ document.addEventListener('keydown', e => {
         <div style="background:white; border:1px solid var(--rule); border-radius:8px; padding:10px 14px; font-size:12px; color:var(--ink-mid);"><strong style="color:var(--ink); display:block; margin-bottom:2px;">Program Ownership</strong>Staff and stakeholders involved</div>
       </div>
 
-      <!-- UX Experience -->
       <h3>Member Experience Tags</h3>
-      <p style="margin-bottom:12px;">Each container is tagged with the experiences our Member Experience team has identified as most important. Look for these tags under each container title.</p>
+      <p style="margin-bottom:12px;">Each container is tagged with the experiences our Member Experience team has identified as most important.</p>
       <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
         <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Supported</span>
         <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Satisfied</span>
@@ -1811,14 +2308,9 @@ document.addEventListener('keydown', e => {
         <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Candor & vulnerability</span>
         <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Curious</span>
         <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Challenged</span>
-        <span style="font-size:11px; padding:3px 10px; border-radius:20px; border:1px solid var(--rule); background:white; color:var(--ink-mid);">Seriousicity</span>
       </div>
-      <p style="font-size:12px; color:var(--ink-light); margin-bottom:20px;">Tags reflect the intended emotional and experiential outcomes for members in each container — not a checklist, but a north star for program design and delivery.</p>
 
-      <!-- How to Navigate -->
       <h3>How to Navigate</h3>
-
-      <!-- By Founder Need -->
       <div style="background:white; border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin-bottom:10px;">
         <div style="padding:12px 16px; border-bottom:1px solid var(--rule);">
           <strong style="font-size:13px; color:var(--ink);">By Founder Need</strong>
@@ -1831,18 +2323,16 @@ document.addEventListener('keydown', e => {
             <li>Do you have a product yet?</li>
             <li>Are you looking for a cohort or self-paced support?</li>
             <li>How many hours a week can you commit?</li>
-            <li>Have you heard of or participated in any of our programs before?</li>
             <li>Are you looking for something structured or flexible?</li>
             <li>Do you need funding, community, or curriculum?</li>
           </ul>
         </div>
       </div>
 
-      <!-- For Internal Use -->
       <div style="background:white; border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin-bottom:20px;">
         <div style="padding:12px 16px; border-bottom:1px solid var(--rule);">
           <strong style="font-size:13px; color:var(--ink);">For Internal Use</strong>
-          <p style="font-size:12px; color:var(--ink-light); margin-top:3px; margin-bottom:0;">Start with an operational, technical, or marketing need → identify the Program Lead → review entry and delivery model.</p>
+          <p style="font-size:12px; color:var(--ink-light); margin-top:3px; margin-bottom:0;">Start with an operational need → identify the Program Lead → review entry and delivery model.</p>
         </div>
         <div style="padding:12px 16px;">
           <p style="font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:8px;">Internal questions you might have</p>
@@ -1855,7 +2345,6 @@ document.addEventListener('keydown', e => {
         </div>
       </div>
 
-      <!-- Important Note -->
       <div style="background:var(--amber-light); border:1px solid #e8c9a8; border-radius:10px; padding:14px 16px;">
         <p style="margin:0; font-size:12px; color:var(--amber);">⚠️ <strong>Important:</strong> This reference describes system and structure — not day-to-day schedules. Specific dates and deadlines should be confirmed through current planning resources.</p>
       </div>
