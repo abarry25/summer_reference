@@ -1,3 +1,12 @@
+Looking at the v2 spec, I need to:
+1. Replace 4 questions with 8 (eligibility + membership gate first)
+2. Add availability-gated catalog with proper date fields
+3. Implement the full decision flow (eligibility → availability → openness → lane → routing → modifiers)
+4. Output Primary / Secondary / 30-day proof-points / 3 actions
+
+Here's the complete implementation:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,7 +62,7 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
 .hidden { display: none !important; }
 
 /* ── PROGRESS ── */
-.prog-track { display: flex; align-items: center; gap: 6px; margin-bottom: 44px; }
+.prog-track { display: flex; align-items: center; gap: 5px; margin-bottom: 44px; }
 .pbar { height: 3px; flex: 1; background: var(--rule); border-radius: 3px; transition: background .3s; }
 .pbar.done { background: var(--ink); }
 .pbar.cur { background: #aaa; }
@@ -79,45 +88,24 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
 }
 .abtn:hover { border-color: #aaa; background: #fafaf8; }
 .abtn.sel { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); background: #fff; }
-
 .aem { font-size: 20px; flex-shrink: 0; line-height: 1.4; margin-top: 2px; }
 .abody { flex: 1; }
 .at { display: block; font-size: 14px; font-weight: 500; color: var(--ink); line-height: 1.3; }
 .as { display: block; font-size: 12px; color: var(--ink-light); margin-top: 3px; line-height: 1.4; }
-
-.radio-ring {
-  width: 18px; height: 18px; border-radius: 50%;
-  border: 1.5px solid var(--rule); flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .12s; margin-top: 3px; pointer-events: none;
-}
+.radio-ring { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--rule); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .12s; margin-top: 3px; pointer-events: none; }
 .abtn.sel .radio-ring { background: var(--ink); border-color: var(--ink); }
 .radio-dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
 .abtn.sel .radio-dot { display: block; }
 
 /* ── Q NAVIGATION ── */
 .qnav { display: flex; align-items: center; justify-content: space-between; }
-.btn-back {
-  padding: 9px 18px; background: none; border: 1px solid var(--rule); border-radius: 20px;
-  font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--ink-light);
-  cursor: pointer; transition: all .12s;
-}
+.btn-back { padding: 9px 18px; background: none; border: 1px solid var(--rule); border-radius: 20px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--ink-light); cursor: pointer; transition: all .12s; }
 .btn-back:hover:not(:disabled) { border-color: #888; color: var(--ink); }
 .btn-back:disabled { opacity: .3; cursor: default; pointer-events: none; }
-
-.btn-next {
-  padding: 10px 24px; background: var(--ink); color: #fff;
-  border: none; border-radius: 20px; font-size: 13px; font-weight: 500;
-  font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background .12s;
-}
+.btn-next { padding: 10px 24px; background: var(--ink); color: #fff; border: none; border-radius: 20px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background .12s; }
 .btn-next:disabled { opacity: .25; cursor: default; }
 .btn-next:not(:disabled):hover { background: #222; }
-
-.btn-generate {
-  padding: 11px 26px; background: #EA3D3E; color: #fff;
-  border: none; border-radius: 20px; font-size: 13px; font-weight: 500;
-  font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background .12s;
-}
+.btn-generate { padding: 11px 26px; background: #EA3D3E; color: #fff; border: none; border-radius: 20px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background .12s; }
 .btn-generate:disabled { opacity: .25; cursor: default; }
 .btn-generate:not(:disabled):hover { background: var(--coral); }
 
@@ -135,11 +123,7 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
 #results { display: none; }
 
 /* Persona card */
-.pcard {
-  background: #fff; border: 1px solid var(--rule); border-radius: 14px;
-  padding: 28px; margin-bottom: 16px; position: relative; overflow: hidden;
-}
-.paccent { position: absolute; top: 0; right: 0; width: 120px; height: 120px; border-radius: 0 14px 0 100px; opacity: .12; }
+.pcard { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 28px; margin-bottom: 16px; position: relative; overflow: hidden; border-top-width: 3px; }
 .pbadge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
 .phl { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(22px, 3vw, 30px); color: var(--ink); line-height: 1.2; margin-bottom: 10px; }
 .pdesc { font-size: 14px; color: var(--ink-mid); line-height: 1.65; max-width: 600px; }
@@ -192,8 +176,9 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
 .r-btn.acc { color: var(--amber); border-color: var(--amber-light); background: var(--amber-light); }
 .r-btn.acc:hover { background: #e8c89a; }
 
-/* Persona color stripe on top border of pcard */
-.pcard { border-top-width: 3px; }
+/* Avail label */
+.avail-lbl { font-size: 11px; color: var(--ink-light); display: block; margin-bottom: 8px; }
+.avail-lbl.warn { color: #b35a00; }
 
 @media (max-width: 640px) {
   header { padding: 32px 20px 24px; }
@@ -219,47 +204,41 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
 
 <header>
   <p class="eyebrow">Harvard Innovation Labs · Summer 2026</p>
-  <h1 class="page-title">Find Your Start Here</h1>
-  <p class="page-sub">Four questions. A personalized path built from real programs, upcoming events, and office hours — matched to exactly where you are right now.</p>
+  <h1 class="page-title">Find Your Path</h1>
+  <p class="page-sub">Eight questions. A personalized path that checks live availability, respects your eligibility, and only recommends programs you can actually join right now.</p>
 </header>
 
 <div class="page-wrap" id="pageWrap">
 
-  <!-- Progress -->
+  <!-- Progress: 8 bars -->
   <div class="prog-track" id="progWrap">
     <div class="pbar cur" id="pb1"></div>
     <div class="pbar" id="pb2"></div>
     <div class="pbar" id="pb3"></div>
     <div class="pbar" id="pb4"></div>
-    <span class="plabel" id="plabel">1 of 4</span>
+    <div class="pbar" id="pb5"></div>
+    <div class="pbar" id="pb6"></div>
+    <div class="pbar" id="pb7"></div>
+    <div class="pbar" id="pb8"></div>
+    <span class="plabel" id="plabel">1 of 8</span>
   </div>
 
   <!-- Questions -->
   <div id="quizqs">
 
-    <!-- Q1 -->
+    <!-- Q1: Harvard student? -->
     <div class="qscreen active" id="q1">
-      <p class="qnum">Question 1 of 4</p>
-      <h2 class="qtxt">What best describes where you are right now?</h2>
+      <p class="qnum">Question 1 of 8</p>
+      <h2 class="qtxt">Are you currently enrolled at Harvard University?</h2>
       <div class="alist">
-        <button class="abtn" data-q="1" data-val="exploring" onclick="pick(this)">
-          <span class="aem">🌱</span>
-          <div class="abody"><span class="at">I have an idea I'm exploring</span><span class="as">Still figuring out if it's worth pursuing — talking to people, testing assumptions, or just getting started</span></div>
+        <button class="abtn" data-q="1" data-val="yes" onclick="pick(this)">
+          <span class="aem">🎓</span>
+          <div class="abody"><span class="at">Yes — I'm a current Harvard student or recent alum</span><span class="as">Enrolled in a Harvard degree program, or a Harvard graduate within the last few years</span></div>
           <div class="radio-ring"><div class="radio-dot"></div></div>
         </button>
-        <button class="abtn" data-q="1" data-val="building" onclick="pick(this)">
-          <span class="aem">🔨</span>
-          <div class="abody"><span class="at">I'm actively building something</span><span class="as">Working on a product or MVP — real progress exists, but I need structure and milestone accountability</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="1" data-val="traction" onclick="pick(this)">
-          <span class="aem">📈</span>
-          <div class="abody"><span class="at">I have traction — real users or early revenue</span><span class="as">Proof points exist. Now focused on growth, fundraising, or finding the right accelerator path</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="1" data-val="scaling" onclick="pick(this)">
-          <span class="aem">🚀</span>
-          <div class="abody"><span class="at">I'm scaling or actively raising capital</span><span class="as">Team-building, investor conversations, accelerator applications — this is go time</span></div>
+        <button class="abtn" data-q="1" data-val="no" onclick="pick(this)">
+          <span class="aem">🌐</span>
+          <div class="abody"><span class="at">No — I'm not currently affiliated with Harvard</span><span class="as">I'd like to learn what i-lab programming, if any, is available to me</span></div>
           <div class="radio-ring"><div class="radio-dot"></div></div>
         </button>
       </div>
@@ -269,367 +248,26 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
       </div>
     </div>
 
-    <!-- Q2 -->
+    <!-- Q2: Membership active? -->
     <div class="qscreen" id="q2">
-      <p class="qnum">Question 2 of 4</p>
-      <h2 class="qtxt">What would make this summer a success for you?</h2>
+      <p class="qnum">Question 2 of 8</p>
+      <h2 class="qtxt">Is your i-lab Membership currently active?</h2>
       <div class="alist">
-        <button class="abtn" data-q="2" data-val="feedback" onclick="pick(this)">
-          <span class="aem">🧪</span>
-          <div class="abody"><span class="at">Real customer feedback and validated assumptions</span><span class="as">Talk to users, test ideas, and know what to build before investing months of effort</span></div>
+        <button class="abtn" data-q="2" data-val="yes" onclick="pick(this)">
+          <span class="aem">✅</span>
+          <div class="abody"><span class="at">Yes — I've completed the intake and I'm active</span><span class="as">I'm in the i-lab Slack, I've received the newsletter, and I can access the coworking space</span></div>
           <div class="radio-ring"><div class="radio-dot"></div></div>
         </button>
-        <button class="abtn" data-q="2" data-val="milestones" onclick="pick(this)">
-          <span class="aem">📋</span>
-          <div class="abody"><span class="at">Clear milestones and someone holding me accountable</span><span class="as">I do best with structure — checkpoints, advisor feedback, and a framework to measure progress</span></div>
+        <button class="abtn" data-q="2" data-val="no" onclick="pick(this)">
+          <span class="aem">🔑</span>
+          <div class="abody"><span class="at">No — I haven't activated my membership yet</span><span class="as">I know I should, or I just haven't gotten around to it yet</span></div>
           <div class="radio-ring"><div class="radio-dot"></div></div>
         </button>
-        <button class="abtn" data-q="2" data-val="community" onclick="pick(this)">
-          <span class="aem">🤝</span>
-          <div class="abody"><span class="at">Co-founders, collaborators, and community</span><span class="as">Build my network, find the right people, and not feel like I'm doing this alone</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="2" data-val="funding" onclick="pick(this)">
-          <span class="aem">💰</span>
-          <div class="abody"><span class="at">Funding, investors, or pitch visibility</span><span class="as">Get in front of capital, win a competition, or land on an investor's radar this summer</span></div>
+        <button class="abtn" data-q="2" data-val="unsure" onclick="pick(this)">
+          <span class="aem">🤷</span>
+          <div class="abody"><span class="at">Not sure — I may have started the process</span><span class="as">I've visited the i-lab or heard about it, but I'm not certain I'm officially "in"</span></div>
           <div class="radio-ring"><div class="radio-dot"></div></div>
         </button>
       </div>
       <div class="qnav">
-        <button class="btn-back" onclick="back('q2','q1',1)">← Back</button>
-        <button class="btn-next" id="n2" disabled onclick="fwd('q2','q3',3)">Next →</button>
-      </div>
-    </div>
-
-    <!-- Q3 -->
-    <div class="qscreen" id="q3">
-      <p class="qnum">Question 3 of 4</p>
-      <h2 class="qtxt">How much time can you realistically commit this summer?</h2>
-      <div class="alist">
-        <button class="abtn" data-q="3" data-val="light" onclick="pick(this)">
-          <span class="aem">⚡</span>
-          <div class="abody"><span class="at">A few hours here and there</span><span class="as">I have classes, a job, or other big commitments — I want to engage when it genuinely makes sense</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="3" data-val="moderate" onclick="pick(this)">
-          <span class="aem">🗓️</span>
-          <div class="abody"><span class="at">3–7 hours/week, consistently</span><span class="as">I can show up reliably — need a structured but manageable cadence, not full-time intensity</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="3" data-val="heavy" onclick="pick(this)">
-          <span class="aem">🔥</span>
-          <div class="abody"><span class="at">10+ hours — this is my main focus</span><span class="as">Going all in. I want the most intensive, high-accountability program the i-lab offers</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-      </div>
-      <div class="qnav">
-        <button class="btn-back" onclick="back('q3','q2',2)">← Back</button>
-        <button class="btn-next" id="n3" disabled onclick="fwd('q3','q4',4)">Next →</button>
-      </div>
-    </div>
-
-    <!-- Q4 -->
-    <div class="qscreen" id="q4">
-      <p class="qnum">Question 4 of 4</p>
-      <h2 class="qtxt">Is creating social or environmental impact central to your work?</h2>
-      <div class="alist">
-        <button class="abtn" data-q="4" data-val="yes" onclick="pick(this)">
-          <span class="aem">💚</span>
-          <div class="abody"><span class="at">Yes — it's the core of what I'm building</span><span class="as">My venture is specifically designed to create positive social or environmental change</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="4" data-val="partly" onclick="pick(this)">
-          <span class="aem">🌐</span>
-          <div class="abody"><span class="at">It's part of it, but not the primary lens</span><span class="as">I care about impact but I'm also building for market opportunity — it's genuinely both</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="4" data-val="no" onclick="pick(this)">
-          <span class="aem">⚡</span>
-          <div class="abody"><span class="at">Not primarily — I'm focused on market opportunity</span><span class="as">Commercial traction, growth, and building a scalable business are my main drivers</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-      </div>
-      <div class="qnav">
-        <button class="btn-back" onclick="back('q4','q3',3)">← Back</button>
-        <button class="btn-generate" id="n4" disabled onclick="runCalc()">Generate my journey →</button>
-      </div>
-    </div>
-
-  </div><!-- /quizqs -->
-
-  <!-- Loading -->
-  <div id="loading">
-    <div class="ldots"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div>
-    <p class="ltxt">Building your personalized journey…</p>
-  </div>
-
-  <!-- Results -->
-  <div id="results"></div>
-
-</div>
-
-<script>
-// ═══════════════════════════════════════════
-// DATA
-// ═══════════════════════════════════════════
-
-const EVENTS = [
-  {
-    id:'launch', name:"Summer Launch Party at Felipe's",
-    con:'Open Community', cbg:'#FFC7C8', ctx:'#711213',
-    date:'June 19', time:'6:00–9:00 PM', loc:"Felipe's, Harvard Square", fmt:'🍕 In-Person',
-    desc:'Kick off the summer with the full i-lab community. Meet founders, collaborators, and staff in a casual setting.',
-    personas:['exploring','building','impact','specialist','accelerator'], cta:'Register on Eventbrite'
-  },
-  {
-    id:'sprint', name:'Customer Discovery Sprint Kickoff',
-    con:'Founder Fundamentals', cbg:'#C1F4A8', ctx:'#27500A',
-    date:'June 16', time:'12:00–1:30 PM', loc:'Harvard Innovation Labs', fmt:'🏛 In-Person',
-    desc:'3-week cohort sprint — structured customer interviews, assumption testing, and real advisor support.',
-    personas:['exploring'], cta:'Register'
-  },
-  {
-    id:'pizza', name:'Founder/Joiner Pizza + Pitch',
-    con:'Open Community', cbg:'#FFC7C8', ctx:'#711213',
-    date:'July 7', time:'6:00–8:00 PM', loc:'Harvard Innovation Labs', fmt:'🍕 In-Person',
-    desc:'Pitch your idea, find co-founders, meet collaborators. Casual, no-stakes, and lots of pizza.',
-    personas:['exploring','building'], cta:'Register'
-  },
-  {
-    id:'hack', name:'AI Agent Hackathon',
-    con:'Founder Fundamentals', cbg:'#C1F4A8', ctx:'#27500A',
-    date:'July 11–12', time:'9 AM–6 PM', loc:'Harvard Innovation Labs', fmt:'🏛 In-Person',
-    desc:'Build an AI prototype on day one, return with real customer feedback on day two. Discovery meets product.',
-    personas:['exploring','building'], cta:'Register'
-  },
-  {
-    id:'fundraising', name:'Fundraising with Allison Byers',
-    con:'Venture Growth', cbg:'#cbcafa', ctx:'#232262',
-    date:'June 23', time:'12:00–1:00 PM', loc:'Harvard Innovation Labs', fmt:'🏛 In-Person',
-    desc:'Expert-led lunch on fundraising strategy, investor relations, and how to position your pitch for capital.',
-    personas:['building','impact','accelerator'], cta:'Register'
-  },
-  {
-    id:'yc', name:'Y Combinator Info Session',
-    con:'Venture Growth', cbg:'#cbcafa', ctx:'#232262',
-    date:'July 9', time:'12:00–1:00 PM', loc:'Harvard Innovation Labs', fmt:'🏛 In-Person',
-    desc:'Direct pipeline session with YC — what they look for, how to apply, and how to position your venture.',
-    personas:['building','accelerator','specialist'], cta:'Register'
-  },
-  {
-    id:'techstars', name:'Techstars Info Session',
-    con:'Venture Growth', cbg:'#cbcafa', ctx:'#232262',
-    date:'July 14', time:'12:00–1:00 PM', loc:'Harvard Innovation Labs', fmt:'🏛 In-Person',
-    desc:'Meet Techstars program directors. Learn about applications and what the accelerator experience delivers.',
-    personas:['building','accelerator'], cta:'Register'
-  },
-  {
-    id:'circles', name:'Founder Circles',
-    con:'Open Community', cbg:'#FFC7C8', ctx:'#711213',
-    date:'Bi-weekly all summer', time:'12:00–1:00 PM', loc:'In-Person + Virtual', fmt:'🔄 Hybrid',
-    desc:'Small-group peer exchange. Bring a real challenge, get real feedback from fellow founders. No prep needed.',
-    personas:['exploring','building','impact','specialist','accelerator'], cta:'Register'
-  },
-  {
-    id:'blitzy', name:'Scaling an AI Startup — Blitzy',
-    con:'Venture Growth', cbg:'#cbcafa', ctx:'#232262',
-    date:'July 28', time:'12:00–1:00 PM', loc:'Harvard Innovation Labs', fmt:'🏛 In-Person',
-    desc:'Brian Elliott + Murph Vandervelde on hard-won lessons from scaling an AI startup. Open Q&A.',
-    personas:['building','accelerator','specialist'], cta:'Register'
-  },
-  {
-    id:'prstack', name:'AI for Communications — PRStack',
-    con:'Venture Growth', cbg:'#cbcafa', ctx:'#232262',
-    date:'July 21', time:'12:00–1:00 PM', loc:'Harvard Innovation Labs', fmt:'🏛 In-Person',
-    desc:'Build your communications and PR strategy from the ground up using AI tools.',
-    personas:['building','specialist'], cta:'Register'
-  },
-  {
-    id:'siff-pitch', name:'SIFF Pitch Day',
-    con:'SIFF', cbg:'#cee5f7', ctx:'#2a5a80',
-    date:'August 7', time:'2:00–5:00 PM', loc:'Harvard Innovation Labs', fmt:'🏛 In-Person',
-    desc:'Social impact ventures pitch to external judges for real funding. All members are welcome to attend.',
-    personas:['impact'], cta:'Apply to SIFF'
-  },
-  {
-    id:'mvp', name:'MVP Feedback Session',
-    con:'Venture Growth', cbg:'#cbcafa', ctx:'#232262',
-    date:'July 17', time:'12:00–1:30 PM', loc:'Harvard Innovation Labs', fmt:'🏛 In-Person',
-    desc:'Structured peer product testing. Get honest feedback on your MVP from fellow founders.',
-    personas:['building','exploring'], cta:'Register'
-  },
-  {
-    id:'ceremony', name:'Advancement Ceremony',
-    con:'Venture Incubation', cbg:'#f7e4d0', ctx:'#993C1D',
-    date:'August 14', time:'4:00–6:00 PM', loc:'Harvard Innovation Labs', fmt:'🏛 In-Person',
-    desc:'Milestone celebration across the Venture Incubation Program. Open to all members.',
-    personas:['building','impact'], cta:'Save the date'
-  },
-];
-
-const OHS = [
-  {
-    id:'cdoh', name:'Themed OH: Customer Discovery',
-    con:'Founder Fundamentals', cbg:'#C1F4A8', ctx:'#27500A',
-    sched:'Wednesdays, 2:00–4:00 PM', fmt:'Drop-in · In-Person',
-    desc:'Bring customer interviews, assumptions, or validation questions. Staff and peer advisors on hand.',
-    personas:['exploring'], cta:'Drop in — no registration needed'
-  },
-  {
-    id:'dropin', name:'Staff Drop-In Hours',
-    con:'Membership', cbg:'#FFC7C8', ctx:'#711213',
-    sched:'Mon & Thu, 10:00 AM–12:00 PM', fmt:'Drop-in · In-Person',
-    desc:'Come with any question — which program is right for me, how to apply, what to expect this summer.',
-    personas:['exploring','building','impact','specialist','accelerator'], cta:'Drop in — no registration needed'
-  },
-  {
-    id:'siffc', name:'SIFF Pitch Coaching',
-    con:'SIFF', cbg:'#cee5f7', ctx:'#2a5a80',
-    sched:'By appointment', fmt:'1:1 · Virtual or In-Person',
-    desc:'Personalized pitch coaching for SIFF participants and applicants. Work directly with Rebekah or Lauren.',
-    personas:['impact'], cta:'Book with Rebekah or Lauren'
-  },
-  {
-    id:'vic', name:'Advisor Check-In (Venture Incubation)',
-    con:'Venture Incubation', cbg:'#f7e4d0', ctx:'#993C1D',
-    sched:'Weekly, flexible scheduling', fmt:'1:1 · In-Person',
-    desc:'Structured milestone check-ins with your assigned advisor. For selected VI participants.',
-    personas:['building'], cta:'Schedule with your advisor'
-  },
-];
-
-// ═══════════════════════════════════════════
-// PERSONA DEFINITIONS
-// ═══════════════════════════════════════════
-
-const PERSONAS = {
-  exploring: {
-    name:'Exploring & Validating', emoji:'🌱',
-    hl:'Start with curiosity. Build toward clarity.',
-    desc:"You're in the most important stage — testing assumptions before investing months of effort. The right programs will get you real customer feedback fast, build foundational skills, and connect you with peers doing exactly the same thing this summer.",
-    ac:'#84A873', bb:'#C1F4A8', bt:'#27500A',
-    stack:[
-      {n:'Membership',    l:'Base',      bg:'#FFC7C8', tx:'#711213'},
-      {n:'Founder Fundamentals', l:'Add-on', bg:'#C1F4A8', tx:'#27500A'},
-      {n:'Open Community',l:'Community', bg:'#FFC7C8', tx:'#711213'},
-    ],
-    steps:[
-      {a:'Complete your Membership intake', d:'Unlocks everything — coworking space, Slack, events, and the weekly newsletter. Takes five minutes.', u:true},
-      {a:'Sign up for the Customer Discovery Sprint', d:'Kicks off June 16 — 3-week cohort with built-in accountability, structured interviews, and real advisor support.', u:true},
-      {a:'Start the async Customer Discovery Primer', d:'Self-paced email series you can begin today — no cohort, no commitment, just proven frameworks.', u:false},
-    ],
-    evIds:['sprint','pizza','hack','mvp','circles','launch'],
-    ohIds:['cdoh','dropin'],
-  },
-  building: {
-    name:'Building & Milestoning', emoji:'🏗️',
-    hl:'You\'re ready for structure and real accountability.',
-    desc:"You have momentum and you need to keep it. Venture Incubation gives you milestone-gated progression with advisor accountability. Venture Growth keeps your knowledge sharp and your network active. The combination is the core of a builder's summer.",
-    ac:'#f29138', bb:'#f7e4d0', bt:'#993C1D',
-    stack:[
-      {n:'Membership',        l:'Base',      bg:'#FFC7C8', tx:'#711213'},
-      {n:'Venture Incubation',l:'Track',     bg:'#f7e4d0', tx:'#993C1D'},
-      {n:'Venture Growth',    l:'Community', bg:'#cbcafa', tx:'#232262'},
-      {n:'Open Community',    l:'Community', bg:'#FFC7C8', tx:'#711213'},
-    ],
-    steps:[
-      {a:'Apply to Venture Incubation', d:'Talk to Tom to start the application process — requires review and interview. Limited spots available.', u:true},
-      {a:'Register for Fundraising with Allison Byers', d:'June 23 — core fundraising strategy whether you\'re raising now or planning six months out.', u:true},
-      {a:'Join Founder Circles for peer accountability', d:'Bi-weekly peer exchange — bring a real challenge and get feedback from founders in the same moment.', u:false},
-    ],
-    evIds:['fundraising','yc','circles','ceremony','launch'],
-    ohIds:['vic','dropin'],
-  },
-  impact: {
-    name:'Impact & Funding', emoji:'💚',
-    hl:'Your mission deserves the right funding pathway.',
-    desc:"SIFF was built for exactly this. Personalized pitch coaching, design support, and a real funding competition make it the most direct path to capital for social impact ventures at the i-lab. SIFF + Incubation is the strongest stack we offer.",
-    ac:'#4A90C4', bb:'#cee5f7', bt:'#2a5a80',
-    stack:[
-      {n:'Membership',        l:'Base',      bg:'#FFC7C8', tx:'#711213'},
-      {n:'SIFF',              l:'Add-on',    bg:'#cee5f7', tx:'#2a5a80'},
-      {n:'Venture Incubation',l:'Track',     bg:'#f7e4d0', tx:'#993C1D'},
-      {n:'Open Community',    l:'Community', bg:'#FFC7C8', tx:'#711213'},
-    ],
-    steps:[
-      {a:'Apply to SIFF', d:'Reach out to Rebekah or Lauren directly — pitch coaching, design support, and real funding on the line.', u:true},
-      {a:'Register for Fundraising with Allison Byers', d:'June 23 — impact fundraising strategy that complements the SIFF coaching track.', u:true},
-      {a:'Consider pairing SIFF with Venture Incubation', d:'The strongest combination in the model — milestone structure alongside dedicated pitch coaching.', u:false},
-    ],
-    evIds:['siff-pitch','fundraising','circles','launch'],
-    ohIds:['siffc','dropin'],
-  },
-  specialist: {
-    name:'Specialist & Flexible', emoji:'🎯',
-    hl:'Engage deeply, entirely on your own terms.',
-    desc:"No application, no weekly cadence required. Venture Growth and Open Community are independently activated — register for what's relevant, show up, and leave with real value. Built for founders who want the i-lab's best content without a structured weekly commitment.",
-    ac:'#232262', bb:'#cbcafa', bt:'#232262',
-    stack:[
-      {n:'Membership',    l:'Base',      bg:'#FFC7C8', tx:'#711213'},
-      {n:'Venture Growth',l:'Community', bg:'#cbcafa', tx:'#232262'},
-      {n:'Open Community',l:'Community', bg:'#FFC7C8', tx:'#711213'},
-    ],
-    steps:[
-      {a:'Complete your Membership intake', d:'Unlocks access to events, coworking, Slack, and the weekly newsletter.', u:true},
-      {a:'Browse Venture Growth events and register for what matters', d:'No commitment required — pick the sessions that fit your needs and calendar.', u:false},
-      {a:'Drop into Founder Circles when you need peer perspective', d:'Bi-weekly, virtual option available — bring a problem, leave with new angles.', u:false},
-    ],
-    evIds:['blitzy','yc','prstack','circles','launch'],
-    ohIds:['dropin'],
-  },
-  accelerator: {
-    name:'Cohort Builder', emoji:'🚀',
-    hl:'You\'re accelerator-ready. Go all in.',
-    desc:"Acceleration is the most intensive container in the summer set. Weekly cohort workshops, board meeting check-ins, targeted clinics, community lunches, and a final pitch event. If this is your main focus and you're ready for maximum commitment, this is your track.",
-    ac:'#7482E8', bb:'#EEEDFE', bt:'#3C3489',
-    stack:[
-      {n:'Membership',    l:'Base',      bg:'#FFC7C8', tx:'#711213'},
-      {n:'Acceleration',  l:'Track',     bg:'#EEEDFE', tx:'#3C3489'},
-      {n:'Venture Growth',l:'Community', bg:'#cbcafa', tx:'#232262'},
-      {n:'Open Community',l:'Community', bg:'#FFC7C8', tx:'#711213'},
-    ],
-    steps:[
-      {a:'Apply to the Summer Accelerator', d:'Talk to Joanna or Rym — cohort selection process, the most intensive program the i-lab offers.', u:true},
-      {a:'Register for YC + Techstars Info Sessions', d:'July 9 + 14 — direct pipeline sessions with top accelerator programs. Valuable context regardless of path.', u:true},
-      {a:'Register for Fundraising with Allison Byers', d:'June 23 — essential if you\'re raising capital before or after the accelerator program.', u:false},
-    ],
-    evIds:['yc','techstars','fundraising','blitzy','launch'],
-    ohIds:['dropin','vic'],
-  },
-};
-
-// ═══════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════
-
-const A = {}; // { q1: 'exploring', q2: 'feedback', ... }
-
-// ═══════════════════════════════════════════
-// QUIZ LOGIC
-// ═══════════════════════════════════════════
-
-function pick(btn) {
-  const q = btn.dataset.q;
-  document.querySelectorAll(`.abtn[data-q="${q}"]`).forEach(b => b.classList.remove('sel'));
-  btn.classList.add('sel');
-  A[`q${q}`] = btn.dataset.val;
-  const nb = document.getElementById(`n${q}`);
-  if (nb) nb.disabled = false;
-}
-
-function fwd(from, to, step) {
-  document.getElementById(from).classList.remove('active');
-  document.getElementById(to).classList.add('active');
-  setprog(step);
-}
-
-function back(from, to, step) {
-  document.getElementById(from).classList.remove('active');
-  document.getElementById(to).classList.add('active');
-  setprog(step);
-}
-
-function setprog(step) {
-  ['pb1','pb2','pb3','pb4'].forEach((id, i) => {
-    const el = document.getElementById(id);
-    el.className = 'pbar' + (i+1 < step ? ' done' : i
+        <button class="btn-back" onclick="back('q2','q1',1)">←
