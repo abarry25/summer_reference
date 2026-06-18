@@ -262,4 +262,51 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
         </button>
       </div>
       <div class="qnav">
-        <button class="btn-back" onclick="back('q2','q1',1)">←
+        <button class="btn-back" onclick="back('q2','q1',1)">←</button>
+          <script>
+  const answers = {};
+
+  function pick(btn) {
+    const q = btn.dataset.q;
+    // Deselect all buttons in this question
+    document.querySelectorAll(`.abtn[data-q="${q}"]`).forEach(b => b.classList.remove('sel'));
+    // Select clicked button
+    btn.classList.add('sel');
+    // Store answer
+    answers[`q${q}`] = btn.dataset.val;
+    // Enable the Next button for this question
+    const nextBtn = document.getElementById(`n${q}`);
+    if (nextBtn) nextBtn.disabled = false;
+  }
+
+  function fwd(fromId, toId, toStep) {
+    document.getElementById(fromId).classList.remove('active');
+    document.getElementById(toId).classList.add('active');
+    updateProgress(toStep);
+  }
+
+  function back(fromId, toId, toStep) {
+    document.getElementById(fromId).classList.remove('active');
+    document.getElementById(toId).classList.add('active');
+    updateProgress(toStep);
+  }
+
+  function updateProgress(step) {
+    const total = 8;
+    for (let i = 1; i <= total; i++) {
+      const bar = document.getElementById(`pb${i}`);
+      if (!bar) continue;
+      bar.className = 'pbar';
+      if (i < step) bar.classList.add('done');
+      else if (i === step) bar.classList.add('cur');
+    }
+    document.getElementById('plabel').textContent = `${step} of ${total}`;
+  }
+</script>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+  
+        
