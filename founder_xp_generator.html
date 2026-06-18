@@ -9,74 +9,40 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --cream: #EBEAE3;
-  --ink: #000;
-  --ink-mid: #444;
-  --ink-light: #888;
-  --ink-faint: #D1D1D1;
-  --rule: #D1D1D1;
-  --amber: #f29138;
-  --amber-light: #f7e4d0;
-  --blue: #4A90C4;
-  --blue-light: #cee5f7;
-  --coral: #711213;
-  --coral-light: #FFC7C8;
-  --green: #84A873;
-  --green-light: #C1F4A8;
-  --teal: #232262;
-  --teal-light: #cbcafa;
-  --purple: #7482E8;
-  --purple-light: #EEEDFE;
+  --cream: #EBEAE3; --ink: #000; --ink-mid: #444; --ink-light: #888;
+  --ink-faint: #D1D1D1; --rule: #D1D1D1; --amber: #f29138;
+  --amber-light: #f7e4d0; --blue: #4A90C4; --blue-light: #cee5f7;
+  --coral: #711213; --coral-light: #FFC7C8; --green: #84A873;
+  --green-light: #C1F4A8; --teal: #232262; --teal-light: #cbcafa;
+  --purple: #7482E8; --purple-light: #EEEDFE;
 }
-
 body { background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; }
-
-/* ── NAV ── */
 .top-nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--rule); }
 .top-nav-inner { max-width: 1100px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
 .brand { font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #888; }
 .nav-r a { margin-left: 20px; text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); border-bottom: 1px solid transparent; padding-bottom: 1px; }
 .nav-r a:hover { border-bottom-color: var(--blue); }
 .nav-r a.active { color: var(--ink); border-bottom-color: var(--ink); }
-
-/* ── HEADER ── */
 header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
 .eyebrow { font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 8px; }
 .page-title { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(28px, 4vw, 42px); color: var(--ink); line-height: 1.15; margin-bottom: 8px; }
 .page-sub { font-size: 14px; color: var(--ink-mid); max-width: 560px; }
-
-/* ── LAYOUT ── */
 .page-wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; transition: max-width .3s ease; }
 .page-wrap.wide { max-width: 980px; }
 .hidden { display: none !important; }
-
-/* ── PROGRESS ── */
 .prog-track { display: flex; align-items: center; gap: 5px; margin-bottom: 44px; }
 .pbar { height: 3px; flex: 1; background: var(--rule); border-radius: 3px; transition: background .3s; }
 .pbar.done { background: var(--ink); }
 .pbar.cur { background: #aaa; }
 .plabel { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-light); white-space: nowrap; padding-left: 10px; }
-
-/* ── QUESTION SCREENS ── */
 .qscreen { display: none; }
 .qscreen.active { display: block; animation: slideup .25s ease both; }
 @keyframes slideup { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-
 .qnum { font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 10px; }
 .qtxt { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(22px, 3vw, 30px); color: var(--ink); line-height: 1.2; margin-bottom: 28px; }
-
-/* ── ANSWER BUTTONS ── */
 .alist { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; }
-.abtn {
-  display: flex; align-items: flex-start; gap: 14px;
-  padding: 15px 16px; background: #fff;
-  border: 1px solid var(--rule); border-radius: 12px;
-  cursor: pointer; text-align: left; width: 100%;
-  font-family: 'DM Sans', sans-serif;
-  transition: border-color .12s, box-shadow .12s;
-}
+.abtn { display: flex; align-items: flex-start; gap: 14px; padding: 15px 16px; background: #fff; border: 1px solid var(--rule); border-radius: 12px; cursor: pointer; text-align: left; width: 100%; font-family: 'DM Sans', sans-serif; transition: border-color .12s, box-shadow .12s; }
 .abtn:hover { border-color: #aaa; background: #fafaf8; }
 .abtn.sel { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); background: #fff; }
 .aem { font-size: 20px; flex-shrink: 0; line-height: 1.4; margin-top: 2px; }
@@ -87,8 +53,6 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
 .abtn.sel .radio-ring { background: var(--ink); border-color: var(--ink); }
 .radio-dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
 .abtn.sel .radio-dot { display: block; }
-
-/* ── Q NAVIGATION ── */
 .qnav { display: flex; align-items: center; justify-content: space-between; }
 .btn-back { padding: 9px 18px; background: none; border: 1px solid var(--rule); border-radius: 20px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--ink-light); cursor: pointer; transition: all .12s; }
 .btn-back:hover:not(:disabled) { border-color: #888; color: var(--ink); }
@@ -99,8 +63,6 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
 .btn-generate { padding: 11px 26px; background: #EA3D3E; color: #fff; border: none; border-radius: 20px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background .12s; }
 .btn-generate:disabled { opacity: .25; cursor: default; }
 .btn-generate:not(:disabled):hover { background: var(--coral); }
-
-/* ── LOADING ── */
 #loading { display: none; text-align: center; padding: 72px 0; }
 #loading.active { display: block; animation: slideup .2s ease both; }
 .ldots { display: flex; justify-content: center; gap: 8px; margin-bottom: 16px; }
@@ -109,74 +71,35 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
 .ldot:nth-child(3) { animation-delay: .44s; }
 @keyframes dp { 0%,60%,100% { background: var(--rule); transform: scale(1); } 30% { background: var(--ink); transform: scale(1.35); } }
 .ltxt { font-size: 14px; color: var(--ink-light); }
-
-/* ── RESULTS ── */
 #results { display: none; }
-
-/* Persona card */
 .pcard { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 28px; margin-bottom: 16px; position: relative; overflow: hidden; border-top-width: 3px; }
 .pbadge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
 .phl { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(22px, 3vw, 30px); color: var(--ink); line-height: 1.2; margin-bottom: 10px; }
 .pdesc { font-size: 14px; color: var(--ink-mid); line-height: 1.65; max-width: 600px; }
-
-/* Stack card */
-.stack-card { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 20px 24px; margin-bottom: 16px; }
-.sec-label { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; }
-.stack-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.spill { padding: 8px 14px; border-radius: 8px; }
-.sn { display: block; font-size: 13px; font-weight: 500; }
-.sl { display: block; font-size: 10px; opacity: .65; }
-.sarr { color: var(--ink-faint); font-size: 14px; flex-shrink: 0; }
-
-/* Two-col grid */
 .rgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 .rcard { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 20px; }
 .rc-title { font-size: 12px; font-weight: 500; color: var(--ink); padding-bottom: 12px; border-bottom: 1px solid var(--rule); margin-bottom: 16px; }
-
-/* Steps */
 .step { display: flex; gap: 12px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
 .step:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 .step-n { width: 22px; height: 22px; border-radius: 50%; background: #1a1a1a; color: #fff; font-size: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
 .step.urg .step-n { background: #EA3D3E; }
 .step-a { display: block; font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; line-height: 1.3; }
 .step-d { font-size: 12px; color: var(--ink-light); line-height: 1.4; }
-
-/* Event cards */
 .ev { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
 .ev:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 .ev-tag { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; margin-bottom: 5px; }
 .ev-name { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 3px; line-height: 1.3; }
 .ev-meta { font-size: 11px; color: var(--ink-light); display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
-.ev-desc { font-size: 12px; color: var(--ink-mid); line-height: 1.45; margin-bottom: 6px; }
-.link-btn { font-size: 11px; font-weight: 500; color: var(--ink); background: none; border: none; padding: 0; cursor: pointer; font-family: 'DM Sans', sans-serif; text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; transition: color .12s; }
-.link-btn:hover { color: #EA3D3E; text-decoration-color: #EA3D3E; }
-
-/* Office hours */
-.oh-wrap { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 20px 24px; margin-bottom: 16px; }
-.oh-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
-.oh-cell { border: 1px solid var(--rule); border-radius: 10px; padding: 14px; }
-.oh-tag { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; margin-bottom: 7px; }
-.oh-name { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 3px; line-height: 1.3; }
-.oh-sched { font-size: 11px; color: var(--ink-light); margin-bottom: 6px; }
-.oh-desc { font-size: 12px; color: var(--ink-mid); line-height: 1.4; margin-bottom: 8px; }
-
-/* Results footer */
+.ev-desc { font-size: 12px; color: var(--ink-mid); line-height: 1.45; }
 .r-footer { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 4px; }
 .r-btn { padding: 9px 18px; border: 1px solid var(--rule); border-radius: 20px; font-size: 12px; font-family: 'DM Sans', sans-serif; cursor: pointer; color: var(--ink-mid); background: #fff; text-decoration: none; display: inline-block; transition: all .12s; }
 .r-btn:hover { background: #f5f5f3; border-color: #888; color: var(--ink); }
 .r-btn.acc { color: var(--amber); border-color: var(--amber-light); background: var(--amber-light); }
 .r-btn.acc:hover { background: #e8c89a; }
-
-/* Avail label */
-.avail-lbl { font-size: 11px; color: var(--ink-light); display: block; margin-bottom: 8px; }
-.avail-lbl.warn { color: #b35a00; }
-
 @media (max-width: 640px) {
   header { padding: 32px 20px 24px; }
   .page-wrap { padding: 32px 16px 60px; }
   .rgrid { grid-template-columns: 1fr; }
-  .oh-grid { grid-template-columns: 1fr; }
-  .stack-row { gap: 6px; }
 }
 </style>
 </head>
@@ -201,7 +124,6 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
 
 <div class="page-wrap" id="pageWrap">
 
-  <!-- Progress: 6 bars -->
   <div class="prog-track" id="progWrap">
     <div class="pbar cur" id="pb1"></div>
     <div class="pbar" id="pb2"></div>
@@ -212,18 +134,211 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
     <span class="plabel" id="plabel">1 of 6</span>
   </div>
 
-  <!-- Questions -->
   <div id="quizqs">
 
-    <!-- !! PASTE YOUR Q3–Q8 HERE, renumbered as Q1–Q6 !! -->
-    <!-- Make sure each question has:                      -->
-    <!--   id="q1" through id="q6"                        -->
-    <!--   data-q="1" through data-q="6" on each button   -->
-    <!--   id="n1" through id="n6" on each Next button     -->
-    <!--   fwd/back calls updated to match new numbering   -->
-    <!-- First question should have class="qscreen active" -->
+    <!-- Q1: Stage -->
+    <div class="qscreen active" id="q1">
+      <p class="qnum">Question 1 of 6</p>
+      <h2 class="qtxt">What's your current stage?</h2>
+      <div class="alist">
+        <button class="abtn" data-q="1" data-val="idea" onclick="pick(this)">
+          <span class="aem">💡</span>
+          <div class="abody"><span class="at">Idea</span><span class="as">I have a concept I'm excited about but haven't tested it with real users yet</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="1" data-val="validation" onclick="pick(this)">
+          <span class="aem">🔍</span>
+          <div class="abody"><span class="at">User Validation</span><span class="as">I've talked to potential users and am actively testing my core assumptions</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="1" data-val="traction" onclick="pick(this)">
+          <span class="aem">📈</span>
+          <div class="abody"><span class="at">Demonstrated Traction</span><span class="as">I have early users, paying customers, or clear signals of product-market fit</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+      </div>
+      <div class="qnav">
+        <button class="btn-back" disabled>← Back</button>
+        <button class="btn-next" id="n1" disabled onclick="fwd('q1','q2',2)">Next →</button>
+      </div>
+    </div>
 
-  </div>
+    <!-- Q2: Goal -->
+    <div class="qscreen" id="q2">
+      <p class="qnum">Question 2 of 6</p>
+      <h2 class="qtxt">What's your primary goal this summer?</h2>
+      <div class="alist">
+        <button class="abtn" data-q="2" data-val="build" onclick="pick(this)">
+          <span class="aem">⚙️</span>
+          <div class="abody"><span class="at">Build & ship my product</span><span class="as">I want to make real progress on what I'm building</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="validate" onclick="pick(this)">
+          <span class="aem">🧪</span>
+          <div class="abody"><span class="at">Talk to customers & validate</span><span class="as">I need to test assumptions and find out if people actually want this</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="fundraise" onclick="pick(this)">
+          <span class="aem">💰</span>
+          <div class="abody"><span class="at">Raise funding or meet investors</span><span class="as">I want to understand fundraising and get in front of the right people</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="team" onclick="pick(this)">
+          <span class="aem">🤝</span>
+          <div class="abody"><span class="at">Find a co-founder or team member</span><span class="as">I need a partner or key hire to move forward</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="mentorship" onclick="pick(this)">
+          <span class="aem">🧭</span>
+          <div class="abody"><span class="at">Get mentorship & expert advice</span><span class="as">I want access to people who've built companies before</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="learn" onclick="pick(this)">
+          <span class="aem">📚</span>
+          <div class="abody"><span class="at">Learn startup fundamentals</span><span class="as">I want to understand how startups actually work</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="network" onclick="pick(this)">
+          <span class="aem">🌐</span>
+          <div class="abody"><span class="at">Network with other founders</span><span class="as">I want to meet my people and build relationships in the startup community</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+      </div>
+      <div class="qnav">
+        <button class="btn-back" onclick="back('q2','q1',1)">← Back</button>
+        <button class="btn-next" id="n2" disabled onclick="fwd('q2','q3',3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q3: Time -->
+    <div class="qscreen" id="q3">
+      <p class="qnum">Question 3 of 6</p>
+      <h2 class="qtxt">How much time per week are you planning to spend on your venture?</h2>
+      <div class="alist">
+        <button class="abtn" data-q="3" data-val="light" onclick="pick(this)">
+          <span class="aem">🌱</span>
+          <div class="abody"><span class="at">1–3 hrs / week</span><span class="as">I'm exploring alongside coursework or other major commitments</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="3" data-val="part" onclick="pick(this)">
+          <span class="aem">⚡</span>
+          <div class="abody"><span class="at">3–7 hrs / week</span><span class="as">I'm serious but balancing other responsibilities this summer</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="3" data-val="heavy" onclick="pick(this)">
+          <span class="aem">🔥</span>
+          <div class="abody"><span class="at">~10+ hrs / week</span><span class="as">This is a major focus — I'm putting in real hours</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="3" data-val="fulltime" onclick="pick(this)">
+          <span class="aem">🚀</span>
+          <div class="abody"><span class="at">Full-time</span><span class="as">I'm all in — this is my job this summer</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+      </div>
+      <div class="qnav">
+        <button class="btn-back" onclick="back('q3','q2',2)">← Back</button>
+        <button class="btn-next" id="n3" disabled onclick="fwd('q3','q4',4)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q4: Support Style -->
+    <div class="qscreen" id="q4">
+      <p class="qnum">Question 4 of 6</p>
+      <h2 class="qtxt">What support style fits you best?</h2>
+      <div class="alist">
+        <button class="abtn" data-q="4" data-val="async" onclick="pick(this)">
+          <span class="aem">📨</span>
+          <div class="abody"><span class="at">Async</span><span class="as">I prefer resources, guides, and feedback on my own schedule</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="4" data-val="cohort" onclick="pick(this)">
+          <span class="aem">👥</span>
+          <div class="abody"><span class="at">Cohort</span><span class="as">I thrive in a structured group working toward similar goals together</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="4" data-val="dropin" onclick="pick(this)">
+          <span class="aem">🚪</span>
+          <div class="abody"><span class="at">Drop-in</span><span class="as">I want access to experts, office hours, and coworking space when I need it</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="4" data-val="social" onclick="pick(this)">
+          <span class="aem">🎉</span>
+          <div class="abody"><span class="at">Social</span><span class="as">I'm energized by community events and meeting other founders</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+      </div>
+      <div class="qnav">
+        <button class="btn-back" onclick="back('q4','q3',3)">← Back</button>
+        <button class="btn-next" id="n4" disabled onclick="fwd('q4','q5',5)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q5: Track -->
+    <div class="qscreen" id="q5">
+      <p class="qnum">Question 5 of 6</p>
+      <h2 class="qtxt">Any interest in a specific track?</h2>
+      <div class="alist">
+        <button class="abtn" data-q="5" data-val="lifesci" onclick="pick(this)">
+          <span class="aem">🧬</span>
+          <div class="abody"><span class="at">Life Sciences</span><span class="as">Biotech, medtech, diagnostics, therapeutics, or health innovation</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="5" data-val="climate" onclick="pick(this)">
+          <span class="aem">🌍</span>
+          <div class="abody"><span class="at">Climate & Sustainability</span><span class="as">Cleantech, energy, climate solutions, or sustainability-focused ventures</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="5" data-val="general" onclick="pick(this)">
+          <span class="aem">🚀</span>
+          <div class="abody"><span class="at">General</span><span class="as">Broad tech, consumer, B2B, SaaS, social impact, or anything else</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+      </div>
+      <div class="qnav">
+        <button class="btn-back" onclick="back('q5','q4',4)">← Back</button>
+        <button class="btn-next" id="n5" disabled onclick="fwd('q5','q6',6)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q6: Challenge -->
+    <div class="qscreen" id="q6">
+      <p class="qnum">Question 6 of 6</p>
+      <h2 class="qtxt">What's your biggest challenge right now?</h2>
+      <div class="alist">
+        <button class="abtn" data-q="6" data-val="clarity" onclick="pick(this)">
+          <span class="aem">🤔</span>
+          <div class="abody"><span class="at">Clarity</span><span class="as">I need help sharpening my idea, finding direction, or figuring out what to build</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="6" data-val="validation" onclick="pick(this)">
+          <span class="aem">🧪</span>
+          <div class="abody"><span class="at">Validation</span><span class="as">I need to prove this is worth building before going further</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="6" data-val="building" onclick="pick(this)">
+          <span class="aem">⚙️</span>
+          <div class="abody"><span class="at">Building</span><span class="as">I need technical resources, tools, or help actually making the thing</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="6" data-val="funding" onclick="pick(this)">
+          <span class="aem">💰</span>
+          <div class="abody"><span class="at">Funding</span><span class="as">I need to understand how to raise money and get in front of the right investors</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="6" data-val="network" onclick="pick(this)">
+          <span class="aem">🤝</span>
+          <div class="abody"><span class="at">Network</span><span class="as">I need connections — co-founders, advisors, customers, or the right community</span></div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+      </div>
+      <div class="qnav">
+        <button class="btn-back" onclick="back('q6','q5',5)">← Back</button>
+        <button class="btn-generate" id="n6" disabled onclick="generate()">Get Recommendation →</button>
+      </div>
+    </div>
+
+  </div><!-- /quizqs -->
 
   <!-- Loading -->
   <div id="loading">
@@ -263,6 +378,9 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
     document.getElementById(fromId).classList.remove('active');
     document.getElementById(toId).classList.add('active');
     updateProgress(toStep);
+    // Re-enable next button if question was already answered
+    const nextBtn = document.getElementById('n' + toStep);
+    if (nextBtn && answers['q' + toStep]) nextBtn.disabled = false;
   }
 
   function updateProgress(step) {
@@ -274,6 +392,175 @@ header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
       else if (i === step) bar.classList.add('cur');
     }
     document.getElementById('plabel').textContent = `${step} of ${TOTAL}`;
+  }
+
+  function generate() {
+    document.getElementById('quizqs').style.display = 'none';
+    document.getElementById('progWrap').style.display = 'none';
+    document.getElementById('loading').classList.add('active');
+    setTimeout(() => {
+      document.getElementById('loading').classList.remove('active');
+      const results = document.getElementById('results');
+      results.style.display = 'block';
+      results.innerHTML = buildResults();
+      document.getElementById('pageWrap').classList.add('wide');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 1800);
+  }
+
+  // ── Personas ──
+  const PERSONAS = {
+    explorer: {
+      color: '#f29138', badgeBg: '#f7e4d0', badgeColor: '#b35a00',
+      badge: '💡 The Curious Builder',
+      headline: 'Start with discovery — the answers are outside the building.',
+      desc: 'You\'re at the most valuable stage: everything is still possible. Your job this summer isn\'t to build — it\'s to learn. Talk to 20 people. Map the problem space. Figure out exactly whose life you\'re trying to change before you write a single line of code or spend a dollar.'
+    },
+    sprint: {
+      color: '#4A90C4', badgeBg: '#cee5f7', badgeColor: '#1a5a8a',
+      badge: '🔍 The Validation Sprinter',
+      headline: 'You\'re in the most critical window — move fast and stay sharp.',
+      desc: 'You\'ve got a hypothesis and you\'re testing it. This is the stage where most ventures succeed or pivot. Your focus should be rapid experimentation: run short tests, get real signal, and update your model quickly. The i-lab has mentors and frameworks built exactly for this moment.'
+    },
+    builder: {
+      color: '#232262', badgeBg: '#cbcafa', badgeColor: '#232262',
+      badge: '📈 The Traction Builder',
+      headline: 'You have signal. Now it\'s time to scale what\'s working.',
+      desc: 'You\'ve validated the core assumption. Now the challenge shifts from "should I build this?" to "how do I grow this?" Focus on team, capital, and distribution. You\'re ready for the most intensive programs the i-lab offers.'
+    },
+    mission: {
+      color: '#84A873', badgeBg: '#C1F4A8', badgeColor: '#3a6b2a',
+      badge: '🌍 The Mission-Driven Founder',
+      headline: 'Building something that matters — with the right ecosystem behind you.',
+      desc: 'Whether you\'re working on the next biotech breakthrough or a climate solution, your venture requires a specialized network. The i-lab\'s dedicated tracks connect you with domain experts, sector-specific investors, and fellow founders who speak your language.'
+    },
+    community: {
+      color: '#EA3D3E', badgeBg: '#FFC7C8', badgeColor: '#711213',
+      badge: '🤝 The Connector Founder',
+      headline: 'Your network is your greatest asset — lean into it.',
+      desc: 'You know that startups are a team sport. The i-lab community is one of Harvard\'s best-kept secrets. Show up, be curious, and watch what happens when you\'re in the same room as the right people at the right time.'
+    }
+  };
+
+  function getPersona() {
+    const { q1: stage, q2: goal, q3: time, q4: style, q5: track } = answers;
+    if (track === 'lifesci' || track === 'climate') return PERSONAS.mission;
+    if (style === 'social' || goal === 'network') return PERSONAS.community;
+    if (stage === 'traction') return PERSONAS.builder;
+    if (stage === 'validation' || time === 'heavy' || time === 'fulltime') return PERSONAS.sprint;
+    return PERSONAS.explorer;
+  }
+
+  function getSteps() {
+    const { q1: stage, q2: goal, q6: challenge } = answers;
+    const pool = [];
+    if (challenge === 'clarity' || stage === 'idea') {
+      pool.push({ urg: true, a: 'Book a Founder Advising session', d: 'A 30-min conversation with an i-lab advisor to map your idea and find the sharpest version of the problem.' });
+    }
+    if (challenge === 'validation' || goal === 'validate') {
+      pool.push({ urg: false, a: 'Attend Customer Discovery Office Hours', d: 'Walk away with a 5-question interview guide you can use this week to test your core assumption.' });
+    }
+    if (challenge === 'funding' || goal === 'fundraise') {
+      pool.push({ urg: false, a: 'Join the Investor Prep Workshop', d: 'Understand what early-stage investors actually look for and get feedback on your narrative before you\'re in the room.' });
+    }
+    if (challenge === 'building' || goal === 'build') {
+      pool.push({ urg: false, a: 'Explore i-lab Tech Resources & Coworking', d: 'Access free tools, AWS credits, prototyping resources, and space to build alongside other technical founders.' });
+    }
+    if (challenge === 'network' || goal === 'team') {
+      pool.push({ urg: false, a: 'RSVP for the next Founder Mixer', d: 'Monthly events designed for founders looking to meet co-founders, collaborators, and early supporters.' });
+    }
+    if (goal === 'learn') {
+      pool.push({ urg: false, a: 'Check out the Founder Bootcamp', d: 'A 4-week intro to how startups work — from problem definition through go-to-market.' });
+    }
+    if (pool.length === 0) {
+      pool.push({ urg: true, a: 'Activate your i-lab Membership', d: 'Complete the short intake form to unlock access to all i-lab resources, events, and office hours.' });
+    }
+    return pool.slice(0, 3).map((s, i) => ({ ...s, n: i + 1 }));
+  }
+
+  function getPrograms() {
+    const { q1: stage, q3: time, q4: style, q5: track } = answers;
+    const pool = [];
+    if (style === 'cohort' || time === 'heavy' || time === 'fulltime') {
+      if (stage === 'validation' || stage === 'traction') {
+        pool.push({ color: '#4A90C4', bg: '#cee5f7', label: 'COHORT', name: 'Summer Venture Program (SVP)', when: '8 weeks · Starts June 9', desc: 'The i-lab\'s flagship summer cohort. Structured curriculum, weekly mentor check-ins, and a pitch at Demo Day.' });
+      } else {
+        pool.push({ color: '#f29138', bg: '#f7e4d0', label: 'COHORT', name: 'Founder Bootcamp', when: '4 weeks · Starts June 2', desc: 'For early-stage founders. Covers problem definition, customer discovery, and early validation frameworks.' });
+      }
+    }
+    if (track === 'lifesci') {
+      pool.push({ color: '#84A873', bg: '#C1F4A8', label: 'TRACK', name: 'Life Sciences Launchpad', when: 'Rolling enrollment', desc: 'Dedicated programming for biotech, medtech, and health founders. Domain-specific mentorship and wet lab partnerships.' });
+    }
+    if (track === 'climate') {
+      pool.push({ color: '#84A873', bg: '#C1F4A8', label: 'TRACK', name: 'Climate Founders Track', when: 'Rolling enrollment', desc: 'A community of climate-focused founders with access to cleantech mentors, impact investors, and sustainability resources.' });
+    }
+    if (style === 'dropin' || time === 'light' || time === 'part') {
+      pool.push({ color: '#232262', bg: '#cbcafa', label: 'DROP-IN', name: 'Office Hours Network', when: 'Weekly · Multiple formats', desc: '30-min sessions with mentors across product, fundraising, legal, and GTM. No commitment required.' });
+    }
+    if (style === 'social') {
+      pool.push({ color: '#EA3D3E', bg: '#FFC7C8', label: 'COMMUNITY', name: 'Founder Socials & Events', when: 'Monthly + ad hoc', desc: 'Mixers, speaker series, and community dinners. The best way to meet future co-founders, investors, and customers.' });
+    }
+    if (pool.length === 0) {
+      pool.push({ color: '#4A90C4', bg: '#cee5f7', label: 'COHORT', name: 'Summer Venture Program (SVP)', when: '8 weeks · Starts June 9', desc: 'The i-lab\'s flagship summer cohort. Structured curriculum, weekly mentor check-ins, and a pitch at Demo Day.' });
+    }
+    return pool.slice(0, 3);
+  }
+
+  function buildResults() {
+    const persona = getPersona();
+    const steps = getSteps();
+    const programs = getPrograms();
+
+    const stepsHTML = steps.map(s => `
+      <div class="step ${s.urg ? 'urg' : ''}">
+        <div class="step-n">${s.n}</div>
+        <div><span class="step-a">${s.a}</span><span class="step-d">${s.d}</span></div>
+      </div>`).join('');
+
+    const programsHTML = programs.map(p => `
+      <div class="ev">
+        <span class="ev-tag" style="background:${p.bg};color:${p.color}">${p.label}</span>
+        <div class="ev-name">${p.name}</div>
+        <div class="ev-meta"><span>${p.when}</span></div>
+        <div class="ev-desc">${p.desc}</div>
+      </div>`).join('');
+
+    return `
+      <div class="pcard" style="border-top-color:${persona.color}">
+        <div class="pbadge" style="background:${persona.badgeBg};color:${persona.badgeColor}">${persona.badge}</div>
+        <h2 class="phl">${persona.headline}</h2>
+        <p class="pdesc">${persona.desc}</p>
+      </div>
+      <div class="rgrid">
+        <div class="rcard">
+          <div class="rc-title">Your next 3 moves</div>
+          ${stepsHTML}
+        </div>
+        <div class="rcard">
+          <div class="rc-title">Programs for you</div>
+          ${programsHTML}
+        </div>
+      </div>
+      <div class="r-footer">
+        <button class="r-btn" onclick="restart()">← Start over</button>
+        <a href="hil_summer_2026_programming.html" class="r-btn">Browse all programs</a>
+        <a href="xp_creator.html" class="r-btn acc">Build your XP →</a>
+      </div>`;
+  }
+
+  function restart() {
+    Object.keys(answers).forEach(k => delete answers[k]);
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('results').innerHTML = '';
+    document.getElementById('quizqs').style.display = 'block';
+    document.getElementById('progWrap').style.display = 'flex';
+    document.getElementById('pageWrap').classList.remove('wide');
+    document.querySelectorAll('.qscreen').forEach(s => s.classList.remove('active'));
+    document.getElementById('q1').classList.add('active');
+    document.querySelectorAll('.abtn').forEach(b => b.classList.remove('sel'));
+    document.querySelectorAll('.btn-next, .btn-generate').forEach(b => b.disabled = true);
+    updateProgress(1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
 
