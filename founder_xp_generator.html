@@ -1,573 +1,880 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/x-icon" href="images/favicon.ico">
-<title>Harvard Innovation Labs — Start Here</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --cream: #EBEAE3; --ink: #000; --ink-mid: #444; --ink-light: #888;
-  --ink-faint: #D1D1D1; --rule: #D1D1D1; --amber: #f29138;
-  --amber-light: #f7e4d0; --blue: #4A90C4; --blue-light: #cee5f7;
-  --coral: #711213; --coral-light: #FFC7C8; --green: #84A873;
-  --green-light: #C1F4A8; --teal: #232262; --teal-light: #cbcafa;
-  --purple: #7482E8; --purple-light: #EEEDFE;
-}
-body { background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; }
-.top-nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--rule); }
-.top-nav-inner { max-width: 1100px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
-.brand { font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #888; }
-.nav-r a { margin-left: 20px; text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); border-bottom: 1px solid transparent; padding-bottom: 1px; }
-.nav-r a:hover { border-bottom-color: var(--blue); }
-.nav-r a.active { color: var(--ink); border-bottom-color: var(--ink); }
-header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
-.eyebrow { font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 8px; }
-.page-title { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(28px, 4vw, 42px); color: var(--ink); line-height: 1.15; margin-bottom: 8px; }
-.page-sub { font-size: 14px; color: var(--ink-mid); max-width: 560px; }
-.page-wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; transition: max-width .3s ease; }
-.page-wrap.wide { max-width: 980px; }
-.hidden { display: none !important; }
-.prog-track { display: flex; align-items: center; gap: 5px; margin-bottom: 44px; }
-.pbar { height: 3px; flex: 1; background: var(--rule); border-radius: 3px; transition: background .3s; }
-.pbar.done { background: var(--ink); }
-.pbar.cur { background: #aaa; }
-.plabel { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-light); white-space: nowrap; padding-left: 10px; }
-.qscreen { display: none; }
-.qscreen.active { display: block; animation: slideup .25s ease both; }
-@keyframes slideup { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-.qnum { font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 10px; }
-.qtxt { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(22px, 3vw, 30px); color: var(--ink); line-height: 1.2; margin-bottom: 28px; }
-.alist { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; }
-.abtn { display: flex; align-items: flex-start; gap: 14px; padding: 15px 16px; background: #fff; border: 1px solid var(--rule); border-radius: 12px; cursor: pointer; text-align: left; width: 100%; font-family: 'DM Sans', sans-serif; transition: border-color .12s, box-shadow .12s; }
-.abtn:hover { border-color: #aaa; background: #fafaf8; }
-.abtn.sel { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); background: #fff; }
-.aem { font-size: 20px; flex-shrink: 0; line-height: 1.4; margin-top: 2px; }
-.abody { flex: 1; }
-.at { display: block; font-size: 14px; font-weight: 500; color: var(--ink); line-height: 1.3; }
-.as { display: block; font-size: 12px; color: var(--ink-light); margin-top: 3px; line-height: 1.4; }
-.radio-ring { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--rule); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .12s; margin-top: 3px; pointer-events: none; }
-.abtn.sel .radio-ring { background: var(--ink); border-color: var(--ink); }
-.radio-dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
-.abtn.sel .radio-dot { display: block; }
-.qnav { display: flex; align-items: center; justify-content: space-between; }
-.btn-back { padding: 9px 18px; background: none; border: 1px solid var(--rule); border-radius: 20px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--ink-light); cursor: pointer; transition: all .12s; }
-.btn-back:hover:not(:disabled) { border-color: #888; color: var(--ink); }
-.btn-back:disabled { opacity: .3; cursor: default; pointer-events: none; }
-.btn-next { padding: 10px 24px; background: var(--ink); color: #fff; border: none; border-radius: 20px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background .12s; }
-.btn-next:disabled { opacity: .25; cursor: default; }
-.btn-next:not(:disabled):hover { background: #222; }
-.btn-generate { padding: 11px 26px; background: #EA3D3E; color: #fff; border: none; border-radius: 20px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background .12s; }
-.btn-generate:disabled { opacity: .25; cursor: default; }
-.btn-generate:not(:disabled):hover { background: var(--coral); }
-#loading { display: none; text-align: center; padding: 72px 0; }
-#loading.active { display: block; animation: slideup .2s ease both; }
-.ldots { display: flex; justify-content: center; gap: 8px; margin-bottom: 16px; }
-.ldot { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); animation: dp 1.4s ease-in-out infinite; }
-.ldot:nth-child(2) { animation-delay: .22s; }
-.ldot:nth-child(3) { animation-delay: .44s; }
-@keyframes dp { 0%,60%,100% { background: var(--rule); transform: scale(1); } 30% { background: var(--ink); transform: scale(1.35); } }
-.ltxt { font-size: 14px; color: var(--ink-light); }
-#results { display: none; }
-.pcard { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 28px; margin-bottom: 16px; position: relative; overflow: hidden; border-top-width: 3px; }
-.pbadge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
-.phl { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(22px, 3vw, 30px); color: var(--ink); line-height: 1.2; margin-bottom: 10px; }
-.pdesc { font-size: 14px; color: var(--ink-mid); line-height: 1.65; max-width: 600px; }
-.rgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-.rcard { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 20px; }
-.rc-title { font-size: 12px; font-weight: 500; color: var(--ink); padding-bottom: 12px; border-bottom: 1px solid var(--rule); margin-bottom: 16px; }
-.step { display: flex; gap: 12px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
-.step:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.step-n { width: 22px; height: 22px; border-radius: 50%; background: #1a1a1a; color: #fff; font-size: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-.step.urg .step-n { background: #EA3D3E; }
-.step-a { display: block; font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; line-height: 1.3; }
-.step-d { font-size: 12px; color: var(--ink-light); line-height: 1.4; }
-.ev { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
-.ev:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.ev-tag { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; margin-bottom: 5px; }
-.ev-name { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 3px; line-height: 1.3; }
-.ev-meta { font-size: 11px; color: var(--ink-light); display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
-.ev-desc { font-size: 12px; color: var(--ink-mid); line-height: 1.45; }
-.r-footer { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 4px; }
-.r-btn { padding: 9px 18px; border: 1px solid var(--rule); border-radius: 20px; font-size: 12px; font-family: 'DM Sans', sans-serif; cursor: pointer; color: var(--ink-mid); background: #fff; text-decoration: none; display: inline-block; transition: all .12s; }
-.r-btn:hover { background: #f5f5f3; border-color: #888; color: var(--ink); }
-.r-btn.acc { color: var(--amber); border-color: var(--amber-light); background: var(--amber-light); }
-.r-btn.acc:hover { background: #e8c89a; }
-@media (max-width: 640px) {
-  header { padding: 32px 20px 24px; }
-  .page-wrap { padding: 32px 16px 60px; }
-  .rgrid { grid-template-columns: 1fr; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>i-lab Program Finder — Harvard Innovation Labs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:             #f7f6f4;
+      --white:          #ffffff;
+      --black:          #0d0d0d;
+      --text:           #1c1c1c;
+      --text-muted:     #5c5c5c;
+      --text-light:     #9a9a9a;
+      --border:         #e0dedd;
+      --accent:         #c41230;
+      --accent-hover:   #a30e26;
+      --accent-light:   #fff0f0;
+      --remote-bg:      #dcfce7;   --remote-text:   #15803d;
+      --inperson-bg:    #dbeafe;   --inperson-text: #1d4ed8;
+      --hybrid-bg:      #fef3c7;   --hybrid-text:   #b45309;
+      --tbd-bg:         #f3f4f6;   --tbd-text:      #6b7280;
+      --radius:         14px;
+      --radius-sm:      10px;
+      --shadow:         0 1px 4px rgba(0,0,0,.07), 0 0 0 1px rgba(0,0,0,.04);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .site-header { margin-bottom: 40px; }
+    .logo {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* Card */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 36px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Animation */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp .22s ease forwards; }
+
+    /* ── START SCREEN ── */
+    .start-tag {
+      display: inline-block;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 16px;
+    }
+    .start-h1 {
+      font-size: 30px; font-weight: 700;
+      color: var(--black); line-height: 1.3; margin-bottom: 14px;
+    }
+    .start-p {
+      font-size: 16px; color: var(--text-muted);
+      line-height: 1.75; margin-bottom: 30px;
+    }
+    .start-meta { margin-top: 14px; font-size: 12px; color: var(--text-light); }
+
+    /* ── QUESTION SCREEN ── */
+    .q-num {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-light); margin-bottom: 10px;
+    }
+    .q-headline {
+      font-size: 24px; font-weight: 700;
+      color: var(--black); line-height: 1.35; margin-bottom: 6px;
+    }
+    .q-subtext { font-size: 14px; color: var(--text-muted); margin-bottom: 26px; }
+    .q-helper  { font-size: 13px; color: var(--text-light); font-style: italic; margin-top: 14px; }
+
+    /* Options */
+    .options { display: flex; flex-direction: column; gap: 9px; margin-bottom: 28px; }
+
+    .option {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: border-color .12s, background .12s;
+      -webkit-user-select: none; user-select: none;
+    }
+    .option:hover        { border-color: var(--accent); background: var(--accent-light); }
+    .option.is-selected  { border-color: var(--accent); background: var(--accent-light); }
+
+    .opt-dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      flex-shrink: 0; margin-top: 3px;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .12s, background .12s;
+    }
+    .option.is-selected .opt-dot { border-color: var(--accent); background: var(--accent); }
+    .opt-dot::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: transparent; }
+    .option.is-selected .opt-dot::after { background: white; }
+
+    /* Checkbox variant */
+    .option.is-check .opt-dot { border-radius: 5px; }
+    .option.is-check.is-selected .opt-dot::after {
+      content: '✓'; background: transparent;
+      color: white; font-size: 11px; font-weight: 700; line-height: 1;
+    }
+
+    .opt-text { flex: 1; }
+    .opt-label { font-size: 15px; font-weight: 600; color: var(--black); line-height: 1.4; }
+    .opt-sub   { font-size: 13px; color: var(--text-muted); margin-top: 2px; line-height: 1.5; }
+
+    /* Validation */
+    .val-msg { font-size: 13px; color: var(--accent); font-weight: 500; margin-bottom: 14px; display: none; }
+    .val-msg.show { display: block; }
+
+    /* Button row */
+    .btn-row { display: flex; align-items: center; justify-content: space-between; }
+
+    .btn-primary {
+      background: var(--accent); color: white;
+      border: none; border-radius: var(--radius-sm);
+      padding: 13px 26px;
+      font-size: 15px; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: background .12s;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .btn-back {
+      background: none; border: none;
+      font-size: 14px; color: var(--text-muted);
+      font-family: inherit; cursor: pointer; padding: 0;
+    }
+    .btn-back:hover { color: var(--text); }
+
+    /* ── RESULTS ── */
+    .results-eyebrow {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .tag {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 10px; border-radius: 100px;
+      background: var(--accent-light); color: var(--accent);
+      border: 1px solid #fecaca;
+    }
+    .results-headline {
+      font-size: 22px; font-weight: 700;
+      color: var(--black); line-height: 1.4; margin-bottom: 24px;
+    }
+    .section-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-light); margin-bottom: 10px;
+    }
+    .results-section {
+      margin-top: 32px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Program cards */
+    .prog-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 18px; margin-bottom: 10px;
+    }
+    .prog-card.is-primary { border-color: var(--accent); }
+    .prog-card-head {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 10px; margin-bottom: 8px;
+    }
+    .prog-name { font-size: 15px; font-weight: 600; color: var(--black); line-height: 1.4; }
+    .rec-badge {
+      font-size: 9px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      background: var(--accent); color: white;
+      padding: 2px 7px; border-radius: 100px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .prog-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 10px; }
+    .prog-warn  { font-size: 12px; color: var(--accent); font-weight: 500; margin-bottom: 8px; }
+    .prog-foot  { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+
+    .fmt-label {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600;
+      padding: 3px 8px; border-radius: 100px;
+    }
+    .fmt-label.REMOTE   { background: var(--remote-bg);   color: var(--remote-text); }
+    .fmt-label.INPERSON { background: var(--inperson-bg); color: var(--inperson-text); }
+    .fmt-label.HYBRID   { background: var(--hybrid-bg);   color: var(--hybrid-text); }
+    .fmt-label.TBD      { background: var(--tbd-bg);      color: var(--tbd-text); }
+
+    .prog-link { font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none; }
+    .prog-link:hover { text-decoration: underline; }
+    .prog-link.is-tbd { color: var(--text-light); cursor: default; }
+    .prog-link.is-tbd:hover { text-decoration: none; }
+
+    .fmt-mismatch { font-size: 11px; color: var(--hybrid-text); font-style: italic; width: 100%; }
+
+    /* Primer card */
+    .primer-card {
+      background: #f0f9ff; border: 1.5px solid #bae6fd;
+      border-radius: var(--radius-sm); padding: 18px; margin-bottom: 10px;
+    }
+    .primer-card .prog-name { color: #075985; }
+    .primer-card .prog-desc { color: #0369a1; }
+    .primer-step { font-size: 13px; font-weight: 600; color: #0369a1; margin-bottom: 10px; }
+
+    /* SIFF card */
+    .siff-card {
+      background: #f0fdf4; border: 1.5px solid #86efac;
+      border-radius: var(--radius-sm); padding: 18px;
+    }
+    .siff-eyebrow {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--remote-text); margin-bottom: 6px;
+    }
+
+    /* Gap note */
+    .gap-note {
+      font-size: 12px; color: var(--text-light); font-style: italic;
+      background: var(--bg);
+      border-left: 3px solid var(--border);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 10px 14px; margin-bottom: 16px; line-height: 1.6;
+    }
+
+    /* Community grid */
+    .community-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .community-grid .prog-card  { margin-bottom: 0; }
+    .community-grid .prog-name  { font-size: 13px; }
+    .community-grid .prog-desc  { font-size: 12px; margin: 4px 0 8px; }
+    .community-grid .prog-link  { font-size: 12px; }
+
+    /* Window Shopper CTA */
+    .ws-cta {
+      background: var(--bg); border-radius: var(--radius-sm);
+      padding: 20px; text-align: center;
+      font-size: 14px; color: var(--text-muted);
+      margin-top: 24px; line-height: 1.7;
+    }
+    .ws-cta a { color: var(--accent); font-weight: 600; text-decoration: none; }
+    .ws-cta a:hover { text-decoration: underline; }
+
+    /* Restart */
+    .restart-row {
+      text-align: center; margin-top: 48px;
+      padding-top: 32px; border-top: 1px solid var(--border);
+    }
+    .restart-row a { font-size: 14px; color: var(--text-muted); text-decoration: none; }
+    .restart-row a:hover { color: var(--accent); }
+
+    /* Responsive */
+    @media (max-width: 520px) {
+      .card { padding: 24px 18px; }
+      .q-headline { font-size: 20px; }
+      .start-h1 { font-size: 25px; }
+      .community-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-
-<nav class="top-nav">
-  <div class="top-nav-inner">
-    <span class="brand">HIL Summer 2026</span>
-    <div class="nav-r">
-      <a href="hil_summer_2026_programming.html">Program View</a>
-      <a href="xp_creator.html">XP Builder</a>
-      <a href="founder_xp_generator.html" class="active">Start Here</a>
-    </div>
-  </div>
-</nav>
-
-<header>
-  <p class="eyebrow">Harvard Innovation Labs · Summer 2026</p>
-  <h1 class="page-title">Find Your Path</h1>
-  <p class="page-sub">Six questions. A personalized path that only recommends programs you can actually join right now.</p>
-</header>
-
-<div class="page-wrap" id="pageWrap">
-
-  <div class="prog-track" id="progWrap">
-    <div class="pbar cur" id="pb1"></div>
-    <div class="pbar" id="pb2"></div>
-    <div class="pbar" id="pb3"></div>
-    <div class="pbar" id="pb4"></div>
-    <div class="pbar" id="pb5"></div>
-    <div class="pbar" id="pb6"></div>
-    <span class="plabel" id="plabel">1 of 6</span>
-  </div>
-
-  <div id="quizqs">
-
-    <!-- Q1: Stage -->
-    <div class="qscreen active" id="q1">
-      <p class="qnum">Question 1 of 6</p>
-      <h2 class="qtxt">What's your current stage?</h2>
-      <div class="alist">
-        <button class="abtn" data-q="1" data-val="idea" onclick="pick(this)">
-          <span class="aem">💡</span>
-          <div class="abody"><span class="at">Idea</span><span class="as">I have a concept I'm excited about but haven't tested it with real users yet</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="1" data-val="validation" onclick="pick(this)">
-          <span class="aem">🔍</span>
-          <div class="abody"><span class="at">User Validation</span><span class="as">I've talked to potential users and am actively testing my core assumptions</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="1" data-val="traction" onclick="pick(this)">
-          <span class="aem">📈</span>
-          <div class="abody"><span class="at">Demonstrated Traction</span><span class="as">I have early users, paying customers, or clear signals of product-market fit</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-      </div>
-      <div class="qnav">
-        <button class="btn-back" disabled>← Back</button>
-        <button class="btn-next" id="n1" disabled onclick="fwd('q1','q2',2)">Next →</button>
-      </div>
-    </div>
-
-    <!-- Q2: Goal -->
-    <div class="qscreen" id="q2">
-      <p class="qnum">Question 2 of 6</p>
-      <h2 class="qtxt">What's your primary goal this summer?</h2>
-      <div class="alist">
-        <button class="abtn" data-q="2" data-val="build" onclick="pick(this)">
-          <span class="aem">⚙️</span>
-          <div class="abody"><span class="at">Build & ship my product</span><span class="as">I want to make real progress on what I'm building</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="2" data-val="validate" onclick="pick(this)">
-          <span class="aem">🧪</span>
-          <div class="abody"><span class="at">Talk to customers & validate</span><span class="as">I need to test assumptions and find out if people actually want this</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="2" data-val="fundraise" onclick="pick(this)">
-          <span class="aem">💰</span>
-          <div class="abody"><span class="at">Raise funding or meet investors</span><span class="as">I want to understand fundraising and get in front of the right people</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="2" data-val="team" onclick="pick(this)">
-          <span class="aem">🤝</span>
-          <div class="abody"><span class="at">Find a co-founder or team member</span><span class="as">I need a partner or key hire to move forward</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="2" data-val="mentorship" onclick="pick(this)">
-          <span class="aem">🧭</span>
-          <div class="abody"><span class="at">Get mentorship & expert advice</span><span class="as">I want access to people who've built companies before</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="2" data-val="learn" onclick="pick(this)">
-          <span class="aem">📚</span>
-          <div class="abody"><span class="at">Learn startup fundamentals</span><span class="as">I want to understand how startups actually work</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="2" data-val="network" onclick="pick(this)">
-          <span class="aem">🌐</span>
-          <div class="abody"><span class="at">Network with other founders</span><span class="as">I want to meet my people and build relationships in the startup community</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-      </div>
-      <div class="qnav">
-        <button class="btn-back" onclick="back('q2','q1',1)">← Back</button>
-        <button class="btn-next" id="n2" disabled onclick="fwd('q2','q3',3)">Next →</button>
-      </div>
-    </div>
-
-    <!-- Q3: Time -->
-    <div class="qscreen" id="q3">
-      <p class="qnum">Question 3 of 6</p>
-      <h2 class="qtxt">How much time per week are you planning to spend on your venture?</h2>
-      <div class="alist">
-        <button class="abtn" data-q="3" data-val="light" onclick="pick(this)">
-          <span class="aem">🌱</span>
-          <div class="abody"><span class="at">1–3 hrs / week</span><span class="as">I'm exploring alongside coursework or other major commitments</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="3" data-val="part" onclick="pick(this)">
-          <span class="aem">⚡</span>
-          <div class="abody"><span class="at">3–7 hrs / week</span><span class="as">I'm serious but balancing other responsibilities this summer</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="3" data-val="heavy" onclick="pick(this)">
-          <span class="aem">🔥</span>
-          <div class="abody"><span class="at">~10+ hrs / week</span><span class="as">This is a major focus — I'm putting in real hours</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="3" data-val="fulltime" onclick="pick(this)">
-          <span class="aem">🚀</span>
-          <div class="abody"><span class="at">Full-time</span><span class="as">I'm all in — this is my job this summer</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-      </div>
-      <div class="qnav">
-        <button class="btn-back" onclick="back('q3','q2',2)">← Back</button>
-        <button class="btn-next" id="n3" disabled onclick="fwd('q3','q4',4)">Next →</button>
-      </div>
-    </div>
-
-    <!-- Q4: Support Style -->
-    <div class="qscreen" id="q4">
-      <p class="qnum">Question 4 of 6</p>
-      <h2 class="qtxt">What support style fits you best?</h2>
-      <div class="alist">
-        <button class="abtn" data-q="4" data-val="async" onclick="pick(this)">
-          <span class="aem">📨</span>
-          <div class="abody"><span class="at">Async</span><span class="as">I prefer resources, guides, and feedback on my own schedule</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="4" data-val="cohort" onclick="pick(this)">
-          <span class="aem">👥</span>
-          <div class="abody"><span class="at">Cohort</span><span class="as">I thrive in a structured group working toward similar goals together</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="4" data-val="dropin" onclick="pick(this)">
-          <span class="aem">🚪</span>
-          <div class="abody"><span class="at">Drop-in</span><span class="as">I want access to experts, office hours, and coworking space when I need it</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="4" data-val="social" onclick="pick(this)">
-          <span class="aem">🎉</span>
-          <div class="abody"><span class="at">Social</span><span class="as">I'm energized by community events and meeting other founders</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-      </div>
-      <div class="qnav">
-        <button class="btn-back" onclick="back('q4','q3',3)">← Back</button>
-        <button class="btn-next" id="n4" disabled onclick="fwd('q4','q5',5)">Next →</button>
-      </div>
-    </div>
-
-    <!-- Q5: Track -->
-    <div class="qscreen" id="q5">
-      <p class="qnum">Question 5 of 6</p>
-      <h2 class="qtxt">Any interest in a specific track?</h2>
-      <div class="alist">
-        <button class="abtn" data-q="5" data-val="lifesci" onclick="pick(this)">
-          <span class="aem">🧬</span>
-          <div class="abody"><span class="at">Life Sciences</span><span class="as">Biotech, medtech, diagnostics, therapeutics, or health innovation</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="5" data-val="climate" onclick="pick(this)">
-          <span class="aem">🌍</span>
-          <div class="abody"><span class="at">Climate & Sustainability</span><span class="as">Cleantech, energy, climate solutions, or sustainability-focused ventures</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-         <button class="abtn" data-q="5" data-val="climate" onclick="pick(this)">
-          <span class="aem">🌍</span>
-          <div class="abody"><span class="at">Social Enterprise & Non-Profit</span><span class="as">Cleantech, energy, climate solutions, or sustainability-focused ventures</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="5" data-val="general" onclick="pick(this)">
-          <span class="aem">🚀</span>
-          <div class="abody"><span class="at">General</span><span class="as">Broad tech, consumer, B2B, SaaS, social impact, or anything else</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-      </div>
-      <div class="qnav">
-        <button class="btn-back" onclick="back('q5','q4',4)">← Back</button>
-        <button class="btn-next" id="n5" disabled onclick="fwd('q5','q6',6)">Next →</button>
-      </div>
-    </div>
-
-    <!-- Q6: Challenge -->
-    <div class="qscreen" id="q6">
-      <p class="qnum">Question 6 of 6</p>
-      <h2 class="qtxt">What's your biggest challenge right now?</h2>
-      <div class="alist">
-        <button class="abtn" data-q="6" data-val="clarity" onclick="pick(this)">
-          <span class="aem">🤔</span>
-          <div class="abody"><span class="at">Clarity</span><span class="as">I need help sharpening my idea, finding direction, or figuring out what to build</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="6" data-val="validation" onclick="pick(this)">
-          <span class="aem">🧪</span>
-          <div class="abody"><span class="at">Validation</span><span class="as">I need to prove this is worth building before going further</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="6" data-val="building" onclick="pick(this)">
-          <span class="aem">⚙️</span>
-          <div class="abody"><span class="at">Building</span><span class="as">I need technical resources, tools, or help actually making the thing</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="6" data-val="funding" onclick="pick(this)">
-          <span class="aem">💰</span>
-          <div class="abody"><span class="at">Funding</span><span class="as">I need to understand how to raise money and get in front of the right investors</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="6" data-val="network" onclick="pick(this)">
-          <span class="aem">🤝</span>
-          <div class="abody"><span class="at">Network</span><span class="as">I need connections — co-founders, advisors, customers, or the right community</span></div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-      </div>
-      <div class="qnav">
-        <button class="btn-back" onclick="back('q6','q5',5)">← Back</button>
-        <button class="btn-generate" id="n6" disabled onclick="generate()">Get Recommendation →</button>
-      </div>
-    </div>
-
-  </div><!-- /quizqs -->
-
-  <!-- Loading -->
-  <div id="loading">
-    <div class="ldots">
-      <div class="ldot"></div>
-      <div class="ldot"></div>
-      <div class="ldot"></div>
-    </div>
-    <p class="ltxt">Building your path…</p>
-  </div>
-
-  <!-- Results -->
-  <div id="results"></div>
-
+<div class="wrap">
+  <header class="site-header">
+    <div class="logo">Harvard Innovation Labs · Program Finder</div>
+  </header>
+  <div id="app"></div>
 </div>
 
 <script>
-  const TOTAL = 6;
-  const answers = {};
 
-  function pick(btn) {
-    const q = btn.dataset.q;
-    document.querySelectorAll(`.abtn[data-q="${q}"]`).forEach(b => b.classList.remove('sel'));
-    btn.classList.add('sel');
-    answers[`q${q}`] = btn.dataset.val;
-    const nextBtn = document.getElementById(`n${q}`);
-    if (nextBtn) nextBtn.disabled = false;
+// ════════════════════════════════════════════════════════════════
+//  SEMESTER-SWAPPABLE LINKS
+//  ▸ This is the ONLY section you need to update each semester.
+//  ▸ Replace each "#" with the real URL for that program.
+//  ▸ Do not change the key names on the left.
+// ════════════════════════════════════════════════════════════════
+const LINKS = {
+  OOH_SIGNUP:              "#",   // Customer Discovery Office Hours
+  PRIMER_SUBSCRIBE:        "#",   // Customer Discovery Primer — subscribe landing page
+  SPRINT_SIGNUP:           "#",   // Customer Discovery Sprint
+  SYSTEM_DYNAMICS_SIGNUP:  "#",   // System Dynamics for Health Care + Life Sciences
+  VIBE_CODING_SIGNUP:      "#",   // Vibe Coding Workshop
+  HACKATHON_SIGNUP:        "#",   // B2C Hackathon: Concept to Testing with AI (Pt 1 + Pt 2)
+  MVP_FEEDBACK:            "#",   // MVP Feedback Session
+  AI_AGENTS_SIGNUP:        "#",   // AI Agents to Run Your B2C Business
+  AI_PR_SIGNUP:            "#",   // How to Use AI for PR (and How Not To)
+  TECHSTARS_SIGNUP:        "#",   // Accelerator Info Session: Techstars
+  YC_SIGNUP:               "#",   // Accelerator Info Session: Y Combinator
+  INVESTOR_PREP:           "#",   // Investor Prep (update when ready — currently TBD)
+  SIFF_APPLICATION:        "#",   // SIFF Fund application
+  FOUNDER_JOINER:          "#",   // Founder/Joiner Connections: Pizza + Pitch
+  FOUNDER_CIRCLE_INPERSON: "#",   // Founder Circle: Pizza + Problem-Solving
+  FOUNDER_CIRCLE_VIRTUAL:  "#",   // Virtual Founder Circle
+  LAUNCH_PARTY:            "#",   // Summer Launch Party at Felipe's
+  MEMBER_APPRECIATION:     "#",   // Member Appreciation: Tacos & Thanks
+  VIP_CEREMONY:            "#",   // Venture Incubation Ceremony
+  TALK_BYERS:              "#",   // Founder Talk: Allison Byers
+  TALK_ELLIOTT:            "#",   // Founder Talk: Blitzy's Brian Elliott + Murph VanderVelde
+};
+// ════════════════════════════════════════════════════════════════
+//  END SEMESTER-SWAPPABLE LINKS
+// ════════════════════════════════════════════════════════════════
+
+
+// ----------------------------------------------------------------
+//  PROGRAM DEFINITIONS
+//  Safe to edit names and descriptions here.
+//  Do NOT change the key names (OOH, PRIMER, SPRINT …)
+// ----------------------------------------------------------------
+const PROGRAMS = {
+  OOH: {
+    name: "Customer Discovery Office Hours",
+    format: "REMOTE", linkKey: "OOH_SIGNUP", linkLabel: "Sign up",
+    desc: "Group office hours for students actively exploring an idea or conducting customer discovery. Facilitated by Becca Xiong, i-lab Managing Director."
+  },
+  PRIMER: {
+    name: "Customer Discovery Primer",
+    format: "REMOTE", linkKey: "PRIMER_SUBSCRIBE", linkLabel: "Sign up",
+    desc: "A self-paced email journey to guide you through customer discovery on your own schedule.",
+    isPrimer: true
+  },
+  SPRINT: {
+    name: "Customer Discovery Sprint",
+    format: "HYBRID", linkKey: "SPRINT_SIGNUP", linkLabel: "Sign up",
+    desc: "A multi-session series for founders ready to go deep on customer discovery — kickoff workshop through final showcase.",
+    warning: "Full commitment required — Kickoff through Final Showcase"
+  },
+  SYSTEM_DYNAMICS: {
+    name: "System Dynamics for Health Care + Life Sciences",
+    format: "INPERSON", linkKey: "SYSTEM_DYNAMICS_SIGNUP", linkLabel: "Sign up",
+    desc: "For HC/LS founders. Map the complex systems shaping adoption, outcomes, and growth. Led by Mark Fagan, Harvard Kennedy School."
+  },
+  VIBE_CODING: {
+    name: "Vibe Coding Workshop",
+    format: "INPERSON", linkKey: "VIBE_CODING_SIGNUP", linkLabel: "Sign up",
+    desc: "A hands-on workshop for founders building and iterating on early-stage products."
+  },
+  HACKATHON: {
+    name: "B2C Hackathon: Concept to Testing with AI",
+    format: "INPERSON", linkKey: "HACKATHON_SIGNUP", linkLabel: "Sign up",
+    desc: "Use AI to move from concept to testable idea — then return to share what you learned from real users.",
+    warning: "2-day commitment — Part 1 (Jul 14) + Part 2 (Jul 16) both required"
+  },
+  MVP_FEEDBACK: {
+    name: "MVP Feedback Session",
+    format: "INPERSON", linkKey: "MVP_FEEDBACK", linkLabel: "Sign up",
+    desc: "Bring a product, prototype, or landing page and get real-time feedback from fellow i-lab members."
+  },
+  AI_AGENTS: {
+    name: "AI Agents to Run Your B2C Business",
+    format: "INPERSON", linkKey: "AI_AGENTS_SIGNUP", linkLabel: "Sign up",
+    desc: "Explore how AI agents can run and automate core parts of your B2C venture."
+  },
+  AI_PR: {
+    name: "How to Use AI for PR (and How Not To)",
+    format: "REMOTE", linkKey: "AI_PR_SIGNUP", linkLabel: "Sign up",
+    desc: "A practical workshop on using AI for media research, messaging, and outreach — while keeping strategy and storytelling human."
+  },
+  TECHSTARS: {
+    name: "Accelerator Info Session: Techstars",
+    format: "INPERSON", linkKey: "TECHSTARS_SIGNUP", linkLabel: "Sign up",
+    desc: "Join Steve Bernard from Techstars to learn how one of the world's leading accelerators evaluates founders and what you gain from participating."
+  },
+  YC: {
+    name: "Accelerator Info Session: Y Combinator",
+    format: "INPERSON", linkKey: "YC_SIGNUP", linkLabel: "Sign up",
+    desc: "Join YC Partner Ankit Gupta and a panel of YC founders for an inside look at one of the most influential accelerators in the world."
+  },
+  INVESTOR_PREP: {
+    name: "Investor Prep",
+    format: "TBD", linkKey: "INVESTOR_PREP", linkLabel: "Learn more",
+    desc: "Prepare to pitch investors. Details updated each semester.",
+    isTBD: true
   }
+};
 
-  function fwd(fromId, toId, toStep) {
-    document.getElementById(fromId).classList.remove('active');
-    document.getElementById(toId).classList.add('active');
-    updateProgress(toStep);
+// Community events — shown at the bottom of every main result page
+const COMMUNITY = [
+  { name: "Founder/Joiner: Pizza + Pitch",           format: "INPERSON", linkKey: "FOUNDER_JOINER",          desc: "Pitch what you're building, share what you need, and meet potential collaborators." },
+  { name: "Founder Circle: Pizza + Problem-Solving", format: "INPERSON", linkKey: "FOUNDER_CIRCLE_INPERSON", desc: "Candid peer problem-solving over pizza." },
+  { name: "Virtual Founder Circle",                  format: "REMOTE",   linkKey: "FOUNDER_CIRCLE_VIRTUAL",  desc: "The same peer energy — on Zoom." },
+  { name: "Summer Launch Party at Felipe's",         format: "INPERSON", linkKey: "LAUNCH_PARTY",            desc: "Connect with founders over quesadillas at everyone's favorite Cambridge taqueria." },
+  { name: "Member Appreciation: Tacos & Thanks",     format: "INPERSON", linkKey: "MEMBER_APPRECIATION",     desc: "A celebration for i-lab community members with local food trucks." },
+  { name: "Venture Incubation Ceremony",             format: "INPERSON", linkKey: "VIP_CEREMONY",            desc: "Celebrate founders advancing through the venture incubation program." },
+  { name: "Founder Talk: Allison Byers",             format: "INPERSON", linkKey: "TALK_BYERS",              desc: "Author of Fundraising for the Rest of Us — lessons on fundraising and building your path." },
+  { name: "Founder Talk: Brian Elliott + Murph VanderVelde", format: "INPERSON", linkKey: "TALK_ELLIOTT",   desc: "Inside Blitzy — one of Boston's fastest-growing AI companies." }
+];
+
+// Needs-based actions — surfaced by Q3 selections
+const NEEDS = {
+  NEED_COFOUNDER:  [{ name: "Founder/Joiner: Pizza + Pitch",           format: "INPERSON", linkKey: "FOUNDER_JOINER",          desc: "Share what you're building and what you need — this is where co-founders find each other." }],
+  NEED_COMMUNITY:  [
+    { name: "Founder Circle: Pizza + Problem-Solving", format: "INPERSON", linkKey: "FOUNDER_CIRCLE_INPERSON", desc: "Candid peer problem-solving over pizza." },
+    { name: "Virtual Founder Circle",                  format: "REMOTE",   linkKey: "FOUNDER_CIRCLE_VIRTUAL",  desc: "Same energy, on Zoom." }
+  ],
+  NEED_MENTORSHIP: [{ name: "Customer Discovery Office Hours", format: "REMOTE",   linkKey: "OOH_SIGNUP",   desc: "Direct feedback from Becca Xiong and fellow founders navigating similar challenges." }],
+  NEED_FUNDING:    [
+    { name: "Founder Talk: Allison Byers", format: "INPERSON", linkKey: "TALK_BYERS",      desc: "Author of Fundraising for the Rest of Us — practical insights from a founder who's been through it." },
+    { name: "Investor Prep",               format: "TBD",      linkKey: "INVESTOR_PREP",   desc: "Details updated each semester.", isTBD: true }
+  ],
+  NEED_INSPIRATION:[
+    { name: "Founder Talk: Allison Byers",                     format: "INPERSON", linkKey: "TALK_BYERS",    desc: "From corporate exec to startup founder — a candid look at the journey." },
+    { name: "Founder Talk: Brian Elliott + Murph VanderVelde", format: "INPERSON", linkKey: "TALK_ELLIOTT",  desc: "Inside Blitzy — one of Boston's fastest-growing AI companies." }
+  ],
+  NEED_MVP:        [{ name: "MVP Feedback Session",             format: "INPERSON", linkKey: "MVP_FEEDBACK", desc: "Bring a product, prototype, or landing page for real-time feedback from fellow founders." }],
+  NEED_PITCH:      [{ name: "Founder/Joiner: Pizza + Pitch",   format: "INPERSON", linkKey: "FOUNDER_JOINER", desc: "A few minutes to share what you're building and practice pitching in front of a live audience." }]
+};
+
+// ----------------------------------------------------------------
+//  RESULTS MATRIX — 21 paths
+//  primary:  string key OR array of keys (Propel multi-program)
+//  secondary: array of keys
+//  gapNote:  optional note shown when no sector-specific program exists
+//  siff:     true → append SIFF callout block
+// ----------------------------------------------------------------
+const MATRIX = {
+  // EXPLORE — Q2 time does not fork results
+  EXPLORE_LIFESCI:      { primary: 'OOH', secondary: ['PRIMER'],                    gapNote: "No Life Sci-specific Explore program this semester — these are your best starting points." },
+  EXPLORE_CLIMATE:      { primary: 'OOH', secondary: ['PRIMER'],                    gapNote: "No Climate-specific Explore program this semester." },
+  EXPLORE_DEEPTECH:     { primary: 'OOH', secondary: ['HACKATHON','PRIMER'] },
+  EXPLORE_SOCIALIMPACT: { primary: 'OOH', secondary: ['PRIMER'],                    gapNote: "No Social Impact-specific Explore program this semester.", siff: true },
+  EXPLORE_GENERAL:      { primary: 'OOH', secondary: ['HACKATHON','PRIMER'] },
+
+  // TEST — 4–10 hrs/week (MID)
+  TEST_LIFESCI_MID:      { primary: 'SYSTEM_DYNAMICS', secondary: ['PRIMER','OOH'] },
+  TEST_CLIMATE_MID:      { primary: 'PRIMER',          secondary: ['OOH'],           gapNote: "No Climate-specific Test program this semester. The Primer is your best structured starting point." },
+  TEST_DEEPTECH_MID:     { primary: 'VIBE_CODING',     secondary: ['PRIMER','MVP_FEEDBACK'] },
+  TEST_SOCIALIMPACT_MID: { primary: 'PRIMER',          secondary: ['OOH','MVP_FEEDBACK'], gapNote: "No Social Impact-specific Test program this semester.", siff: true },
+  TEST_GENERAL_MID:      { primary: 'PRIMER',          secondary: ['HACKATHON','OOH'] },
+
+  // TEST — 10+ hrs/week (HIGH)
+  TEST_LIFESCI_HIGH:      { primary: 'SYSTEM_DYNAMICS', secondary: ['SPRINT','OOH'] },
+  TEST_CLIMATE_HIGH:      { primary: 'SPRINT',          secondary: ['OOH'],           gapNote: "No Climate-specific Test program this semester. The Sprint is the best available structured path." },
+  TEST_DEEPTECH_HIGH:     { primary: 'SPRINT',          secondary: ['VIBE_CODING','MVP_FEEDBACK'] },
+  TEST_SOCIALIMPACT_HIGH: { primary: 'SPRINT',          secondary: ['OOH','MVP_FEEDBACK'], gapNote: "No Social Impact-specific Test program this semester.", siff: true },
+  TEST_GENERAL_HIGH:      { primary: 'SPRINT',          secondary: ['HACKATHON','MVP_FEEDBACK'] },
+
+  // PROPEL — Q2 time does not fork results
+  PROPEL_LIFESCI:      { primary: ['TECHSTARS','YC'], secondary: ['AI_PR','INVESTOR_PREP'], gapNote: "No Life Sci-specific Propel program this semester. Accelerator Info Sessions are your best path." },
+  PROPEL_CLIMATE:      { primary: ['TECHSTARS','YC'], secondary: ['AI_PR','INVESTOR_PREP'], gapNote: "No Climate-specific Propel program this semester." },
+  PROPEL_DEEPTECH:     { primary: 'AI_AGENTS',        secondary: ['YC','TECHSTARS','AI_PR'] },
+  PROPEL_SOCIALIMPACT: { primary: ['TECHSTARS','YC'], secondary: ['AI_PR','INVESTOR_PREP'], gapNote: "No Social Impact-specific Propel program this semester.", siff: true },
+  PROPEL_GENERAL:      { primary: ['TECHSTARS','YC'], secondary: ['AI_AGENTS','AI_PR','INVESTOR_PREP'] }
+};
+
+// Results page header copy — keyed by stage
+const HEADERS = {
+  EXPLORE:        "Here's where to start — matched to where you are and what you're building.",
+  TEST:           "Here's how to get real answers from real people — fast.",
+  PROPEL:         "Here's how to build momentum and get in front of the right people.",
+  WINDOW_SHOPPER: "Here's what fits a 1–3 hour/week commitment right now."
+};
+
+// Human-readable labels for result tags
+const LABELS = {
+  EXPLORE: 'Explore', TEST: 'Test', PROPEL: 'Propel',
+  LIFESCI: 'Life Sci / Health', CLIMATE: 'Climate',
+  DEEPTECH: 'Deep Tech / AI', SOCIALIMPACT: 'Social Impact', GENERAL: 'General',
+  TIME_LOW: '1–3 hrs/wk', TIME_MID: '4–10 hrs/wk', TIME_HIGH: '10+ hrs/wk'
+};
+
+// Quiz questions
+const QUESTIONS = [
+  {
+    id: 'stage', num: 'Q1 of 5', type: 'single',
+    headline: "Where are you in your founder journey?",
+    helper: "Not sure? Pick the one that feels closest.",
+    opts: [
+      { label: '🔍 Explore', sub: "I have an idea — or a few — and I'm figuring out if there's something real here", val: 'EXPLORE' },
+      { label: '🧪 Test',    sub: "I have a specific problem I'm solving and I'm starting to talk to customers or build early versions", val: 'TEST' },
+      { label: '🚀 Propel',  sub: "I have early traction and I'm focused on growth, fundraising, or scaling", val: 'PROPEL' }
+    ]
+  },
+  {
+    id: 'time', num: 'Q2 of 5', type: 'single',
+    headline: "How much time can you commit to i-lab programs each week?",
+    opts: [
+      { label: '1–3 hours',  sub: "I want to stay connected but keep it light for now", val: 'TIME_LOW' },
+      { label: '4–10 hours', sub: "I can show up regularly and do some work between sessions", val: 'TIME_MID' },
+      { label: '10+ hours',  sub: "I'm ready to go deep and make this a real priority", val: 'TIME_HIGH' }
+    ]
+  },
+  {
+    id: 'needs', num: 'Q3 of 5', type: 'multi',
+    headline: "What do you need most right now?",
+    subtext: "Pick at least one — this shapes your recommendations.",
+    opts: [
+      { label: '🤝 A co-founder or collaborator',              val: 'NEED_COFOUNDER' },
+      { label: "👥 Peer community — people who get what I'm building", val: 'NEED_COMMUNITY' },
+      { label: '🧭 Mentorship or expert feedback',             val: 'NEED_MENTORSHIP' },
+      { label: '💰 Fundraising or investor connections',       val: 'NEED_FUNDING' },
+      { label: '✨ Inspiration from other founders',           val: 'NEED_INSPIRATION' },
+      { label: '🛠 Feedback on my product or MVP',             val: 'NEED_MVP' },
+      { label: '🎤 Pitching practice',                         val: 'NEED_PITCH' }
+    ]
+  },
+  {
+    id: 'format', num: 'Q4 of 5', type: 'single',
+    headline: "How do you prefer to participate?",
+    opts: [
+      { label: '🟢 Remote',    sub: "I work best online — show me virtual options", val: 'FORMAT_REMOTE' },
+      { label: '🟡 Hybrid',    sub: "I like a mix of in-person and virtual",        val: 'FORMAT_HYBRID' },
+      { label: '🔵 In-Person', sub: "I want to be in the room",                     val: 'FORMAT_INPERSON' }
+    ]
+  },
+  {
+    id: 'sector', num: 'Q5 of 5', type: 'single',
+    headline: "What space are you building in?",
+    opts: [
+      { label: '🧬 Life Sciences / Health Care', sub: "Biotech, medtech, health services, pharma",          val: 'LIFESCI' },
+      { label: '🌱 Climate / Sustainability',    sub: "Clean energy, climate tech, environmental impact",   val: 'CLIMATE' },
+      { label: '⚙️ Deep Tech / AI / Engineering',sub: "Hard tech, AI, robotics, software infrastructure",  val: 'DEEPTECH' },
+      { label: '💙 Social Impact',               sub: "Mission-driven ventures, nonprofits, social enterprise", val: 'SOCIALIMPACT' },
+      { label: '🌐 General / Not sure yet',      sub: "Across industries or still exploring the problem space", val: 'GENERAL' }
+    ]
   }
+];
 
-  function back(fromId, toId, toStep) {
-    document.getElementById(fromId).classList.remove('active');
-    document.getElementById(toId).classList.add('active');
-    updateProgress(toStep);
-    // Re-enable next button if question was already answered
-    const nextBtn = document.getElementById('n' + toStep);
-    if (nextBtn && answers['q' + toStep]) nextBtn.disabled = false;
-  }
 
-  function updateProgress(step) {
-    for (let i = 1; i <= TOTAL; i++) {
-      const bar = document.getElementById(`pb${i}`);
-      if (!bar) continue;
-      bar.className = 'pbar';
-      if (i < step) bar.classList.add('done');
-      else if (i === step) bar.classList.add('cur');
-    }
-    document.getElementById('plabel').textContent = `${step} of ${TOTAL}`;
-  }
+// ════════════════════════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════════════════════════
+let S = {
+  screen: 'start',   // 'start' | 'question' | 'ws' | 'results'
+  qIdx: 0,
+  ans: { stage: null, time: null, needs: [], format: null, sector: null }
+};
 
-  function generate() {
-    document.getElementById('quizqs').style.display = 'none';
-    document.getElementById('progWrap').style.display = 'none';
-    document.getElementById('loading').classList.add('active');
-    setTimeout(() => {
-      document.getElementById('loading').classList.remove('active');
-      const results = document.getElementById('results');
-      results.style.display = 'block';
-      results.innerHTML = buildResults();
-      document.getElementById('pageWrap').classList.add('wide');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1800);
-  }
 
-  // ── Personas ──
-  const PERSONAS = {
-    explorer: {
-      color: '#f29138', badgeBg: '#f7e4d0', badgeColor: '#b35a00',
-      badge: '💡 The Curious Builder',
-      headline: 'Start with discovery — the answers are outside the building.',
-      desc: 'You\'re at the most valuable stage: everything is still possible. Your job this summer isn\'t to build — it\'s to learn. Talk to 20 people. Map the problem space. Figure out exactly whose life you\'re trying to change before you write a single line of code or spend a dollar.'
-    },
-    sprint: {
-      color: '#4A90C4', badgeBg: '#cee5f7', badgeColor: '#1a5a8a',
-      badge: '🔍 The Validation Sprinter',
-      headline: 'You\'re in the most critical window — move fast and stay sharp.',
-      desc: 'You\'ve got a hypothesis and you\'re testing it. This is the stage where most ventures succeed or pivot. Your focus should be rapid experimentation: run short tests, get real signal, and update your model quickly. The i-lab has mentors and frameworks built exactly for this moment.'
-    },
-    builder: {
-      color: '#232262', badgeBg: '#cbcafa', badgeColor: '#232262',
-      badge: '📈 The Traction Builder',
-      headline: 'You have signal. Now it\'s time to scale what\'s working.',
-      desc: 'You\'ve validated the core assumption. Now the challenge shifts from "should I build this?" to "how do I grow this?" Focus on team, capital, and distribution. You\'re ready for the most intensive programs the i-lab offers.'
-    },
-    mission: {
-      color: '#84A873', badgeBg: '#C1F4A8', badgeColor: '#3a6b2a',
-      badge: '🌍 The Mission-Driven Founder',
-      headline: 'Building something that matters — with the right ecosystem behind you.',
-      desc: 'Whether you\'re working on the next biotech breakthrough or a climate solution, your venture requires a specialized network. The i-lab\'s dedicated tracks connect you with domain experts, sector-specific investors, and fellow founders who speak your language.'
-    },
-    community: {
-      color: '#EA3D3E', badgeBg: '#FFC7C8', badgeColor: '#711213',
-      badge: '🤝 The Connector Founder',
-      headline: 'Your network is your greatest asset — lean into it.',
-      desc: 'You know that startups are a team sport. The i-lab community is one of Harvard\'s best-kept secrets. Show up, be curious, and watch what happens when you\'re in the same room as the right people at the right time.'
-    }
+// ════════════════════════════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════════════════════════════
+function lnk(key) { return LINKS[key] || '#'; }
+
+function fmtBadge(fmt) {
+  const map = {
+    REMOTE:   ['🟢','Remote'],
+    INPERSON: ['🔵','In-Person'],
+    HYBRID:   ['🟡','Hybrid'],
+    TBD:      ['⚪','Format TBD']
   };
+  const [ico, txt] = map[fmt] || map.TBD;
+  return `<span class="fmt-label ${fmt}">${ico} ${txt}</span>`;
+}
 
-  function getPersona() {
-    const { q1: stage, q2: goal, q3: time, q4: style, q5: track } = answers;
-    if (track === 'lifesci' || track === 'climate') return PERSONAS.mission;
-    if (style === 'social' || goal === 'network') return PERSONAS.community;
-    if (stage === 'traction') return PERSONAS.builder;
-    if (stage === 'validation' || time === 'heavy' || time === 'fulltime') return PERSONAS.sprint;
-    return PERSONAS.explorer;
-  }
+function mismatchNote(progFmt, userFmt) {
+  const map = { FORMAT_REMOTE:'REMOTE', FORMAT_HYBRID:'HYBRID', FORMAT_INPERSON:'INPERSON' };
+  const pref = map[userFmt];
+  if (!pref || progFmt === 'TBD' || progFmt === pref) return '';
+  const names = { REMOTE:'Remote', INPERSON:'In-Person', HYBRID:'Hybrid' };
+  return `<div class="fmt-mismatch">⚠️ This program is ${names[progFmt]} — your preference was ${names[pref]}</div>`;
+}
 
-  function getSteps() {
-    const { q1: stage, q2: goal, q6: challenge } = answers;
-    const pool = [];
-    if (challenge === 'clarity' || stage === 'idea') {
-      pool.push({ urg: true, a: 'Book a Founder Advising session', d: 'A 30-min conversation with an i-lab advisor to map your idea and find the sharpest version of the problem.' });
-    }
-    if (challenge === 'validation' || goal === 'validate') {
-      pool.push({ urg: false, a: 'Attend Customer Discovery Office Hours', d: 'Walk away with a 5-question interview guide you can use this week to test your core assumption.' });
-    }
-    if (challenge === 'funding' || goal === 'fundraise') {
-      pool.push({ urg: false, a: 'Join the Investor Prep Workshop', d: 'Understand what early-stage investors actually look for and get feedback on your narrative before you\'re in the room.' });
-    }
-    if (challenge === 'building' || goal === 'build') {
-      pool.push({ urg: false, a: 'Explore i-lab Tech Resources & Coworking', d: 'Access free tools, AWS credits, prototyping resources, and space to build alongside other technical founders.' });
-    }
-    if (challenge === 'network' || goal === 'team') {
-      pool.push({ urg: false, a: 'RSVP for the next Founder Mixer', d: 'Monthly events designed for founders looking to meet co-founders, collaborators, and early supporters.' });
-    }
-    if (goal === 'learn') {
-      pool.push({ urg: false, a: 'Check out the Founder Bootcamp', d: 'A 4-week intro to how startups work — from problem definition through go-to-market.' });
-    }
-    if (pool.length === 0) {
-      pool.push({ urg: true, a: 'Activate your i-lab Membership', d: 'Complete the short intake form to unlock access to all i-lab resources, events, and office hours.' });
-    }
-    return pool.slice(0, 3).map((s, i) => ({ ...s, n: i + 1 }));
-  }
+function matrixKey() {
+  const { stage, time, sector } = S.ans;
+  if (stage === 'TEST') return `TEST_${sector}_${time === 'TIME_HIGH' ? 'HIGH' : 'MID'}`;
+  return `${stage}_${sector}`;
+}
 
-  function getPrograms() {
-    const { q1: stage, q3: time, q4: style, q5: track } = answers;
-    const pool = [];
-    if (style === 'cohort' || time === 'heavy' || time === 'fulltime') {
-      if (stage === 'validation' || stage === 'traction') {
-        pool.push({ color: '#4A90C4', bg: '#cee5f7', label: 'COHORT', name: 'Summer Venture Program (SVP)', when: '8 weeks · Starts June 9', desc: 'The i-lab\'s flagship summer cohort. Structured curriculum, weekly mentor check-ins, and a pitch at Demo Day.' });
-      } else {
-        pool.push({ color: '#f29138', bg: '#f7e4d0', label: 'COHORT', name: 'Founder Bootcamp', when: '4 weeks · Starts June 2', desc: 'For early-stage founders. Covers problem definition, customer discovery, and early validation frameworks.' });
-      }
-    }
-    if (track === 'lifesci') {
-      pool.push({ color: '#84A873', bg: '#C1F4A8', label: 'TRACK', name: 'Life Sciences Launchpad', when: 'Rolling enrollment', desc: 'Dedicated programming for biotech, medtech, and health founders. Domain-specific mentorship and wet lab partnerships.' });
-    }
-    if (track === 'climate') {
-      pool.push({ color: '#84A873', bg: '#C1F4A8', label: 'TRACK', name: 'Climate Founders Track', when: 'Rolling enrollment', desc: 'A community of climate-focused founders with access to cleantech mentors, impact investors, and sustainability resources.' });
-    }
-    if (style === 'dropin' || time === 'light' || time === 'part') {
-      pool.push({ color: '#232262', bg: '#cbcafa', label: 'DROP-IN', name: 'Office Hours Network', when: 'Weekly · Multiple formats', desc: '30-min sessions with mentors across product, fundraising, legal, and GTM. No commitment required.' });
-    }
-    if (style === 'social') {
-      pool.push({ color: '#EA3D3E', bg: '#FFC7C8', label: 'COMMUNITY', name: 'Founder Socials & Events', when: 'Monthly + ad hoc', desc: 'Mixers, speaker series, and community dinners. The best way to meet future co-founders, investors, and customers.' });
-    }
-    if (pool.length === 0) {
-      pool.push({ color: '#4A90C4', bg: '#cee5f7', label: 'COHORT', name: 'Summer Venture Program (SVP)', when: '8 weeks · Starts June 9', desc: 'The i-lab\'s flagship summer cohort. Structured curriculum, weekly mentor check-ins, and a pitch at Demo Day.' });
-    }
-    return pool.slice(0, 3);
-  }
 
-  function buildResults() {
-    const persona = getPersona();
-    const steps = getSteps();
-    const programs = getPrograms();
+// ════════════════════════════════════════════════════════════════
+//  CARD RENDERERS
+// ════════════════════════════════════════════════════════════════
+function progCard(p, isPrimary, userFmt) {
+  const badge    = isPrimary ? `<span class="rec-badge">Recommended</span>` : '';
+  const warnEl   = p.warning  ? `<div class="prog-warn">⚠️ ${p.warning}</div>` : '';
+  const mismatch = userFmt    ? mismatchNote(p.format, userFmt) : '';
+  const linkEl   = p.isTBD
+    ? `<span class="prog-link is-tbd">Link coming soon</span>`
+    : `<a href="${lnk(p.linkKey)}" target="_blank" class="prog-link">${p.linkLabel || 'Sign up'} →</a>`;
 
-    const stepsHTML = steps.map(s => `
-      <div class="step ${s.urg ? 'urg' : ''}">
-        <div class="step-n">${s.n}</div>
-        <div><span class="step-a">${s.a}</span><span class="step-d">${s.d}</span></div>
-      </div>`).join('');
-
-    const programsHTML = programs.map(p => `
-      <div class="ev">
-        <span class="ev-tag" style="background:${p.bg};color:${p.color}">${p.label}</span>
-        <div class="ev-name">${p.name}</div>
-        <div class="ev-meta"><span>${p.when}</span></div>
-        <div class="ev-desc">${p.desc}</div>
-      </div>`).join('');
-
+  if (p.isPrimer) {
     return `
-      <div class="pcard" style="border-top-color:${persona.color}">
-        <div class="pbadge" style="background:${persona.badgeBg};color:${persona.badgeColor}">${persona.badge}</div>
-        <h2 class="phl">${persona.headline}</h2>
-        <p class="pdesc">${persona.desc}</p>
-      </div>
-      <div class="rgrid">
-        <div class="rcard">
-          <div class="rc-title">Your next 3 moves</div>
-          ${stepsHTML}
+      <div class="primer-card fade-up">
+        <div class="prog-card-head">
+          <div class="prog-name">${p.name}</div>${badge}
         </div>
-        <div class="rcard">
-          <div class="rc-title">Programs for you</div>
-          ${programsHTML}
+        <div class="prog-desc">${p.desc}</div>
+        <div class="primer-step">Step 1: Sign up below — we'll take it from there.</div>
+        <div class="prog-foot">
+          ${fmtBadge(p.format)}
+          <a href="${lnk(p.linkKey)}" target="_blank" class="prog-link" style="color:#0369a1;">Sign up →</a>
         </div>
-      </div>
-      <div class="r-footer">
-        <button class="r-btn" onclick="restart()">← Start over</button>
-        <a href="hil_summer_2026_programming.html" class="r-btn">Browse all programs</a>
-        <a href="xp_creator.html" class="r-btn acc">Build your XP →</a>
       </div>`;
   }
 
-  function restart() {
-    Object.keys(answers).forEach(k => delete answers[k]);
-    document.getElementById('results').style.display = 'none';
-    document.getElementById('results').innerHTML = '';
-    document.getElementById('quizqs').style.display = 'block';
-    document.getElementById('progWrap').style.display = 'flex';
-    document.getElementById('pageWrap').classList.remove('wide');
-    document.querySelectorAll('.qscreen').forEach(s => s.classList.remove('active'));
-    document.getElementById('q1').classList.add('active');
-    document.querySelectorAll('.abtn').forEach(b => b.classList.remove('sel'));
-    document.querySelectorAll('.btn-next, .btn-generate').forEach(b => b.disabled = true);
-    updateProgress(1);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-</script>
+  return `
+    <div class="prog-card ${isPrimary ? 'is-primary' : ''} fade-up">
+      <div class="prog-card-head">
+        <div class="prog-name">${p.name}</div>${badge}
+      </div>
+      <div class="prog-desc">${p.desc}</div>
+      ${warnEl}${mismatch}
+      <div class="prog-foot">${fmtBadge(p.format)}${linkEl}</div>
+    </div>`;
+}
 
+function miniCard(p) {
+  return `
+    <div class="prog-card fade-up" style="margin-bottom:0;">
+      <div class="prog-name" style="font-size:13px;">${p.name}</div>
+      <div class="prog-desc" style="font-size:12px;margin:4px 0 8px;">${p.desc}</div>
+      <div class="prog-foot">
+        ${fmtBadge(p.format)}
+        <a href="${lnk(p.linkKey)}" target="_blank" class="prog-link" style="font-size:12px;">Sign up →</a>
+      </div>
+    </div>`;
+}
+
+
+// ════════════════════════════════════════════════════════════════
+//  SCREEN RENDERERS
+// ════════════════════════════════════════════════════════════════
+function screenStart() {
+  return `
+    <div class="card fade-up">
+      <div class="start-tag">Program Finder · Summer 2026</div>
+      <h1 class="start-h1">Find the right program for where you are right now.</h1>
+      <p class="start-p">5 questions. Less than 2 minutes. We'll match you to i-lab programs based on your stage, what you're building, and what you actually need.</p>
+      <button class="btn-primary" onclick="go('start')">Get started →</button>
+      <p class="start-meta">Summer 2026 · Harvard Innovation Labs</p>
+    </div>`;
+}
+
+function screenQuestion(idx) {
+  const q = QUESTIONS[idx];
+  const isMulti = q.type === 'multi';
+  const selected = isMulti ? S.ans.needs : (S.ans[q.id] ? [S.ans[q.id]] : []);
+  const isLast   = idx === QUESTIONS.length - 1;
+
+  const opts = q.opts.map(o => `
+    <div class="option ${isMulti ? 'is-check' : ''} ${selected.includes(o.val) ? 'is-selected' : ''}"
+         onclick="pick('${q.id}','${o.val}',${isMulti})">
+      <div class="opt-dot"></div>
+      <div class="opt-text">
+        <div class="opt-label">${o.label}</div>
+        ${o.sub ? `<div class="opt-sub">${o.sub}</div>` : ''}
+      </div>
+    </div>`).join('');
+
+  const backBtn = idx > 0
+    ? `<button class="btn-back" onclick="go('back')">← Back</button>`
+    : `<div></div>`;
+
+  return `
+    <div class="card fade-up">
+      <div class="q-num">${q.num}</div>
+      <h2 class="q-headline">${q.headline}</h2>
+      ${q.subtext ? `<p class="q-subtext">${q.subtext}</p>` : ''}
+      <div class="options">${opts}</div>
+      <div class="val-msg" id="val-msg">Select at least one to continue.</div>
+      <div class="btn-row">
+        ${backBtn}
+        <button class="btn-primary" onclick="go('next',${idx})">
+          ${isLast ? "Show me what's next →" : "Next →"}
+        </button>
+      </div>
+      ${q.helper ? `<p class="q-helper">${q.helper}</p>` : ''}
+    </div>`;
+}
+
+function screenWindowShopper() {
+  const events = [
+    { name: "Founder/Joiner: Pizza + Pitch",           format: "INPERSON", linkKey: "FOUNDER_JOINER",          desc: "Pitch what you're working on and connect with potential collaborators over pizza." },
+    { name: "Founder Circle: Pizza + Problem-Solving", format: "INPERSON", linkKey: "FOUNDER_CIRCLE_INPERSON", desc: "Bring your biggest challenge. Get peer input. Leave with fresh ideas." },
+    { name: "Virtual Founder Circle",                  format: "REMOTE",   linkKey: "FOUNDER_CIRCLE_VIRTUAL",  desc: "The same peer energy — on Zoom." },
+    { name: "Summer Launch Party at Felipe's",         format: "INPERSON", linkKey: "LAUNCH_PARTY",            desc: "Connect with founders over quesadillas at everyone's favorite Cambridge taqueria." },
+    { name: "Member Appreciation: Tacos & Thanks",     format: "INPERSON", linkKey: "MEMBER_APPRECIATION",     desc: "A celebration for i-lab community members with local food trucks." },
+    { name: "Founder Talk: Allison Byers",             format: "INPERSON", linkKey: "TALK_BYERS",              desc: "Author of Fundraising for the Rest of Us — lessons on fundraising and building your path." },
+    { name: "Founder Talk: Brian Elliott + Murph VanderVelde", format: "INPERSON", linkKey: "TALK_ELLIOTT",   desc: "Inside Blitzy — one of Boston's fastest-growing AI companies." },
+    { name: "Venture Incubation Ceremony",             format: "INPERSON", linkKey: "VIP_CEREMONY",            desc: "Celebrate founders advancing through the venture incubation program." }
+  ];
+
+  return `
+    <div class="fade-up">
+      <button class="btn-back" onclick="go('back')" style="margin-bottom:20px;">← Back</button>
+      <div class="results-eyebrow">Your results</div>
+      <h2 class="results-headline">${HEADERS.WINDOW_SHOPPER}</h2>
+      ${events.map(p => progCard(p, false)).join('')}
+      <div class="ws-cta">
+        When you're ready to go deeper,
+        <a href="#" onclick="go('restart');return false;">come back and retake the quiz</a>.
+      </div>
+    </div>`;
+}
+
+function screenResults() {
+  const { stage, sector, time, needs, format } = S.ans;
+  const key = matrixKey();
+  const r = MATRIX[key];
+  if (!r) return `<div class="card">Something went wrong. <a href="#" onclick="go('restart');return false;">Start over</a></div>`;
+
+  // Tags
+  const tags = [LABELS[stage], LABELS[sector], LABELS[time]]
+    .map(t => `<span class="tag">${t}</span>`).join('');
+
+  // Gap note
+  const gapEl = r.gapNote ? `<div class="gap-note">ℹ️ ${r.gapNote}</div>` : '';
+
+  // Primary recommendation(s)
+  let primaryEl = `<div class="section-label">Recommended for you</div>`;
+  if (Array.isArray(r.primary)) {
+    primaryEl += r.primary.map(k => progCard(PROGRAMS[k], true, format)).join('');
+  } else {
+    primaryEl += progCard(PROGRAMS[r.primary], true, format);
+  }
+
+  // Secondary recommendations
+  let secEl = '';
+  if (r.secondary && r.secondary.length) {
+    const cards = r.secondary
+      .filter(k => PROGRAMS[k])
+      .map(k => progCard(PROGRAMS[k], false, format)).join('');
+    secEl = `<div class="results-section"><div class="section-label">Also worth exploring</div>${cards}</div>`;
+  }
+
+  // Needs-based actions (deduplicated)
+  let needsEl = '';
+  if (needs.length) {
+    const seen  = new Set();
+    const cards = needs
+      .filter(n => NEEDS[n])
+      .flatMap(n => NEEDS[n])
+      .filter(p => { if (seen.has(p.linkKey)) return false; seen.add(p.linkKey); return true; })
+      .map(p => progCard(p, false, format)).join('');
+    if (cards) needsEl = `<div class="results-section"><div class="section-label">Based on what you need</div>${cards}</div>`;
+  }
+
+  // SIFF callout (Social Impact only)
+  const siffEl = r.siff ? `
+    <div class="results-section">
+      <div class="siff-card fade-up">
+        <div class="siff-eyebrow">Competitive Program</div>
+        <div class="prog-name" style="color:#166534;margin-bottom:8px;">🌱 SIFF Fund</div>
+        <div class="prog-desc" style="color:#166534;opacity:.85;">
+          A competitive program for 6 teams with months of coaching and funding support.
+          Applications open each semester.
+        </div>
+        <div class="prog-foot" style="margin-top:12px;">
+          ${fmtBadge('REMOTE')}
+          <a href="${lnk('SIFF_APPLICATION')}" target="_blank" class="prog-link" style="color:#166534;">
+            Learn more + apply →
+          </a>
+        </div>
+      </div>
+    </div>` : '';
+
+  // Community block
+  const communityEl = `
+    <div class="results-section">
+      <div class="section-label">Also happening →</div>
+      <div class="community-grid">${COMMUNITY.map(p => miniCard(p)).join('')}</div>
+    </div>`;
+
+  return `
+    <div class="fade-up">
+      <div class="results-eyebrow">Your results</div>
+      <div class="tag-row">${tags}</div>
+      <h2 class="results-headline">${HEADERS[stage]}</h2>
+      ${gapEl}
+      ${primaryEl}
+      ${secEl}
+      ${needsEl}
+      ${siffEl}
+      ${communityEl}
+      <div class="restart-row">
+        <a href="#" onclick="go('restart');return false;">↺ Retake the quiz</a>
+      </div>
+    </div>`;
+}
+
+
+// ════════════════════════════════════════════════════════════════
+//  RENDER
+// ════════════════════════════════════════════════════════════════
+function render(scrollToTop) {
+  const app = document.getElementById('app');
+  if      (S.screen === 'start')    app.innerHTML = screenStart();
+  else if (S.screen === 'question') app.innerHTML = screenQuestion(S.qIdx);
+  else if (S.screen === 'ws')       app.innerHTML = screenWindowShopper();
+  else if (S.screen === 'results')  app.innerHTML = screenResults();
+  if (scrollToTop !== false) window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
+// ════════════════════════════════════════════════════════════════
+//  ACTIONS
+// ════════════════════════════════════════════════════════════════
+function go(action, idx) {
+  if (action === 'start') {
+    S.screen = 'question'; S.qIdx = 0; render();
+
+  } else if (action === 'restart') {
+    S = { screen: 'start', qIdx: 0, ans: { stage: null, time: null, needs: [], format: null, sector: null } };
+    render();
+
+  } else if (action === 'back') {
+    if (S.screen === 'ws') {
+      // Return to Q2 so user can change time commitment
+      S.screen = 'question'; S.qIdx = 1; render();
+    } else if (S.qIdx > 0) {
+      S.qIdx--; render();
+    } else {
+      S.screen = 'start'; render();
+    }
+
+  } else if (action === 'next') {
+    const q = QUESTIONS[idx];
+
+    // Validate Q3 multi-select
+    if (q.type === 'multi' && S.ans.needs.length === 0) {
+      document.getElementById('val-msg').classList.add('show');
+      return;
+    }
+    // Require selection on single-select
+    if (q.type === 'single' && !S.ans[q.id]) return;
+
+    // Gate check after Q2
+    if (idx === 1 && S.ans.time === 'TIME_LOW') {
+      S.screen = 'ws'; render(); return;
+    }
+
+    // Advance to next question or show results
+    if (idx < QUESTIONS.length - 1) {
+      S.qIdx = idx + 1; render();
+    } else {
+      S.screen = 'results'; render();
+    }
+  }
+}
+
+// Handles option selection (both single and multi)
+function pick(qId, val, isMulti) {
+  if (isMulti) {
+    const i = S.ans.needs.indexOf(val);
+    i === -1 ? S.ans.needs.push(val) : S.ans.needs.splice(i, 1);
+  } else {
+    S.ans[qId] = val;
+  }
+  render(false); // re-render without scrolling
+}
+
+// Boot
+render();
+</script>
 </body>
 </html>
