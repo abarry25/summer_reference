@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="images/favicon.ico">
+<title>Decision Logic + Update Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #EBEAE3;
+  --ink: #000;
+  --ink-mid: #444;
+  --ink-light: #888;
+  --ink-faint: #D1D1D1;
+  --rule: #D1D1D1;
+  --amber: #f29138;
+  --amber-light: #f7e4d0;
+  --blue: #4A90C4;
+  --blue-light: #cee5f7;
+  --coral: #711213;
+  --coral-light: #FFC7C8;
+  --green: #84A873;
+  --green-light: #C1F4A8;
+  --teal: #232262;
+  --teal-light: #cbcafa;
+  --red: #EA3D3E;
+  --red-light: #fde8e8;
+}
+
+body { background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
+
+/* ── NAV ── */
+.top-nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--rule); }
+.top-nav-inner { max-width: 1100px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #888; }
+.nav-r a { margin-left: 20px; text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); border-bottom: 1px solid transparent; padding-bottom: 1px; }
+.nav-r a:hover { border-bottom-color: var(--blue); }
+.nav-r a.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ── HEADER ── */
+header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
+.eyebrow { font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 8px; }
+.page-title { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(28px, 4vw, 42px); color: var(--ink); line-height: 1.15; margin-bottom: 8px; }
+.page-sub { font-size: 14px; color: var(--ink-mid); max-width: 600px; line-height: 1.7; }
+
+/* ── LAYOUT ── */
+.page-wrap { max-width: 980px; margin: 0 auto; padding: 52px 24px 100px; }
+.section { margin-bottom: 64px; }
+.section-header { margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+.section-eyebrow { font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 6px; }
+.section-title { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(20px, 2.5vw, 26px); color: var(--ink); line-height: 1.2; }
+
+/* ── CARDS ── */
+.card { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 24px; }
+.card-sm { background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; }
+
+/* ── GRID ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+
+/* ── LABELS ── */
+.label { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+.label-amber { background: var(--amber-light); color: #7a4010; }
+.label-blue  { background: var(--blue-light);  color: #1a4a6e; }
+.label-green { background: var(--green-light);  color: #27500A; }
+.label-coral { background: var(--coral-light);  color: var(--coral); }
+.label-teal  { background: var(--teal-light);   color: var(--teal); }
+.label-red   { background: var(--red-light);    color: #991b1b; }
+.label-ink   { background: #f0f0ee; color: var(--ink); }
+
+/* ── FLOW DIAGRAM ── */
+.flow { display: flex; flex-direction: column; gap: 0; }
+.flow-row { display: flex; align-items: stretch; gap: 12px; }
+.flow-arrow-row { display: flex; justify-content: center; align-items: center; padding: 4px 0; }
+.flow-arrow { font-size: 18px; color: var(--ink-faint); }
+.flow-box {
+  flex: 1; background: #fff; border: 1.5px solid var(--rule);
+  border-radius: 12px; padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.flow-box.accent-amber { border-color: var(--amber); background: var(--amber-light); }
+.flow-box.accent-green { border-color: #84A873; background: var(--green-light); }
+.flow-box.accent-blue  { border-color: var(--blue); background: var(--blue-light); }
+.flow-box.accent-coral { border-color: var(--coral); background: var(--coral-light); }
+.flow-box.accent-teal  { border-color: var(--teal); background: var(--teal-light); }
+.flow-box.accent-red   { border-color: var(--red); background: var(--red-light); }
+.flow-box.accent-ink   { border-color: var(--ink); background: #f5f5f3; }
+.flow-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 2px; }
+.flow-title { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.flow-sub   { font-size: 11px; color: var(--ink-mid); line-height: 1.4; margin-top: 2px; }
+.flow-connector { width: 2px; background: var(--rule); margin: 0 auto; height: 20px; }
+
+/* ── SCORING TABLE ── */
+.score-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.score-table th { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-light); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--rule); background: #fafaf8; }
+.score-table td { padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.4; }
+.score-table tr:last-child td { border-bottom: none; }
+.score-table tr:hover td { background: #fafaf8; }
+.pts { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.pts-hi  { background: #dcfce7; color: #166534; }
+.pts-mid { background: #fef9c3; color: #713f12; }
+.pts-lo  { background: #f3f4f6; color: #6b7280; }
+
+/* ── PERSONA CARDS ── */
+.persona-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.persona-card { border-radius: 12px; padding: 16px; border: 1.5px solid transparent; }
+.persona-card .pc-emoji { font-size: 22px; margin-bottom: 8px; }
+.persona-card .pc-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.persona-card .pc-when { font-size: 11px; opacity: .75; line-height: 1.5; }
+
+/* ── TWO-DIMENSION VIZ ── */
+.dimension-wrap { display: grid; grid-template-columns: auto 1fr; gap: 0; }
+.dim-axis-label {
+  writing-mode: vertical-lr; transform: rotate(180deg);
+  font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-light); display: flex; align-items: center; justify-content: center;
+  padding-right: 12px;
+}
+.dim-table { width: 100%; border-collapse: collapse; }
+.dim-table th { font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-mid); padding: 8px 10px; text-align: center; background: #fafaf8; border: 1px solid var(--rule); }
+.dim-table th.row-head { text-align: right; color: var(--ink-light); background: #fafaf8; font-size: 10px; }
+.dim-table td { padding: 10px; border: 1px solid var(--rule); text-align: center; font-size: 11px; line-height: 1.4; color: var(--ink-mid); vertical-align: middle; }
+.dim-table td.highlight { background: var(--amber-light); color: #7a4010; font-weight: 500; border-color: var(--amber); }
+.dim-table td.highlight-blue { background: var(--blue-light); color: #1a4a6e; font-weight: 500; border-color: var(--blue); }
+
+/* ── TAG SYSTEM ── */
+.tag-example { display: flex; align-items: flex-start; gap: 14px; padding: 14px; border: 1px solid var(--rule); border-radius: 10px; background: #fff; margin-bottom: 10px; }
+.tag-code { font-family: 'Courier New', monospace; font-size: 11px; background: #f5f5f3; border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px; flex-shrink: 0; color: var(--teal); line-height: 1.8; }
+.tag-explain { font-size: 12px; color: var(--ink-mid); line-height: 1.6; }
+.tag-explain strong { color: var(--ink); font-weight: 500; }
+
+/* ── STEPS LOGIC ── */
+.steps-example { border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; }
+.steps-example-head { background: #fafaf8; padding: 10px 16px; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-light); border-bottom: 1px solid var(--rule); }
+.steps-row { display: grid; grid-template-columns: 100px 100px 40px 1fr; gap: 0; border-bottom: 1px solid var(--rule); }
+.steps-row:last-child { border-bottom: none; }
+.steps-row.header { background: #f5f5f3; }
+.steps-cell { padding: 10px 14px; font-size: 12px; border-right: 1px solid var(--rule); display: flex; align-items: center; }
+.steps-cell:last-child { border-right: none; }
+.steps-cell.col-head { font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-light); }
+.steps-row.winner { background: #f0fdf4; }
+.steps-row.winner .steps-cell { color: #166534; }
+.steps-row.loser  { background: #fafaf8; opacity: .5; }
+.win-badge { font-size: 9px; font-weight: 700; background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 10px; margin-left: 6px; }
+.lose-badge { font-size: 9px; font-weight: 700; background: #f3f4f6; color: #9ca3af; padding: 2px 6px; border-radius: 10px; margin-left: 6px; }
+
+/* ── OVERRIDE CALLOUT ── */
+.override-box { border: 2px solid var(--red); border-radius: 12px; padding: 20px 24px; background: var(--red-light); margin-bottom: 16px; }
+.override-box .ob-title { font-size: 13px; font-weight: 600; color: #991b1b; margin-bottom: 6px; }
+.override-box .ob-code { font-family: 'Courier New', monospace; font-size: 12px; color: #7f1d1d; background: #fff; border: 1px solid #fca5a5; border-radius: 6px; padding: 10px 12px; margin: 8px 0; display: block; }
+.override-box .ob-note { font-size: 12px; color: #991b1b; }
+
+/* ── UPDATE GUIDE ── */
+.update-type { border-radius: 14px; padding: 24px; margin-bottom: 16px; border: 1.5px solid transparent; }
+.update-type.type-1 { background: var(--blue-light); border-color: var(--blue); }
+.update-type.type-2 { background: var(--amber-light); border-color: var(--amber); }
+.update-type .ut-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+.update-type.type-1 .ut-label { color: #1a4a6e; }
+.update-type.type-2 .ut-label { color: #7a4010; }
+.update-type .ut-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 20px; margin-bottom: 8px; }
+.update-type .ut-desc { font-size: 13px; line-height: 1.65; }
+.update-type.type-1 .ut-desc { color: #1e3a5f; }
+.update-type.type-2 .ut-desc { color: #6b3a0f; }
+
+.task-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+.task-row:last-child { border-bottom: none; }
+.task-num { width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.task-body { flex: 1; }
+.task-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+.task-desc { font-size: 12px; color: var(--ink-light); line-height: 1.5; }
+.task-file { display: inline-block; font-family: 'Courier New', monospace; font-size: 10px; background: #f0f0ee; border: 1px solid var(--rule); border-radius: 4px; padding: 1px 6px; color: var(--teal); margin-top: 4px; }
+
+.checklist { list-style: none; }
+.checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--rule); font-size: 13px; }
+.checklist li:last-child { border-bottom: none; }
+.check-box { width: 18px; height: 18px; border: 1.5px solid var(--rule); border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+.check-text { flex: 1; line-height: 1.4; }
+.check-file { display: inline-block; font-family: 'Courier New', monospace; font-size: 10px; background: #f0f0ee; border: 1px solid var(--rule); border-radius: 4px; padding: 1px 6px; color: var(--teal); margin-left: 6px; }
+
+/* ── FILE MAP ── */
+.file-map { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.file-card { border: 1.5px solid var(--rule); border-radius: 12px; overflow: hidden; }
+.file-card-head { padding: 12px 16px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 8px; }
+.file-icon { font-size: 16px; }
+.file-name { font-family: 'Courier New', monospace; font-size: 12px; font-weight: 600; color: var(--teal); }
+.file-card-body { padding: 14px 16px; background: #fff; }
+.file-card-body ul { list-style: none; }
+.file-card-body li { font-size: 12px; color: var(--ink-mid); padding: 4px 0; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 6px; line-height: 1.4; }
+.file-card-body li:last-child { border-bottom: none; }
+.file-card-body li::before { content: '→'; color: var(--ink-faint); font-size: 11px; flex-shrink: 0; }
+.file-edit { background: #fff9f0; }
+.file-noedit { background: #f9f9f9; }
+
+/* ── QUICK REF TABLE ── */
+.ref-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ref-table th { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-light); padding: 8px 14px; text-align: left; background: #fafaf8; border-bottom: 2px solid var(--rule); }
+.ref-table td { padding: 10px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; }
+.ref-table tr:last-child td { border-bottom: none; }
+.ref-table tr:hover td { background: #fafaf8; }
+.ref-table td:first-child { font-weight: 500; color: var(--ink); }
+.ref-table td code { font-family: 'Courier New', monospace; font-size: 10px; background: #f0f0ee; border: 1px solid var(--rule); border-radius: 3px; padding: 1px 5px; color: var(--teal); }
+
+/* ── INLINE CODE ── */
+code { font-family: 'Courier New', monospace; font-size: 11px; background: #f0f0ee; border: 1px solid var(--rule); border-radius: 4px; padding: 1px 6px; color: var(--teal); }
+
+/* ── STICKY TOC ── */
+.toc { position: sticky; top: 60px; background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 16px 20px; margin-bottom: 32px; }
+.toc-label { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 10px; }
+.toc-links { display: flex; flex-wrap: wrap; gap: 6px; }
+.toc-links a { font-size: 12px; font-weight: 500; color: var(--ink-mid); text-decoration: none; padding: 4px 12px; border: 1px solid var(--rule); border-radius: 20px; transition: all .12s; }
+.toc-links a:hover { color: var(--ink); border-color: #888; background: #fafaf8; }
+
+/* ── DIVIDER ── */
+.divider { border: none; border-top: 1px solid var(--rule); margin: 48px 0; }
+
+@media (max-width: 700px) {
+  header { padding: 32px 20px 24px; }
+  .page-wrap { padding: 32px 16px 60px; }
+  .grid-2, .grid-3, .persona-grid, .file-map { grid-template-columns: 1fr; }
+  .steps-row { grid-template-columns: 80px 80px 30px 1fr; }
+  .dimension-wrap { grid-template-columns: 1fr; }
+  .dim-axis-label { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="top-nav-inner">
+    <span class="brand">HIL Summer 2026</span>
+    <div class="nav-r">
+      <a href="hil_summer_2026_programming.html">Program View</a>
+      <a href="xp_creator.html">XP Builder</a>
+      <a href="founder_xp_generator.html">Find Your Path</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <p class="eyebrow">Harvard Innovation Labs · Internal Reference</p>
+  <h1 class="page-title">Decision Logic + Update Guide</h1>
+  <p class="page-sub">How the Program Finder quiz works, how results are built, and exactly where to go when something needs to change.</p>
+</header>
+
+<div class="page-wrap">
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-label">On this page</div>
+    <div class="toc-links">
+      <a href="#architecture">File Architecture</a>
+      <a href="#quiz-flow">Quiz Flow</a>
+      <a href="#persona-scoring">Persona Scoring</a>
+      <a href="#two-dimensions">Two Dimensions</a>
+      <a href="#tags">Tag System</a>
+      <a href="#steps-logic">Steps Logic</a>
+      <a href="#update-types">Two Update Types</a>
+      <a href="#how-to">How-To Tasks</a>
+      <a href="#checklist">Semester Checklist</a>
+      <a href="#quick-ref">Quick Reference</a>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 1 — FILE ARCHITECTURE
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="architecture">
+    <div class="section-header">
+      <p class="section-eyebrow">Section 1</p>
+      <h2 class="section-title">File Architecture — What Lives Where</h2>
+    </div>
+
+    <p style="font-size:14px;color:var(--ink-mid);margin-bottom:20px;line-height:1.7;">
+      Two files do all the work. One file you edit often. One file you almost never touch.
+    </p>
+
+    <div class="file-map">
+
+      <div class="file-card">
+        <div class="file-card-head file-edit" style="background:#fff9f0;border-bottom-color:var(--amber);">
+          <span class="file-icon">✏️</span>
+          <span class="file-name">ilab-data.js</span>
+          <span class="label label-amber" style="margin-left:auto;">Edit this</span>
+        </div>
+        <div class="file-card-body file-edit">
+          <ul>
+            <li>All program signup links (LINKS)</li>
+            <li>Every event that can appear in results (EVENTS)</li>
+            <li>Every office hours session (OHS)</li>
+            <li>The 3 recommended steps per persona + sector (STEPS_DATA)</li>
+            <li>Persona card copy and colors (PERSONAS)</li>
+            <li>Content resolver functions (getSteps, getEvents, getOHs)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="file-card">
+        <div class="file-card-head file-noedit" style="background:#f5f5f3;">
+          <span class="file-icon">🔒</span>
+          <span class="file-name">founder_xp_generator.html</span>
+          <span class="label label-ink" style="margin-left:auto;">Rarely touch</span>
+        </div>
+        <div class="file-card-body file-noedit">
+          <ul>
+            <li>Quiz questions Q1–Q5 (HTML)</li>
+            <li>Quiz navigation logic (pick, fwd, back)</li>
+            <li>Persona scoring algorithm (calcPersona)</li>
+            <li>Results page renderer (renderResults)</li>
+            <li>Visual design and layout (CSS)</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card-sm" style="margin-top:16px;background:#f0fdf4;border-color:#86efac;">
+      <p style="font-size:13px;color:#166534;line-height:1.6;">
+        <strong>Rule of thumb:</strong> If the real world changed (new event, new link, new program), edit <code>ilab-data.js</code>.
+        If the quiz itself needs to behave differently (new question, different routing), edit the HTML.
+        You should almost never need to touch the HTML.
+      </p>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 2 — QUIZ FLOW
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="quiz-flow">
+    <div class="section-header">
+      <p class="section-eyebrow">Section 2</p>
+      <h2 class="section-title">Quiz Flow — Start to Results</h2>
+    </div>
+
+    <div class="flow">
+
+      <div class="flow-row">
+        <div class="flow-box accent-ink">
+          <div class="flow-label">Q1</div>
+          <div class="flow-title">Stage</div>
+          <div class="flow-sub">Explore · Test · Propel</div>
+        </div>
+        <div class="flow-box accent-ink">
+          <div class="flow-label">Q2</div>
+          <div class="flow-title">Goal</div>
+          <div class="flow-sub">Feedback · Milestones · Community · Funding</div>
+        </div>
+        <div class="flow-box accent-ink">
+          <div class="flow-label">Q3</div>
+          <div class="flow-title">Time Commitment</div>
+          <div class="flow-sub">Light · Moderate · Heavy</div>
+        </div>
+        <div class="flow-box accent-ink">
+          <div class="flow-label">Q4</div>
+          <div class="flow-title">Sector</div>
+          <div class="flow-sub">LifeSci · Climate · DeepTech · Social Impact · General</div>
+        </div>
+        <div class="flow-box accent-ink">
+          <div class="flow-label">Q5</div>
+          <div class="flow-title">Format</div>
+          <div class="flow-sub">Remote · Hybrid · In-Person</div>
+        </div>
+      </div>
+
+      <div class="flow-connector"></div>
+
+      <div class="flow-row">
+        <div class="flow-box accent-amber" style="max-width:400px;margin:0 auto;flex:none;width:100%;">
+          <div class="flow-label">calcPersona() — in founder_xp_generator.html</div>
+          <div class="flow-title">Answers are scored → Persona is assigned</div>
+          <div class="flow-sub">Q1, Q2, Q3, Q4 all contribute. Q5 (format) does NOT affect persona — it only affects display.</div>
+        </div>
+      </div>
+
+      <div class="flow-connector"></div>
+
+      <div class="flow-row">
+        <div class="flow-box accent-green">
+          <div class="flow-label">Left column</div>
+          <div class="flow-title">3 Steps</div>
+          <div class="flow-sub">From STEPS_DATA in ilab-data.js<br>Filtered by persona + sector</div>
+        </div>
+        <div class="flow-box accent-blue">
+          <div class="flow-label">Right column</div>
+          <div class="flow-title">Events</div>
+          <div class="flow-sub">From EVENTS in ilab-data.js<br>Filtered by tags, sorted by format</div>
+        </div>
+        <div class="flow-box accent-coral">
+          <div class="flow-label">Bottom grid</div>
+          <div class="flow-title">Office Hours</div>
+          <div class="flow-sub">From OHS in ilab-data.js<br>Filtered by persona tags</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 3 — PERSONA SCORING
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="persona-scoring">
+    <div class="section-header">
+      <p class="section-eyebrow">Section 3</p>
+      <h2 class="section-title">Persona Scoring — How Someone Gets Routed</h2>
+    </div>
+
+    <p style="font-size:14px;color:var(--ink-mid);margin-bottom:20px;line-height:1.7;">
+      Quiz answers add points to four buckets. The highest scoring bucket wins and becomes the persona.
+      Two hard overrides skip scoring entirely and route directly.
+    </p>
+
+    <!-- Hard overrides -->
+    <div class="override-box" style="margin-bottom:24px;">
+      <div class="ob-title">⚡ Hard Overrides — checked first, skip all scoring</div>
+      <code class="ob-code">if (sector === 'socialimpact') return 'impact';</code>
+      <code class="ob-code">if (time === 'light')          return 'community';</code>
+      <div class="ob-note">If either of these conditions is true, the scoring table below is never consulted. The persona is locked immediately.</div>
+    </div>
+
+    <!-- Scoring table -->
+    <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th>Quiz Answer</th>
+            <th>Explorer</th>
+            <th>Validator</th>
+            <th>Builder</th>
+            <th>Propeller</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--ink-light);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:#fafaf8;" colspan="5">Stage (Q1)</td>
+          </tr>
+          <tr>
+            <td>Stage = Explore</td>
+            <td><span class="pts pts-hi">+5</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+          </tr>
+          <tr>
+            <td>Stage = Test</td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-hi">+3</span></td>
+            <td><span class="pts pts-mid">+2</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+          </tr>
+          <tr>
+            <td>Stage = Propel</td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-lo">+1</span></td>
+            <td><span class="pts pts-hi">+5</span></td>
+          </tr>
+          <tr>
+            <td style="color:var(--ink-light);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:#fafaf8;" colspan="5">Goal (Q2)</td>
+          </tr>
+          <tr>
+            <td>Goal = Feedback</td>
+            <td><span class="pts pts-mid">+2</span></td>
+            <td><span class="pts pts-hi">+3</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+          </tr>
+          <tr>
+            <td>Goal = Milestones</td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-lo">+1</span></td>
+            <td><span class="pts pts-hi">+3</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+          </tr>
+          <tr>
+            <td>Goal = Community</td>
+            <td><span class="pts pts-mid">+2</span></td>
+            <td><span class="pts pts-lo">+1</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+          </tr>
+          <tr>
+            <td>Goal = Funding</td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-lo">+1</span></td>
+            <td><span class="pts pts-hi">+3</span></td>
+          </tr>
+          <tr>
+            <td style="color:var(--ink-light);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:#fafaf8;" colspan="5">Time (Q3)</td>
+          </tr>
+          <tr>
+            <td>Time = Moderate</td>
+            <td><span class="pts pts-lo">+1</span></td>
+            <td><span class="pts pts-mid">+2</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+          </tr>
+          <tr>
+            <td>Time = Heavy</td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-lo">–</span></td>
+            <td><span class="pts pts-hi">+3</span></td>
+            <td><span class="pts pts-lo">+1</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Example calculation -->
+    <div class="card" style="background:#f0f9ff;border-color:#bae6fd;">
+      <p style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#0369a1;margin-bottom:12px;">Worked Example</p>
+      <p style="font-size:13px;color:#0c4a6e;margin-bottom:10px;line-height:1.6;">
+        Someone answers: <strong>Stage = Explore</strong> · <strong>Goal = Feedback</strong> · <strong>Time = Moderate</strong> · <strong>Sector = Deep Tech</strong>
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
+        <div style="background:#fff;border-radius:8px;padding:10px;text-align:center;border:1px solid #bae6fd;">
+          <div style="font-size:18px;font-weight:700;color:#0369a1;">8</div>
+          <div style="font-size:10px;color:#0369a1;font-weight:600;">Explorer</div>
+          <div style="font-size:10px;color:#7dd3fc;">+5 +2 +1</div>
+        </div>
+        <div style="background:#fff;border-radius:8px;padding:10px;text-align:center;border:1px solid #bae6fd;">
+          <div style="font-size:18px;font-weight:700;color:#64748b;">5</div>
+          <div style="font-size:10px;color:#64748b;font-weight:600;">Validator</div>
+          <div style="font-size:10px;color:#94a3b8;">+3 +2</div>
+        </div>
+        <div style="background:#fff;border-radius:8px;padding:10px;text-align:center;border:1px solid #bae6fd;">
+          <div style="font-size:18px;font-weight:700;color:#64748b;">0</div>
+          <div style="font-size:10px;color:#64748b;font-weight:600;">Builder</div>
+          <div style="font-size:10px;color:#94a3b8;">–</div>
+        </div>
+        <div style="background:#fff;border-radius:8px;padding:10px;text-align:center;border:1px solid #bae6fd;">
+          <div style="font-size:18px;font-weight:700;color:#64748b;">0</div>
+          <div style="font-size:10px;color:#64748b;font-weight:600;">Propeller</div>
+          <div style="font-size:10px;color:#94a3b8;">–</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:#0c4a6e;line-height:1.6;">
+        <strong>Result: Explorer persona.</strong> Deep Tech sector is then used to customize which step 2 they see — but it never changed the persona itself.
+      </p>
+    </div>
+
+    <!-- Six personas -->
+    <div style="margin-top:24px;">
+      <p style="font-size:12px;font-weight:500;color:var(--ink-light);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">The Six Personas</p>
+      <div class="persona-grid">
+        <div class="persona-card" style="background:var(--green-light);border-color:#84A873;">
+          <div class="pc-emoji">🌱</div>
+          <div class="pc-name">Explorer</div>
+          <div class="pc-when" style="color:#27500A;">High explore score. Still figuring out the idea.</div>
+        </div>
+        <div class="persona-card" style="background:var(--amber-light);border-color:var(--amber);">
+          <div class="pc-emoji">🧪</div>
+          <div class="pc-name">Validator</div>
+          <div class="pc-when" style="color:#7a4010;">High feedback + moderate time. Testing a real problem.</div>
+        </div>
+        <div class="persona-card" style="background:var(--teal-light);border-color:var(--teal);">
+          <div class="pc-emoji">🏗️</div>
+          <div class="pc-name">Sprint Builder</div>
+          <div class="pc-when" style="color:var(--teal);">High builder score + heavy time commitment.</div>
+        </div>
+        <div class="persona-card" style="background:var(--purple-light);border-color:var(--purple);">
+          <div class="pc-emoji">🚀</div>
+          <div class="pc-name">Growth Founder</div>
+          <div class="pc-when" style="color:#3C3489;">High propeller score. Traction exists, building momentum.</div>
+        </div>
+        <div class="persona-card" style="background:var(--blue-light);border-color:var(--blue);">
+          <div class="pc-emoji">💚</div>
+          <div class="pc-name">Impact Founder</div>
+          <div class="pc-when" style="color:#1a4a6e;"><strong>Hard override:</strong> sector = Social Impact</div>
+        </div>
+        <div class="persona-card" style="background:var(--coral-light);border-color:var(--coral);">
+          <div class="pc-emoji">🤝</div>
+          <div class="pc-name">Community First</div>
+          <div class="pc-when" style="color:var(--coral);"><strong>Hard override:</strong> time = Light</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 4 — TWO DIMENSIONS
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="two-dimensions">
+    <div class="section-header">
+      <p class="section-eyebrow">Section 4</p>
+      <h2 class="section-title">Two Dimensions — Persona and Sector</h2>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:20px;">
+      <div class="card" style="border-top:3px solid #84A873;">
+        <p style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#84A873;margin-bottom:8px;">Dimension 1 — Persona</p>
+        <p style="font-size:18px;font-weight:600;margin-bottom:8px;">Who you are as a founder</p>
+        <p style="font-size:13px;color:var(--ink-mid);line-height:1.6;">Determined by quiz scoring. Controls the shape and tone of the results page — headline, description, recommended journey stack.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--blue);">
+        <p style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:8px;">Dimension 2 — Sector</p>
+        <p style="font-size:18px;font-weight:600;margin-bottom:8px;">What you're building</p>
+        <p style="font-size:13px;color:var(--ink-mid);line-height:1.6;">Selected directly in Q4. Never changes the persona. Only changes which specific steps, events, and programs appear inside that persona's results.</p>
+      </div>
+    </div>
+
+    <div class="dimension-wrap">
+      <div class="dim-axis-label">← PERSONA</div>
+      <div>
+        <table class="dim-table">
+          <thead>
+            <tr>
+              <th class="row-head"></th>
+              <th>Life Sci</th>
+              <th>Climate</th>
+              <th>Deep Tech</th>
+              <th>Social Impact</th>
+              <th>General</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="row-head">🌱 Explorer</th>
+              <td>OOH + Primer</td>
+              <td>OOH + Primer</td>
+              <td class="highlight">OOH + Hackathon</td>
+              <td>OOH + Primer + SIFF</td>
+              <td>OOH + Primer + Hackathon</td>
+            </tr>
+            <tr>
+              <th class="row-head">🧪 Validator</th>
+              <td class="highlight">Sys Dynamics + OOH</td>
+              <td>Primer + OOH</td>
+              <td>Primer + OOH</td>
+              <td>Primer + OOH + SIFF</td>
+              <td>Primer + OOH</td>
+            </tr>
+            <tr>
+              <th class="row-head">🏗️ Builder</th>
+              <td class="highlight">Sys Dynamics + Sprint</td>
+              <td>Sprint (default)</td>
+              <td class="highlight">Vibe Coding + Sprint</td>
+              <td>Sprint + SIFF</td>
+              <td>Sprint</td>
+            </tr>
+            <tr>
+              <th class="row-head">🚀 Propeller</th>
+              <td>Accel Sessions</td>
+              <td>Accel Sessions</td>
+              <td class="highlight-blue">AI Agents + Accel</td>
+              <td>Accel Sessions + SIFF</td>
+              <td>Accel Sessions</td>
+            </tr>
+            <tr>
+              <th class="row-head">💚 Impact</th>
+              <td colspan="5" style="text-align:center;background:#f0fdf4;color:#166534;font-size:12px;">Always routes here when sector = Social Impact — sector column becomes irrelevant</td>
+            </tr>
+            <tr>
+              <th class="row-head">🤝 Community</th>
+              <td colspan="5" style="text-align:center;background:#fff0f0;color:#991b1b;font-size:12px;">Always routes here when time = Light — only community events shown, sector irrelevant</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:10px;color:var(--ink-light);margin-top:8px;">Highlighted cells = sector-specific programming exists. Others fall back to default path.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 5 — TAG SYSTEM
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="tags">
+    <div class="section-header">
+      <p class="section-eyebrow">Section 5</p>
+      <h2 class="section-title">Tag System — How Events Surface</h2>
+    </div>
+
+    <p style="font-size:14px;color:var(--ink-mid);margin-bottom:20px;line-height:1.7;">
+      Every event and office hour has a <code>tags</code> array. Think of it as a subscription list — the event declares who it is relevant to.
+      The quiz asks "which events have subscribed this founder?" and shows those.
+    </p>
+
+    <div class="tag-example">
+      <div class="tag-code">tags: ['builder', 'deeptech']</div>
+      <div class="tag-explain">
+        <strong>Builder tag:</strong> Any founder routed to the builder persona sees this event.<br>
+        <strong>Deeptech tag:</strong> Any founder who selected Deep Tech as their sector sees this event surfaced first, regardless of persona.<br>
+        Both tags work independently — either one is enough to surface this event.
+      </div>
+    </div>
+
+    <div class="tag-example">
+      <div class="tag-code">tags: ['community', 'explorer',<br>'validator', 'builder',<br>'propeller', 'impact']</div>
+      <div class="tag-explain">
+        <strong>Every persona tag listed:</strong> This event shows for everyone. Used for community events like the Launch Party and Founder Circles that are open to all members.
+      </div>
+    </div>
+
+    <div class="tag-example">
+      <div class="tag-code">tags: ['lifesci']</div>
+      <div class="tag-explain">
+        <strong>Sector tag only:</strong> This event surfaces only for Life Sci founders, regardless of their persona. Used for sector-specific workshops like System Dynamics.
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;padding:20px 24px;">
+      <p style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-light);margin-bottom:14px;">All valid tag values</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <div>
+          <p style="font-size:10px;color:var(--ink-light);margin-bottom:6px;">Persona tags</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span class="label label-green">explorer</span>
+            <span class="label label-amber">validator</span>
+            <span class="label label-teal">builder</span>
+            <span class="label label-teal" style="background:var(--purple-light);color:#3C3489;">propeller</span>
+            <span class="label label-blue">impact</span>
+            <span class="label label-coral">community</span>
+          </div>
+        </div>
+        <div style="margin-left:24px;">
+          <p style="font-size:10px;color:var(--ink-light);margin-bottom:6px;">Sector tags</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span class="label label-ink">lifesci</span>
+            <span class="label label-ink">deeptech</span>
+            <span class="label label-ink">climate</span>
+            <span class="label label-ink">socialimpact</span>
+            <span class="label label-ink">general</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;background:#fefce8;border:1px solid #fde047;border-radius:10px;padding:14px 18px;">
+      <p style="font-size:13px;color:#713f12;line-height:1.6;">
+        <strong>Sort order:</strong> Events matching the founder's selected <strong>sector</strong> surface first.
+        Then events matching their <strong>persona</strong> fill in. Within each group, events matching their format preference sort to the top.
+        Maximum of 4 events shown per result page.
+      </p>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 6 — STEPS LOGIC
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="steps-logic">
+    <div class="section-header">
+      <p class="section-eyebrow">Section 6</p>
+      <h2 class="section-title">Steps Logic — How the 3 Recommended Actions Are Built</h2>
+    </div>
+
+    <p style="font-size:14px;color:var(--ink-mid);margin-bottom:20px;line-height:1.7;">
+      Steps are a lookup table. Each row says: <em>"For this persona, in this sector, at this step number — show this action."</em>
+      Three <code>sector</code> keywords control the priority.
+    </p>
+
+    <div class="grid-3" style="margin-bottom:24px;">
+      <div class="card" style="border-top:3px solid var(--red);">
+        <p style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:6px;">sector: 'lifesci'</p>
+        <p style="font-size:13px;font-weight:500;margin-bottom:4px;">Sector-specific</p>
+        <p style="font-size:12px;color:var(--ink-mid);line-height:1.5;">Wins for founders in that exact sector. Override the default for this persona.</p>
+      </div>
+      <div class="card" style="border-top:3px solid var(--amber);">
+        <p style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7a4010;margin-bottom:6px;">sector: 'default'</p>
+        <p style="font-size:13px;font-weight:500;margin-bottom:4px;">Fallback</p>
+        <p style="font-size:12px;color:var(--ink-mid);line-height:1.5;">Shows when no sector-specific row exists. Every persona should have one per step.</p>
+      </div>
+      <div class="card" style="border-top:3px solid #84A873;">
+        <p style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#27500A;margin-bottom:6px;">sector: 'all'</p>
+        <p style="font-size:13px;font-weight:500;margin-bottom:4px;">Universal</p>
+        <p style="font-size:12px;color:var(--ink-mid);line-height:1.5;">Always shows, regardless of sector. Use for steps that apply to everyone in this persona.</p>
+      </div>
+    </div>
+
+    <!-- Priority flow -->
+    <div style="background:#fafaf8;border:1px solid var(--rule);border-radius:12px;padding:20px;margin-bottom:24px;">
+      <p style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-light);margin-bottom:14px;">Priority Order — for each step number</p>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="background:var(--red-light);border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;text-align:center;">
+          <div style="font-size:12px;font-weight:600;color:#991b1b;">Sector-specific row</div>
+          <div style="font-size:10px;color:#991b1b;opacity:.7;">e.g. sector: 'lifesci'</div>
+        </div>
+        <div style="font-size:18px;color:var(--ink-faint);">→</div>
+        <div style="font-size:11px;color:var(--ink-light);">not found?</div>
+        <div style="font-size:18px;color:var(--ink-faint);">→</div>
+        <div style="background:var(--amber-light);border:1px solid #fcd34d;border-radius:8px;padding:10px 14px;text-align:center;">
+          <div style="font-size:12px;font-weight:600;color:#92400e;">Default row</div>
+          <div style="font-size:10px;color:#92400e;opacity:.7;">sector: 'default'</div>
+        </div>
+        <div style="font-size:18px;color:var(--ink-faint);">→</div>
+        <div style="font-size:11px;color:var(--ink-light);">not found?</div>
+        <div style="font-size:18px;color:var(--ink-faint);">→</div>
+        <div style="background:var(--green-light);border:1px solid #86efac;border-radius:8px;padding:10px 14px;text-align:center;">
+          <div style="font-size:12px;font-weight:600;color:#166534;">All row</div>
+          <div style="font-size:10px;color:#166534;opacity:.7;">sector: 'all'</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual example -->
+    <p style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:10px;">Example: Builder persona — who sees what at Step 1</p>
+    <div class="steps-example">
+      <div class="steps-example-head">STEPS_DATA → builder array</div>
+      <div class="steps-row header">
+        <div class="steps-cell col-head">persona</div>
+        <div class="steps-cell col-head">sector</div>
+        <div class="steps-cell col-head">step</div>
+        <div class="steps-cell col-head">action</div>
+      </div>
+      <div class="steps-row winner">
+        <div class="steps-cell">builder</div>
+        <div class="steps-cell">lifesci</div>
+        <div class="steps-cell">1</div>
+        <div class="steps-cell">Register: System Dynamics for HC + Life Sciences <span class="win-badge">wins for LifeSci</span></div>
+      </div>
+      <div class="steps-row winner">
+        <div class="steps-cell">builder</div>
+        <div class="steps-cell">deeptech</div>
+        <div class="steps-cell">1</div>
+        <div class="steps-cell">Register: Vibe Coding Workshop <span class="win-badge">wins for DeepTech</span></div>
+      </div>
+      <div class="steps-row winner">
+        <div class="steps-cell">builder</div>
+        <div class="steps-cell">default</div>
+        <div class="steps-cell">1</div>
+        <div class="steps-cell">Commit to the Customer Discovery Sprint <span class="win-badge">wins for Climate, General, others</span></div>
+      </div>
+      <div class="steps-row" style="background:#f0fdf4;">
+        <div class="steps-cell">builder</div>
+        <div class="steps-cell">all</div>
+        <div class="steps-cell">3</div>
+        <div class="steps-cell">Register for MVP Feedback Session <span class="win-badge" style="background:#dcfce7;color:#166534;">shows for everyone</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 7 — TWO UPDATE TYPES
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="update-types">
+    <div class="section-header">
+      <p class="section-eyebrow">Section 7</p>
+      <h2 class="section-title">Two Types of Updates</h2>
+    </div>
+
+    <p style="font-size:14px;color:var(--ink-mid);margin-bottom:20px;line-height:1.7;">
+      Every change you will ever make falls into one of two categories.
+      Identifying the type first tells you exactly which file to open.
+    </p>
+
+    <div class="update-type type-1">
+      <div class="ut-label">Type 1 — Catalog Update</div>
+      <div class="ut-title">Something in the real world changed</div>
+      <p class="ut-desc">A new event was added. A link changed. A session was cancelled. A step description has an old date. These are factual updates to what exists — you're keeping the catalog accurate.</p>
+      <p style="font-size:12px;color:#1e3a5f;margin-top:10px;font-weight:600;">File to open: <code style="color:#1a4a6e;">ilab-data.js</code> — LINKS, EVENTS, OHS, or STEPS_DATA sections</p>
+    </div>
+
+    <div class="update-type type-2">
+      <div class="ut-label">Type 2 — Logic Update</div>
+      <div class="ut-title">Who sees what needs to change</div>
+      <p class="ut-desc">An event should now surface for a different persona. A step should be different for Climate founders. Too many people are landing on the wrong persona. You're changing the rules of who gets shown what.</p>
+      <p style="font-size:12px;color:#6b3a0f;margin-top:10px;font-weight:600;">File to open: <code style="color:#7a4010;">ilab-data.js</code> (tags or STEPS_DATA) or <code style="color:#7a4010;">founder_xp_generator.html</code> (calcPersona)</p>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 8 — HOW-TO TASKS
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="how-to">
+    <div class="section-header">
+      <p class="section-eyebrow">Section 8</p>
+      <h2 class="section-title">How-To — Common Update Tasks</h2>
+    </div>
+
+    <!-- Task group 1 -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--rule);">
+        <span class="label label-blue">Type 1 — Catalog</span>
+        <span style="font-size:14px;font-weight:600;">Updating a link</span>
+      </div>
+      <div class="task-row">
+        <div class="task-num">1</div>
+        <div class="task-body">
+          <div class="task-title">Find the program row in the Links tab of your Google Sheet</div>
+          <div class="task-desc">The key column tells you the exact identifier (e.g. SPRINT_SIGNUP)</div>
+        </div>
+      </div>
+      <div class="task-row">
+        <div class="task-num">2</div>
+        <div class="task-body">
+          <div class="task-title">Open ilab-data.js on GitHub → find the LINKS section at the top</div>
+          <div class="task-desc">Ctrl+F the key name to jump directly to it</div>
+          <div class="task-file">ilab-data.js → LINKS</div>
+        </div>
+      </div>
+      <div class="task-row">
+        <div class="task-num">3</div>
+        <div class="task-body">
+          <div class="task-title">Replace the '#' or old URL with the new URL</div>
+          <div class="task-desc">Commit the change — it goes live immediately</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task group 2 -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--rule);">
+        <span class="label label-blue">Type 1 — Catalog</span>
+        <span style="font-size:14px;font-weight:600;">Adding a new event</span>
+      </div>
+      <div class="task-row">
+        <div class="task-num">1</div>
+        <div class="task-body">
+          <div class="task-title">Add a row in the Google Sheet → Events tab</div>
+          <div class="task-desc">Fill in all columns. Set active to yes. Decide which tags it should carry.</div>
+        </div>
+      </div>
+      <div class="task-row">
+        <div class="task-num">2</div>
+        <div class="task-body">
+          <div class="task-title">Add the same event as an object in ilab-data.js → EVENTS array</div>
+          <div class="task-desc">Copy an existing event object as a template. Change the id, name, date, format, tags, desc.</div>
+          <div class="task-file">ilab-data.js → EVENTS</div>
+        </div>
+      </div>
+      <div class="task-row">
+        <div class="task-num">3</div>
+        <div class="task-body">
+          <div class="task-title">If it needs a signup link, add the key to LINKS first</div>
+          <div class="task-desc">Add the key to LINKS, then reference it in the event object if needed</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task group 3 -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--rule);">
+        <span class="label label-blue">Type 1 — Catalog</span>
+        <span style="font-size:14px;font-weight:600;">Removing a cancelled event</span>
+      </div>
+      <div class="task-row">
+        <div class="task-num">1</div>
+        <div class="task-body">
+          <div class="task-title">Find the event in ilab-data.js → EVENTS</div>
+          <div class="task-desc">Never delete the row — future semesters you may want to bring it back</div>
+          <div class="task-file">ilab-data.js → EVENTS</div>
+        </div>
+      </div>
+      <div class="task-row">
+        <div class="task-num">2</div>
+        <div class="task-body">
+          <div class="task-title">Change active: true to active: false</div>
+          <div class="task-desc">The event immediately disappears from all results. The row stays in your data for reference.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task group 4 -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--rule);">
+        <span class="label label-amber">Type 2 — Logic</span>
+        <span style="font-size:14px;font-weight:600;">Making an event show for a different persona</span>
+      </div>
+      <div class="task-row">
+        <div class="task-num">1</div>
+        <div class="task-body">
+          <div class="task-title">Find the event in ilab-data.js → EVENTS</div>
+          <div class="task-file">ilab-data.js → EVENTS</div>
+        </div>
+      </div>
+      <div class="task-row">
+        <div class="task-num">2</div>
+        <div class="task-body">
+          <div class="task-title">Add or remove the relevant persona or sector tag from the tags array</div>
+          <div class="task-desc">Example: to show this event for validators, add 'validator' to tags. To stop showing it for builders, remove 'builder' from tags.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task group 5 -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--rule);">
+        <span class="label label-amber">Type 2 — Logic</span>
+        <span style="font-size:14px;font-weight:600;">Changing a recommended step for a persona</span>
+      </div>
+      <div class="task-row">
+        <div class="task-num">1</div>
+        <div class="task-body">
+          <div class="task-title">Open ilab-data.js → STEPS_DATA</div>
+          <div class="task-file">ilab-data.js → STEPS_DATA</div>
+        </div>
+      </div>
+      <div class="task-row">
+        <div class="task-num">2</div>
+        <div class="task-body">
+          <div class="task-title">Find the right persona block, then the right sector and step number</div>
+          <div class="task-desc">e.g. builder → sector: 'lifesci' → step: 1</div>
+        </div>
+      </div>
+      <div class="task-row">
+        <div class="task-num">3</div>
+        <div class="task-body">
+          <div class="task-title">Edit the a: (action title) and/or d: (description) fields</div>
+          <div class="task-desc">To add a new sector-specific path, add a new row with the sector name. The default row still covers everyone else.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task group 6 -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--rule);">
+        <span class="label label-amber">Type 2 — Logic</span>
+        <span style="font-size:14px;font-weight:600;">Changing how personas are scored / routed</span>
+      </div>
+      <div class="task-row">
+        <div class="task-num">1</div>
+        <div class="task-body">
+          <div class="task-title">Open founder_xp_generator.html → find calcPersona()</div>
+          <div class="task-desc">This is the only function in the HTML you should ever need to edit for content reasons</div>
+          <div class="task-file">founder_xp_generator.html → calcPersona()</div>
+        </div>
+      </div>
+      <div class="task-row">
+        <div class="task-num">2</div>
+        <div class="task-body">
+          <div class="task-title">Adjust the point values to change relative weighting</div>
+          <div class="task-desc">Higher number = stronger pull toward that persona. Refer to the scoring table in Section 3 of this page to understand current weights before editing.</div>
+        </div>
+      </div>
+      <div class="task-row">
+        <div class="task-num">3</div>
+        <div class="task-body">
+          <div class="task-title">To add a hard override, add it at the top of the function</div>
+          <div class="task-desc">Example: if (sector === 'climate') return 'impact'; — this skips all scoring for Climate founders</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 9 — SEMESTER CHECKLIST
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="checklist">
+    <div class="section-header">
+      <p class="section-eyebrow">Section 9</p>
+      <h2 class="section-title">Semester Update Checklist</h2>
+    </div>
+
+    <p style="font-size:14px;color:var(--ink-mid);margin-bottom:20px;line-height:1.7;">
+      Run through this at the start of every semester. In order.
+    </p>
+
+    <div class="card" style="padding:20px 24px;">
+      <ul class="checklist">
+        <li>
+          <div class="check-box"></div>
+          <div class="check-text">
+            Duplicate the Google Sheet and rename it for the new semester
+            <span class="check-file">Google Sheet</span>
+          </div>
+        </li>
+        <li>
+          <div class="check-box"></div>
+          <div class="check-text">
+            Update every URL in the Links tab — confirm no '#' placeholders remain
+            <span class="check-file">ilab-data.js → LINKS</span>
+          </div>
+        </li>
+        <li>
+          <div class="check-box"></div>
+          <div class="check-text">
+            Set active: false for any events that are not running this semester
+            <span class="check-file">ilab-data.js → EVENTS</span>
+          </div>
+        </li>
+        <li>
+          <div class="check-box"></div>
+          <div class="check-text">
+            Add new events as objects with correct tags and format
+            <span class="check-file">ilab-data.js → EVENTS</span>
+          </div>
+        </li>
+        <li>
+          <div class="check-box"></div>
+          <div class="check-text">
+            Update office hours schedules and set active: false for anything not running
+            <span class="check-file">ilab-data.js → OHS</span>
+          </div>
+        </li>
+        <li>
+          <div class="check-box"></div>
+          <div class="check-text">
+            Review each step in STEPS_DATA — update dates in action titles and descriptions
+            <span class="check-file">ilab-data.js → STEPS_DATA</span>
+          </div>
+        </li>
+        <li>
+          <div class="check-box"></div>
+          <div class="check-text">
+            Update the header eyebrow text ("Summer 2026") in the HTML if semester changed
+            <span class="check-file">founder_xp_generator.html → header</span>
+          </div>
+        </li>
+        <li>
+          <div class="check-box"></div>
+          <div class="check-text">
+            Push all changes to GitHub
+          </div>
+        </li>
+        <li>
+          <div class="check-box"></div>
+          <div class="check-text">
+            Test at least 6 persona combinations — one per persona — and verify links work
+          </div>
+        </li>
+        <li>
+          <div class="check-box"></div>
+          <div class="check-text">
+            Test retake flow — confirm quiz resets cleanly from results page
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 10 — QUICK REFERENCE
+  ══════════════════════════════════════════════ -->
+  <div class="section" id="quick-ref">
+    <div class="section-header">
+      <p class="section-eyebrow">Section 10</p>
+      <h2 class="section-title">Quick Reference</h2>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>I want to change…</th>
+            <th>Update type</th>
+            <th>File</th>
+            <th>Location in file</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A signup or info link</td>
+            <td><span class="label label-blue">Type 1</span></td>
+            <td><code>ilab-data.js</code></td>
+            <td>LINKS section at top</td>
+          </tr>
+          <tr>
+            <td>An event name, date, or description</td>
+            <td><span class="label label-blue">Type 1</span></td>
+            <td><code>ilab-data.js</code></td>
+            <td>EVENTS array — find by id</td>
+          </tr>
+          <tr>
+            <td>Hide a cancelled event</td>
+            <td><span class="label label-blue">Type 1</span></td>
+            <td><code>ilab-data.js</code></td>
+            <td>EVENTS → active: false</td>
+          </tr>
+          <tr>
+            <td>Add a new event</td>
+            <td><span class="label label-blue">Type 1</span></td>
+            <td><code>ilab-data.js</code></td>
+            <td>EVENTS → add new object</td>
+          </tr>
+          <tr>
+            <td>Office hours schedule</td>
+            <td><span class="label label-blue">Type 1</span></td>
+            <td><code>ilab-data.js</code></td>
+            <td>OHS → sched field</td>
+          </tr>
+          <tr>
+            <td>Step action title or description</td>
+            <td><span class="label label-blue">Type 1</span></td>
+            <td><code>ilab-data.js</code></td>
+            <td>STEPS_DATA → a: or d: fields</td>
+          </tr>
+          <tr>
+            <td>Persona card headline or description</td>
+            <td><span class="label label-blue">Type 1</span></td>
+            <td><code>ilab-data.js</code></td>
+            <td>PERSONAS → hl: or desc: fields</td>
+          </tr>
+          <tr>
+            <td>Which persona or sector sees an event</td>
+            <td><span class="label label-amber">Type 2</span></td>
+            <td><code>ilab-data.js</code></td>
+            <td>EVENTS → tags: [] on that event</td>
+          </tr>
+          <tr>
+            <td>Which persona sees an office hour</td>
+            <td><span class="label label-amber">Type 2</span></td>
+            <td><code>ilab-data.js</code></td>
+            <td>OHS → tags: [] on that OH</td>
+          </tr>
+          <tr>
+            <td>What a persona sees at step 1, 2, or 3</td>
+            <td><span class="label label-amber">Type 2</span></td>
+            <td><code>ilab-data.js</code></td>
+            <td>STEPS_DATA → find persona + sector + step</td>
+          </tr>
+          <tr>
+            <td>Add a sector-specific step path</td>
+            <td><span class="label label-amber">Type 2</span></td>
+            <td><code>ilab-data.js</code></td>
+            <td>STEPS_DATA → add new row with sector name</td>
+          </tr>
+          <tr>
+            <td>How personas are scored / weighted</td>
+            <td><span class="label label-amber">Type 2</span></td>
+            <td><code>founder_xp_generator.html</code></td>
+            <td>calcPersona() function</td>
+          </tr>
+          <tr>
+            <td>Add a hard override (always route X to Y)</td>
+            <td><span class="label label-amber">Type 2</span></td>
+            <td><code>founder_xp_generator.html</code></td>
+            <td>calcPersona() — top of function</td>
+          </tr>
+          <tr>
+            <td>Quiz questions or answer choices</td>
+            <td><span class="label label-amber">Type 2</span></td>
+            <td><code>founder_xp_generator.html</code></td>
+            <td>Q1–Q5 HTML blocks</td>
+          </tr>
+          <tr>
+            <td>Design, colors, or layout</td>
+            <td><span class="label label-ink">Design</span></td>
+            <td><code>founder_xp_generator.html</code></td>
+            <td>CSS :root variables + style rules</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div><!-- /page-wrap -->
+</body>
+</html>
