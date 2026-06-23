@@ -431,6 +431,210 @@
     flex-shrink: 0;
   }
 
+  /* ── HELP OVERLAY ───────────────────────────────────────── */
+  .help-overlay-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  .help-overlay-backdrop.open { display: flex; }
+
+  .help-overlay {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid var(--rule);
+    max-width: 880px;
+    width: calc(100% - 32px);
+    max-height: calc(100vh - 80px);
+    box-shadow: 0 18px 45px rgba(0,0,0,.18);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .help-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .help-title-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .help-title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+  .help-subtitle {
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+  .help-close-btn {
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 3px 9px;
+    font-size: 11px;
+    font-weight: 500;
+    background: #fff;
+    color: var(--ink-light);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .help-close-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
+
+  .help-body {
+    padding: 14px 18px 16px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 14px;
+    overflow-y: auto;
+  }
+
+  .help-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .help-section {
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 10px 11px;
+    background: #FAFAF8;
+  }
+  .help-section.alt {
+    background: #fff;
+  }
+
+  .help-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+  .help-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .help-section-text {
+    font-size: 12px;
+    color: var(--ink-mid);
+    line-height: 1.55;
+  }
+
+  .help-list {
+    font-size: 12px;
+    color: var(--ink-mid);
+    padding-left: 16px;
+    margin-top: 4px;
+  }
+  .help-list li { margin-bottom: 3px; }
+
+  .help-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: var(--cream);
+    color: var(--ink-light);
+    margin-top: 4px;
+  }
+
+  .help-hotspot-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    margin-top: 6px;
+  }
+  .help-hotspot-pill {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: #fff;
+  }
+  .help-hotspot-desc {
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+
+  .help-footer {
+    padding: 8px 18px 11px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+  .help-footer strong { color: var(--ink-mid); font-weight: 600; }
+
+  .help-footer-links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .help-footer-link {
+    font-size: 11px;
+    color: var(--ink-mid);
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+  .help-footer-link:hover { text-decoration-color: var(--ink); }
+
+  .help-chip {
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    background: #fff;
+    color: var(--ink-light);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .help-chip:hover { border-color: var(--ink-mid); color: var(--ink); }
+
+  @media (max-width: 720px) {
+    .help-overlay {
+      max-height: calc(100vh - 32px);
+    }
+    .help-body {
+      grid-template-columns: 1fr;
+    }
+  }
+
   /* Match badges */
   .match-badge {
     font-size: 10px;
@@ -590,12 +794,12 @@
       <div class="tool-title">The Routing Desk</div>
       <div class="tool-sub">Translate what you're hearing from a founder into the right i-lab offering — in real time.</div>
     </div>
-    <div class="tool-meta">
+<div class="tool-meta">
       <span class="tool-meta-chip">⚡ Updates in real time</span>
       <span class="tool-meta-chip">✏️ All data editable in source file</span>
       <span class="tool-meta-chip">💬 Scripts ready to use word-for-word</span>
+      <button class="help-chip" type="button" onclick="openHelpOverlay()">❔ How this tool works</button>
     </div>
-  </div>
 </header>
 
 <!-- ── ROUTING LAYOUT ── -->
@@ -1489,6 +1693,27 @@ function clearAll() {
   updateActiveCount();
 }
 
+  /* ══════════════════════════════════════════════════════════════════════
+   HELP OVERLAY
+══════════════════════════════════════════════════════════════════════ */
+
+function openHelpOverlay() {
+  const el = document.getElementById('helpOverlayBackdrop');
+  if (el) el.classList.add('open');
+}
+
+function closeHelpOverlay() {
+  const el = document.getElementById('helpOverlayBackdrop');
+  if (el) el.classList.remove('open');
+}
+
+// Close if clicking on the dark backdrop, but not inside the panel
+function backdropCloseHelp(event) {
+  if (event.target.id === 'helpOverlayBackdrop') {
+    closeHelpOverlay();
+  }
+}
+
 
 /* ══════════════════════════════════════════════════════════════════════
    ACTIVE COUNT
@@ -1507,5 +1732,140 @@ function updateActiveCount() {
 renderChips();
 
 </script>
+  <!-- ── HELP OVERLAY ── -->
+<div class="help-overlay-backdrop" id="helpOverlayBackdrop" onclick="backdropCloseHelp(event)">
+  <div class="help-overlay" role="dialog" aria-modal="true" aria-labelledby="helpOverlayTitle">
+    <div class="help-header">
+      <div class="help-title-wrap">
+        <div class="help-title" id="helpOverlayTitle">How to use the Routing Desk</div>
+        <div class="help-subtitle">For i-lab staff — live routing in founder conversations</div>
+      </div>
+      <button type="button" class="help-close-btn" onclick="closeHelpOverlay()">✕ Close</button>
+    </div>
+
+    <div class="help-body">
+      <!-- Left column: How to use -->
+      <div class="help-col">
+        <div class="help-section">
+          <div class="help-section-label">Step 1</div>
+          <div class="help-section-title">Capture what you’re hearing</div>
+          <div class="help-section-text">
+            Use the chips on the left to mirror what the founder is telling you:
+            <ul class="help-list">
+              <li><strong>Who they are</strong> (student, recent grad, alumni, etc.)</li>
+              <li><strong>Stage</strong> (exploring → raising)</li>
+              <li><strong>Needs</strong> (funding, community, accountability, etc.)</li>
+              <li><strong>Focus area</strong> (general, social impact, life sciences, climate)</li>
+              <li><strong>Time</strong> they can commit (drop-in vs. structured)</li>
+              <li><strong>Format</strong> (remote, hybrid, in-person)</li>
+            </ul>
+            Results update in real time as you toggle chips on and off.
+          </div>
+        </div>
+
+        <div class="help-section alt">
+          <div class="help-section-label">Step 2</div>
+          <div class="help-section-title">Read the routing story at the top</div>
+          <div class="help-section-text">
+            The <strong>Routing</strong> sentence above the results turns your chips into
+            a one-line summary you can quickly sanity-check. If it doesn’t sound like the
+            founder you’re talking to, adjust the chips until it does.
+          </div>
+          <div class="help-hotspot-row">
+            <span class="help-hotspot-pill">Routing: …</span>
+            <span class="help-hotspot-desc">Plain‑English summary of who you’re routing.</span>
+          </div>
+        </div>
+
+        <div class="help-section">
+          <div class="help-section-label">Step 3</div>
+          <div class="help-section-title">Use the result cards live in conversation</div>
+          <div class="help-section-text">
+            Each card gives you:
+            <ul class="help-list">
+              <li><strong>Why it fits</strong> — 1–2 sentences of context for you.</li>
+              <li><strong>“Say this to them”</strong> — a script you can read almost verbatim.</li>
+              <li><strong>Next step</strong> — exactly what you should do next (and links where relevant).</li>
+              <li><strong>Then ask</strong> — a follow‑up question to qualify fit.</li>
+              <li><strong>Watch out</strong> — landmines, caveats, or capacity notes.</li>
+            </ul>
+            Use the <strong>Copy</strong> button if you’re writing an email or Slack message.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: How to update / logic -->
+      <div class="help-col">
+        <div class="help-section alt">
+          <div class="help-section-label">For editors</div>
+          <div class="help-section-title">How to update programs & scripts</div>
+          <div class="help-section-text">
+            Everything is driven by the <code>PROGRAMS</code> array in this file:
+            <ul class="help-list">
+              <li><strong>To edit a talking point</strong> — update <code>script</code>, <code>whyItFits</code>,
+                <code>nextStep</code>, or <code>followUp</code> on the relevant program object.</li>
+              <li><strong>To add a new program</strong> — copy an existing object, give it a new <code>id</code>,
+                fill in <code>stages</code>, <code>needs</code>, <code>focus</code>, <code>commitment</code>, and <code>format</code>.</li>
+              <li><strong>To change who owns it</strong> — edit the <code>contacts</code> array (names + “Lead” vs “Facilitator”).</li>
+            </ul>
+          </div>
+          <div class="help-tag">Tip — search for <code>const PROGRAMS = [</code> in the source.</div>
+        </div>
+
+        <div class="help-section">
+          <div class="help-section-label">Routing rules</div>
+          <div class="help-section-title">How the matching logic works</div>
+          <div class="help-section-text">
+            The score for each program is based on:
+            <ul class="help-list">
+              <li><strong>Hard filters</strong>
+                <ul class="help-list">
+                  <li>Drop‑in only (<code>commitment = minimal</code>) hides structured programs
+                    like Acceleration, VIP, LLX, SIFF, and Climate Circle.</li>
+                  <li>Remote participants won’t see in‑person‑only programs.</li>
+                  <li>Focus‑specific programs (Life Lab, Climate Circle, SIFF) only appear when that focus is selected.</li>
+                </ul>
+              </li>
+              <li><strong>Soft scoring</strong> on:
+                <ul class="help-list">
+                  <li>Stage alignment</li>
+                  <li>Overlapping needs</li>
+                  <li>Time they can commit</li>
+                  <li>Format preference (remote / in‑person / hybrid)</li>
+                </ul>
+              </li>
+            </ul>
+            The final score determines whether a card shows up and how strong its match badge is.
+          </div>
+        </div>
+
+        <div class="help-section alt">
+          <div class="help-section-label">Signal chips</div>
+          <div class="help-section-title">How to add or change chips</div>
+          <div class="help-section-text">
+            The left‑hand chips are defined in <code>SIGNAL_CONFIG</code>:
+            <ul class="help-list">
+              <li><strong>To rename a chip</strong> — update its <code>label</code> only.</li>
+              <li><strong>To add/remove a chip</strong> — edit the <code>options</code> arrays,
+                then wire the new <code>value</code> into <code>scoreProgram()</code> if needed.</li>
+              <li><strong>To add a new group</strong> — add another group object to <code>SIGNAL_CONFIG</code>
+                and hook it into the <code>state</code> object.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="help-footer">
+      <div>
+        <strong>Working draft.</strong> This tool should evolve as programs and realities change. When in doubt,
+        talk directly to the program lead.
+      </div>
+      <div class="help-footer-links">
+        <span class="help-footer-link" onclick="closeHelpOverlay()">Got it — close overlay</span>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
