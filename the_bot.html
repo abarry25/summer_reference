@@ -665,6 +665,7 @@
                  'pitch-prep' | 'product-feedback' | 'networking' | 'lab-space' | 'scaling'
    focus:        'general' | 'social-impact' | 'life-sciences' | 'climate'
    commitment:   'minimal' | 'low' | 'medium' | 'high'
+   format:       'REMOTE' | 'HYBRID' | 'INPERSON'
    requiredFocus: if set, program ONLY appears when that exact focus is selected
                   (or when no focus is selected — it will score low either way).
                   Set to null for programs open to any focus area.
@@ -681,6 +682,7 @@ const PROGRAMS = [
     tagline: 'The foundation — unlocks everything at the i-lab',
     entryModel: 'Supported activation',
     requiredFocus: null,
+    format: 'HYBRID', // works for both remote + in-person
 
     stages:     ['exploring','idea','validation','building','growth','raising'],
     needs:      ['getting-started','community','networking','cofounder'],
@@ -708,6 +710,7 @@ const PROGRAMS = [
     tagline: 'Async, self-paced email series for solo validation',
     entryModel: 'Supported activation',
     requiredFocus: null,
+    format: 'REMOTE',
 
     stages:     ['exploring','idea','validation'],
     needs:      ['customer-discovery','skill-building','getting-started'],
@@ -734,6 +737,7 @@ const PROGRAMS = [
     tagline: '3-week cohort: kickoff → field work → check-in → showcase',
     entryModel: 'Supported activation',
     requiredFocus: null,
+    format: 'HYBRID',
 
     stages:     ['idea','validation'],
     needs:      ['customer-discovery','accountability','skill-building','community'],
@@ -764,6 +768,7 @@ const PROGRAMS = [
     tagline: 'Milestone-gated, advisor-led progression through venture stages',
     entryModel: 'Supported activation + selection',
     requiredFocus: null,
+    format: 'INPERSON',
 
     stages:     ['validation','building'],
     needs:      ['accountability','mentorship','skill-building'],
@@ -789,6 +794,7 @@ const PROGRAMS = [
     tagline: 'Funded fellowship for social impact ventures — pitch coaching + Pitch Day',
     entryModel: 'Supported activation + selection',
     requiredFocus: 'social-impact',
+    format: 'INPERSON',
 
     stages:     ['building','growth','raising'],
     needs:      ['funding','mentorship','pitch-prep','accountability'],
@@ -818,6 +824,7 @@ const PROGRAMS = [
     tagline: 'Cohort-based company building — workshops, clinics, lunches, pitch event',
     entryModel: 'Supported activation + selection',
     requiredFocus: null,
+    format: 'INPERSON',
 
     stages:     ['building','growth','raising'],
     needs:      ['accountability','mentorship','pitch-prep','scaling','networking','skill-building'],
@@ -844,6 +851,7 @@ const PROGRAMS = [
     tagline: 'Post-accelerator residency — equity-free, year-round space + support',
     entryModel: 'Via Summer Accelerator pitch only',
     requiredFocus: null,
+    format: 'INPERSON',
 
     stages:     ['growth','raising'],
     needs:      ['scaling','funding','mentorship','networking','pitch-prep'],
@@ -870,6 +878,7 @@ const PROGRAMS = [
     tagline: 'Open events — founder talks, workshops, accelerator info sessions',
     entryModel: 'Independent activation',
     requiredFocus: null,
+    format: 'HYBRID',
 
     stages:     ['idea','validation','building','growth','raising'],
     needs:      ['networking','skill-building','product-feedback','pitch-prep','mentorship'],
@@ -899,6 +908,7 @@ const PROGRAMS = [
     tagline: 'Social events, peer circles, co-founder connections',
     entryModel: 'Independent activation',
     requiredFocus: null,
+    format: 'HYBRID',
 
     stages:     ['exploring','idea','validation','building','growth'],
     needs:      ['community','cofounder','networking','getting-started'],
@@ -925,6 +935,7 @@ const PROGRAMS = [
     tagline: 'Life sciences coworking, wet lab space, and expert programming',
     entryModel: 'Supported activation + selection',
     requiredFocus: 'life-sciences',
+    format: 'INPERSON',
 
     stages:     ['exploring','idea','validation','building','growth'],
     needs:      ['lab-space','community','mentorship','networking','skill-building'],
@@ -953,6 +964,7 @@ const PROGRAMS = [
     tagline: 'Climate tech cohort — peer learning, accountability, expert speakers',
     entryModel: 'Supported activation + selection',
     requiredFocus: 'climate',
+    format: 'INPERSON',
 
     stages:     ['exploring','idea','validation','building'],
     needs:      ['community','accountability','mentorship','networking','skill-building'],
@@ -1045,6 +1057,16 @@ const SIGNAL_CONFIG = [
       { value: 'high',    label: '⏰ Full-time focus' },
     ]
   },
+  {
+    id: 'format',
+    label: "How can they participate?",
+    multi: false,
+    options: [
+      { value: 'remote',   label: '🟢 Remote / not in Boston' },
+      { value: 'hybrid',   label: '🟡 Either remote or in person' },
+      { value: 'inperson', label: '🔵 In person in Boston' },
+    ]
+  },
 ];
 
 
@@ -1058,6 +1080,7 @@ const state = {
   needs:       new Set(),
   focus:       null,
   commitment:  null,
+  format:      null,  // 'remote' | 'hybrid' | 'inperson'
 };
 
 
@@ -1065,7 +1088,39 @@ const state = {
    SCORING
 ══════════════════════════════════════════════════════════════════════ */
 
+function programIsStructured(p) {
+  // programs that should NOT be shown to drop-in-only founders
+  return ['acceleration', 'venture-incubation', 'llx', 'siff', 'climate-circle'].includes(p.id);
+}
+
+function formatMatchesUser(programFormat, userFormat) {
+  if (!programFormat || !userFormat) return true;
+  // user hybrid → everything is allowed
+  if (userFormat === 'hybrid') return true;
+  if (userFormat === 'remote') {
+    // remote only: block in-person only
+    return programFormat === 'REMOTE' || programFormat === 'HYBRID';
+  }
+  if (userFormat === 'inperson') {
+    // in-person user can attend anything, but we'll soft-score matches below
+    return true;
+  }
+  return true;
+}
+
 function scoreProgram(p) {
+  // ── HARD AVAILABILITY RULES ─────────────────────
+  if (state.commitment === 'minimal' && programIsStructured(p)) {
+    // Someone who can only do drop-in shouldn't do acceleration/incubation/diff-like things
+    return -999;
+  }
+
+  // ── HARD FORMAT RULES ───────────────────────────
+  if (!formatMatchesUser(p.format, state.format)) {
+    // e.g. remote user and program is INPERSON only
+    return -999;
+  }
+
   let score = 0;
 
   // ── Focus (hard filter + bonus) ──
@@ -1090,6 +1145,13 @@ function scoreProgram(p) {
     score += p.commitment.includes(state.commitment) ? 1 : -1;
   }
 
+  // ── Format (soft preference) ──
+  if (state.format) {
+    if (state.format === 'remote' && p.format === 'REMOTE') score += 2;
+    if (state.format === 'inperson' && p.format === 'INPERSON') score += 2;
+    if (state.format === 'hybrid' && p.format === 'HYBRID') score += 1;
+  }
+
   return score;
 }
 
@@ -1107,7 +1169,7 @@ function getMatchStrength(score) {
 
 function getQuickTip() {
   const n = [...state.needs];
-  const { stage, focus, commitment, affiliation } = state;
+  const { stage, focus, commitment, affiliation, format } = state;
 
   if (focus === 'life-sciences')
     return "🧬 Life Sciences focus detected — Life Lab is purpose-built for this. Lead with it in your conversation and connect to Courtney or Michelle.";
@@ -1132,6 +1194,9 @@ function getQuickTip() {
 
   if (n.includes('customer-discovery') && (commitment === 'low' || commitment === 'medium'))
     return "🌱 They can commit some time AND need customer discovery — the Sprint is probably better than the Primer for accountability and peer energy.";
+
+  if (format === 'remote')
+    return "🟢 They're remote — avoid in-person-only programs like VIP, Summer Accelerator, LLX, and make sure at least one recommendation is fully accessible online.";
 
   if (n.length >= 4)
     return "💡 They have a lot of needs — usually that means a primary program for structure, plus community events to fill the gaps. Think about sequencing, not just matching.";
@@ -1168,6 +1233,11 @@ const NEED_LABELS = {
 const COMMIT_LABELS = {
   minimal:'drop-in only', low:'1–3 hrs/week', medium:'3–7 hrs/week', high:'full-time focus'
 };
+const FORMAT_LABELS = {
+  remote:   'remote only',
+  hybrid:   'either remote or in person',
+  inperson: 'in-person in Boston',
+};
 
 function buildContextText() {
   const parts = [];
@@ -1179,6 +1249,7 @@ function buildContextText() {
     parts.push(`who needs <strong>${list}</strong>`);
   }
   if (state.commitment) parts.push(`able to give <strong>${COMMIT_LABELS[state.commitment]}</strong>`);
+  if (state.format) parts.push(`and <strong>${FORMAT_LABELS[state.format]}</strong> participation`);
   return 'Routing: ' + parts.join(', ') + '.';
 }
 
@@ -1235,7 +1306,7 @@ function handleChip(group, value, isMulti) {
 
 function renderResults() {
   const hasSignals = state.stage || state.needs.size > 0 || state.focus
-                  || state.commitment || state.affiliation;
+                  || state.commitment || state.affiliation || state.format;
 
   const emptyEl   = document.getElementById('emptyState');
   const wrapEl    = document.getElementById('resultsWrap');
@@ -1411,6 +1482,7 @@ function clearAll() {
   state.needs       = new Set();
   state.focus       = null;
   state.commitment  = null;
+  state.format      = null;
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
   document.getElementById('emptyState').style.display  = '';
   document.getElementById('resultsWrap').style.display = 'none';
@@ -1424,7 +1496,8 @@ function clearAll() {
 
 function updateActiveCount() {
   const n = (state.affiliation ? 1 : 0) + (state.stage ? 1 : 0)
-          + state.needs.size + (state.focus ? 1 : 0) + (state.commitment ? 1 : 0);
+          + state.needs.size + (state.focus ? 1 : 0)
+          + (state.commitment ? 1 : 0) + (state.format ? 1 : 0);
   document.getElementById('activeCount').textContent =
     n > 0 ? `${n} signal${n > 1 ? 's' : ''} active` : '';
 }
