@@ -869,10 +869,13 @@
                  'pitch-prep' | 'product-feedback' | 'networking' | 'lab-space' | 'scaling'
    focus:        'general' | 'social-impact' | 'life-sciences' | 'climate'
    commitment:   'minimal' | 'low' | 'medium' | 'high'
-   format:       'REMOTE' | 'HYBRID' | 'INPERSON'
    requiredFocus: if set, program ONLY appears when that exact focus is selected
                   (or when no focus is selected — it will score low either way).
                   Set to null for programs open to any focus area.
+   excludedAffiliations: array of affiliation values that should NEVER see this program.
+                  e.g. ['alumni'] hides the program when Alumni Founder is selected.
+                  Valid values: 'current-student' | 'recent-grad' | 'team-member' | 'alumni'
+                  Set to [] or omit the field entirely for programs open to all affiliations.
 ═══════════════════════════════════════════════════════════════════════ */
 
 const PROGRAMS = [
