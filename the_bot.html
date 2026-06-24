@@ -886,6 +886,7 @@ const PROGRAMS = [
     tagline: 'The foundation — unlocks everything at the i-lab',
     entryModel: 'Supported activation',
     requiredFocus: null,
+    excludedAffiliations: ['alumni'],
     format: 'HYBRID', // works for both remote + in-person
 
     stages:     ['exploring','idea','validation','building','growth','raising'],
@@ -1313,6 +1314,11 @@ function formatMatchesUser(programFormat, userFormat) {
 }
 
 function scoreProgram(p) {
+
+    // ── Affiliation hard exclusions ──
+  if (p.excludedAffiliations && state.affiliation) {
+    if (p.excludedAffiliations.includes(state.affiliation)) return -999;
+  }
   // ── HARD AVAILABILITY RULES ─────────────────────
   if (state.commitment === 'minimal' && programIsStructured(p)) {
     // Someone who can only do drop-in shouldn't do acceleration/incubation/diff-like things
@@ -1374,6 +1380,12 @@ function getMatchStrength(score) {
 function getQuickTip() {
   const n = [...state.needs];
   const { stage, focus, commitment, affiliation, format } = state;
+
+    // ADD THIS BLOCK FIRST ↓
+  if (affiliation === 'alumni')
+    return "🏛️ Alumni founders aren't eligible for standard Membership — skip straight to program routing. Acceleration, Venture Growth events, and LLX are all open to alumni founders.";
+
+  // ...rest of existing tips unchanged
 
   if (focus === 'life-sciences')
     return "🧬 Life Sciences focus detected — Life Lab is purpose-built for this. Lead with it in your conversation and connect to Courtney or Michelle.";
