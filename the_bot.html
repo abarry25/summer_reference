@@ -150,6 +150,63 @@
     align-items: stretch;
   }
 
+  /* ── HELP MASCOT + BUBBLE ── */
+#help-mascot {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+/* speech bubble */
+#help-mascot .help-bubble {
+  position: relative;
+  background: #ffffff;
+  color: var(--ink-mid);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  white-space: nowrap;
+}
+
+/* little tail */
+#help-mascot .help-bubble::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  bottom: 12px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent transparent #ffffff;
+}
+
+/* mascot button */
+#help-mascot button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+#help-mascot img {
+  width: 70px;   /* tweak size as you like */
+  height: auto;
+  display: block;
+}
+
+/* On small screens, hide bubble text so it doesn't crowd */
+@media (max-width: 600px) {
+  #help-mascot .help-bubble {
+    display: none;
+  }
+}
+
   /* ══════════════════════════════════
      SIGNAL PANEL (left)
   ══════════════════════════════════ */
@@ -798,7 +855,6 @@
       <span class="tool-meta-chip">⚡ Updates in real time</span>
       <span class="tool-meta-chip">✏️ All data editable in source file</span>
       <span class="tool-meta-chip">💬 Scripts ready to use word-for-word</span>
-      <button class="help-chip" type="button" onclick="openHelpOverlay()">❔ How this tool works</button>
     </div>
 </header>
 
@@ -1881,6 +1937,13 @@ renderChips();
       </div>
     </div>
   </div>
+</div>
+  <!-- Mascot + "How this tool works" bubble -->
+<div id="help-mascot" onclick="openHelpOverlay()">
+  <div class="help-bubble">How this tool works</div>
+  <button aria-label="How this tool works">
+    <img src="images/mascot.png" alt="Help mascot">
+  </button>
 </div>
 </body>
 </html>
