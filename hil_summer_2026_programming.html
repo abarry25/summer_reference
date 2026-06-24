@@ -360,27 +360,62 @@
   letter-spacing: .02em;
 }
   
-  /* ── HOW TO USE BUTTON ── */
-.how-to-use-btn {
+/* ── HOW TO USE MASCOT + BUBBLE ── */
+#help-mascot {
   position: fixed;
   bottom: 28px;
   right: 28px;
-  z-index: 100;
-  background: #EA3D3E;
-  color: white;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 10px 16px;
-  border-radius: 24px;
-  border: none;
-  cursor: pointer;
+  z-index: 150;
   display: flex;
   align-items: center;
-  gap: 6px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-  transition: background .15s;
+  gap: 10px;
+  cursor: pointer;
 }
-.how-to-use-btn:hover { background:  #711213; }
+
+/* speech bubble */
+#help-mascot .help-bubble {
+  position: relative;
+  background: #ffffff;
+  color: var(--ink-mid);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  white-space: nowrap;
+}
+
+/* little tail on bubble */
+#help-mascot .help-bubble::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  bottom: 12px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent transparent #ffffff;
+}
+
+/* mascot button */
+#help-mascot button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+#help-mascot img {
+  width: 80px;     /* tweak as you like */
+  height: auto;
+  display: block;
+}
+
+/* optional: on small screens, hide bubble text so it doesn’t crowd */
+@media (max-width: 600px) {
+  #help-mascot .help-bubble {
+    display: none;
+  }
+}
 
 /* ── MODAL ── */
 .modal-overlay {
@@ -2250,10 +2285,14 @@ document.addEventListener('keydown', e => {
 initSearch();
 </script>
 
-<!-- Sticky button -->
-<button class="how-to-use-btn" onclick="document.getElementById('howToUseModal').classList.add('open')">
-  ℹ️ How to use this page
-</button>
+<!-- Mascot + "How to use this page" bubble -->
+<div id="help-mascot"
+     onclick="document.getElementById('howToUseModal').classList.add('open')">
+  <div class="help-bubble">How to use this page</div>
+  <button aria-label="How to use this page">
+    <img src="images/mascot.png" alt="Help mascot">
+  </button>
+</div>
 
 <!-- Modal -->
 <div class="modal-overlay" id="howToUseModal" onclick="if(event.target===this) this.classList.remove('open')">
