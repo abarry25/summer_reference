@@ -39,6 +39,14 @@ nav .nav-link.active { color: white; background: rgba(255,255,255,0.12); }
 nav .export-btn { margin-left: auto; background: var(--crimson); color: white; border: none; padding: 7px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 500; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
 nav .export-btn:hover { background: var(--crimson-dark); }
 
+/* ── NAV ── */
+.top-nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--rule); }
+.top-nav-inner { max-width: 1100px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #888; }
+.nav-r a { margin-left: 20px; text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); border-bottom: 1px solid transparent; padding-bottom: 1px; }
+.nav-r a:hover { border-bottom-color: var(--blue); }
+.nav-r a.active { color: var(--ink); border-bottom-color: var(--ink); }
+
 /* LAYOUT */
 .page-wrap { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
