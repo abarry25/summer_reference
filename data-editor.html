@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>i-lab Data Editor · Harvard Innovation Labs</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --crimson: #A51C30;
+  --crimson-light: #f5e6e8;
+  --crimson-dark: #7a1422;
+  --green-bg: #C1F4A8; --green-tx: #27500A;
+  --purple-bg: #cbcafa; --purple-tx: #232262;
+  --pink-bg: #FFC7C8; --pink-tx: #711213;
+  --blue-bg: #cee5f7; --blue-tx: #2a5a80;
+  --surface: #ffffff;
+  --page: #f5f5f3;
+  --border: #e0deda;
+  --border-strong: #c8c4be;
+  --text: #1a1a18;
+  --text-muted: #6b6860;
+  --text-light: #9a9790;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--page); color: var(--text); font-size: 14px; line-height: 1.5; min-height: 100vh; }
+
+/* NAV */
+nav { background: #1a0a0c; padding: 0 2rem; display: flex; align-items: center; gap: 2rem; height: 52px; position: sticky; top: 0; z-index: 100; }
+nav .wordmark { color: white; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; opacity: 0.9; white-space: nowrap; }
+nav .nav-links { display: flex; gap: 2px; flex: 1; }
+nav .nav-link { color: rgba(255,255,255,0.55); font-size: 12px; padding: 6px 12px; border-radius: 6px; cursor: pointer; border: none; background: none; transition: all 0.15s; white-space: nowrap; }
+nav .nav-link:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.08); }
+nav .nav-link.active { color: white; background: rgba(255,255,255,0.12); }
+nav .export-btn { margin-left: auto; background: var(--crimson); color: white; border: none; padding: 7px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 500; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+nav .export-btn:hover { background: var(--crimson-dark); }
+
+/* LAYOUT */
+.page-wrap { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* SECTION HEADER */
+.section-head { margin-bottom: 1.25rem; }
+.section-head h2 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+.section-head p { font-size: 13px; color: var(--text-muted); }
+
+/* TABS */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* CARDS */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 10px; box-shadow: var(--shadow); }
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; gap: 8px; }
+.card-title { font-size: 14px; font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-meta { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+/* FIELDS */
+.field-grid { display: grid; gap: 10px; margin-bottom: 10px; }
+.field-grid-2 { grid-template-columns: 1fr 1fr; }
+.field-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.field-group { display: flex; flex-direction: column; gap: 4px; }
+.field-group label { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+input[type=text], input[type=url], select, textarea { width: 100%; padding: 7px 10px; font-size: 13px; border: 1px solid var(--border); border-radius: var(--radius); background: white; color: var(--text); font-family: inherit; transition: border-color 0.15s; }
+input[type=text]:focus, input[type=url]:focus, select:focus, textarea:focus { outline: none; border-color: var(--crimson); }
+textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+
+/* TOGGLE */
+.toggle-wrap { display: flex; align-items: center; gap: 8px; }
+.toggle { width: 38px; height: 22px; border-radius: 11px; border: none; cursor: pointer; position: relative; transition: background 0.2s; flex-shrink: 0; }
+.toggle.on { background: #2d7d1a; }
+.toggle.off { background: var(--border-strong); }
+.toggle::after { content: ''; position: absolute; width: 16px; height: 16px; border-radius: 50%; background: white; top: 3px; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+.toggle.on::after { left: 19px; }
+.toggle.off::after { left: 3px; }
+.toggle-label { font-size: 12px; color: var(--text-muted); }
+
+/* BADGES */
+.badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+.badge-green { background: var(--green-bg); color: var(--green-tx); }
+.badge-purple { background: var(--purple-bg); color: var(--purple-tx); }
+.badge-pink { background: var(--pink-bg); color: var(--pink-tx); }
+.badge-blue { background: var(--blue-bg); color: var(--blue-tx); }
+.badge-gray { background: #eee; color: #555; }
+.badge-urgent { background: #fde8e8; color: #8b1c1c; }
+
+/* FORMAT PILLS */
+.fmt-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.fmt-pill { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1.5px solid var(--border-strong); background: white; color: var(--text-muted); transition: all 0.12s; }
+.fmt-pill.active { border-color: #1a1a18; background: #1a1a18; color: white; }
+
+/* TAG PILLS */
+.tags-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag-pill { padding: 3px 10px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 1.5px solid var(--border-strong); background: white; color: var(--text-muted); transition: all 0.12s; user-select: none; }
+.tag-pill.selected { background: #232262; color: white; border-color: #232262; }
+.tag-pill.sector.selected { background: #27500A; color: white; border-color: #27500A; }
+
+/* BUTTONS */
+.btn { padding: 7px 14px; font-size: 13px; font-weight: 500; border-radius: var(--radius); cursor: pointer; border: 1px solid var(--border-strong); background: white; color: var(--text); transition: all 0.12s; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { background: var(--page); }
+.btn-primary { background: var(--crimson); color: white; border-color: var(--crimson); }
+.btn-primary:hover { background: var(--crimson-dark); border-color: var(--crimson-dark); }
+.btn-danger { color: #8b1c1c; border-color: #f5c6c6; }
+.btn-danger:hover { background: #fef2f2; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-ghost { border: none; background: none; color: var(--text-muted); }
+.btn-ghost:hover { background: var(--page); color: var(--text); }
+
+/* ADD BUTTON */
+.add-card { border: 2px dashed var(--border-strong); border-radius: 12px; padding: 1rem; text-align: center; cursor: pointer; color: var(--text-muted); font-size: 13px; transition: all 0.15s; margin-bottom: 10px; background: white; }
+.add-card:hover { border-color: var(--crimson); color: var(--crimson); background: var(--crimson-light); }
+
+/* IMPORT ZONE */
+.import-zone { border: 2px dashed var(--border-strong); border-radius: 12px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.15s; background: white; margin-bottom: 1.5rem; }
+.import-zone:hover, .import-zone.drag-over { border-color: var(--crimson); background: var(--crimson-light); }
+.import-zone .icon { font-size: 28px; margin-bottom: 8px; }
+.import-zone h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.import-zone p { font-size: 12px; color: var(--text-muted); }
+.import-zone input[type=file] { display: none; }
+
+/* IMPORT PREVIEW */
+.import-preview { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+.import-preview h3 { font-size: 14px; font-weight: 600; margin-bottom: 1rem; }
+.preview-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.preview-row:last-child { border-bottom: none; }
+.preview-row .ev-name { flex: 1; font-weight: 500; }
+.preview-row .ev-date { color: var(--text-muted); font-size: 12px; min-width: 80px; }
+.preview-row .ev-status { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+.status-pub { background: #d1fae5; color: #065f46; }
+.status-skip { background: #f3f4f6; color: #9ca3af; }
+.import-actions { display: flex; gap: 8px; margin-top: 1rem; }
+
+/* EXPORT */
+.export-area { background: #1a1a18; border-radius: 12px; padding: 1.25rem; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11.5px; color: #a8d5a2; white-space: pre; overflow-x: auto; max-height: 500px; overflow-y: auto; line-height: 1.6; }
+.export-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.copy-feedback { font-size: 12px; color: #27500A; font-weight: 500; opacity: 0; transition: opacity 0.3s; }
+.copy-feedback.show { opacity: 1; }
+
+/* STEPS */
+.persona-block { margin-bottom: 1.5rem; }
+.persona-label { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.step-number { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; font-weight: 700; background: var(--border); color: var(--text-muted); flex-shrink: 0; }
+.step-number.urgent { background: #fde8e8; color: #8b1c1c; }
+
+/* LINKS */
+.links-grid { display: grid; grid-template-columns: 1fr; gap: 6px; }
+.link-row { display: grid; grid-template-columns: 220px 1fr; gap: 10px; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px; }
+.link-key { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* NOTICE */
+.notice { background: #fffbeb; border: 1px solid #fcd34d; border-radius: var(--radius); padding: 10px 14px; font-size: 12px; color: #92400e; margin-bottom: 1rem; display: flex; gap: 8px; align-items: flex-start; }
+.notice-icon { flex-shrink: 0; font-size: 14px; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+@media (max-width: 640px) {
+  .field-grid-2, .field-grid-3 { grid-template-columns: 1fr; }
+  .link-row { grid-template-columns: 1fr; }
+  nav .nav-links { gap: 0; }
+  nav .wordmark { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="wordmark">i-lab · Data Editor</span>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="switchTab('events')">Events</button>
+    <button class="nav-link" onclick="switchTab('ohs')">Office hours</button>
+    <button class="nav-link" onclick="switchTab('steps')">Steps</button>
+    <button class="nav-link" onclick="switchTab('links')">Links</button>
+  </div>
+  <button class="export-btn" onclick="switchTab('export'); buildExport()">Export ilab-data.js</button>
+</nav>
+
+<div class="page-wrap">
+
+<!-- EVENTS TAB -->
+<div id="tab-events" class="tab-content active">
+  <div class="section-head">
+    <h2>Events</h2>
+    <p>Import from ClickUp, then assign tags and review before exporting.</p>
+  </div>
+
+  <div class="import-zone" id="dropzone" onclick="document.getElementById('xlsx-input').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+    <input type="file" id="xlsx-input" accept=".xlsx,.xls,.csv" onchange="handleFileInput(event)">
+    <div class="icon">📥</div>
+    <h3>Import from ClickUp</h3>
+    <p>Drop your ClickUp .xlsx export here, or click to browse<br>Only "PUBLISHED EB" events will be imported</p>
+  </div>
+
+  <div id="import-preview" style="display:none"></div>
+
+  <div id="events-list"></div>
+  <div class="add-card" onclick="addEvent()">+ Add event manually</div>
+</div>
+
+<!-- OFFICE HOURS TAB -->
+<div id="tab-ohs" class="tab-content">
+  <div class="section-head">
+    <h2>Office hours</h2>
+    <p>These appear in the bottom grid of results pages.</p>
+  </div>
+  <div id="ohs-list"></div>
+  <div class="add-card" onclick="addOH()">+ Add office hours</div>
+</div>
+
+<!-- STEPS TAB -->
+<div id="tab-steps" class="tab-content">
+  <div class="section-head">
+    <h2>Recommended steps</h2>
+    <p>Left column of results — 3 steps per persona, customizable by sector.</p>
+  </div>
+  <div class="notice">
+    <span class="notice-icon">💡</span>
+    <span>Use <strong>sector: all</strong> to show a step to everyone in that persona. Use <strong>default</strong> as the fallback when no sector-specific row exists. Sector-specific rows (lifesci, deeptech, etc.) win over default.</span>
+  </div>
+  <div id="steps-list"></div>
+</div>
+
+<!-- LINKS TAB -->
+<div id="tab-links" class="tab-content">
+  <div class="section-head">
+    <h2>Links</h2>
+    <p>All signup URLs. Replace # placeholders with real URLs before exporting.</p>
+  </div>
+  <div class="links-grid" id="links-list"></div>
+</div>
+
+<!-- EXPORT TAB -->
+<div id="tab-export" class="tab-content">
+  <div class="section-head">
+    <h2>Export</h2>
+    <p>Copy this and paste it into your <code>ilab-data.js</code> file on GitHub.</p>
+  </div>
+  <div class="export-header">
+    <div style="font-size:13px;color:var(--text-muted)" id="export-summary"></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="copy-feedback" id="copy-feedback">Copied!</span>
+      <button class="btn btn-primary" onclick="copyExport()">Copy all</button>
+    </div>
+  </div>
+  <div class="export-area" id="export-out">Click "Export ilab-data.js" in the nav to generate.</div>
+</div>
+
+</div><!-- /page-wrap -->
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────
+const PERSONA_TAGS = ['explorer','validator','builder','propeller','impact','community'];
+const SECTOR_TAGS  = ['lifesci','deeptech','climate','socialimpact','general'];
+const ALL_TAGS     = [...PERSONA_TAGS, ...SECTOR_TAGS];
+const FORMATS      = ['REMOTE','INPERSON','HYBRID'];
+const PERSONAS     = ['community','impact','explorer','validator','builder','propeller'];
+const SECTORS      = ['all','default','lifesci','deeptech','climate','socialimpact','general'];
+const CAT_COLORS   = {
+  'Community':           {cbg:'#FFC7C8', ctx:'#711213'},
+  'Founder Fundamentals':{cbg:'#C1F4A8', ctx:'#27500A'},
+  'Venture Growth':      {cbg:'#cbcafa', ctx:'#232262'},
+  'SIFF':                {cbg:'#cee5f7', ctx:'#2a5a80'},
+  'Membership':          {cbg:'#FFC7C8', ctx:'#711213'},
+};
+const FOCUS_TO_CAT = {
+  'Community':           'Community',
+  'Founder Fundamentals':'Founder Fundamentals',
+  'Membership':          'Membership',
+  'SIFF':                'SIFF',
+  'Accelerator':         'Venture Growth',
+  'Venture Incubation':  'Venture Growth',
+};
+
+let state = {
+  links: {
+    OOH_SIGNUP:'#', PRIMER_SUBSCRIBE:'#', SPRINT_SIGNUP:'#',
+    SYSTEM_DYNAMICS_SIGNUP:'#', VIBE_CODING_SIGNUP:'#', HACKATHON_SIGNUP:'#',
+    MVP_FEEDBACK:'#', AI_AGENTS_SIGNUP:'#', AI_PR_SIGNUP:'#',
+    TECHSTARS_SIGNUP:'#', YC_SIGNUP:'#', INVESTOR_PREP:'#',
+    SIFF_APPLICATION:'#', FOUNDER_JOINER:'#', FOUNDER_CIRCLE_INPERSON:'#',
+    FOUNDER_CIRCLE_VIRTUAL:'#', LAUNCH_PARTY:'#', MEMBER_APPRECIATION:'#',
+    TALK_BYERS:'#', TALK_ELLIOTT:'#'
+  },
+  events: [
+    {id:'tacos',active:true,name:"Member Appreciation: Tacos & Thanks",con:'Community',cbg:'#FFC7C8',ctx:'#711213',date:'Jun 16',time:'',format:'INPERSON',tags:['community','explorer','validator','builder','propeller','impact'],desc:'Celebrate with the i-lab community over tacos and ice cream from local food trucks.',link:''},
+    {id:'ideas_ooh',active:true,name:"Group Office Hours: Ideas Into Impact",con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',date:'Jun 22',time:'12:00 PM',format:'REMOTE',tags:['explorer','community'],desc:'Drop-in office hours for students actively working through an idea.',link:''},
+    {id:'techstars',active:true,name:"Accelerator Info Session: Techstars",con:'Venture Growth',cbg:'#cbcafa',ctx:'#232262',date:'Jun 23',time:'12:00 PM',format:'INPERSON',tags:['propeller','builder'],desc:'Steve Bernard from Techstars on what they look for in founders.',link:''},
+    {id:'sprint',active:true,name:"Customer Discovery Sprint",con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',date:'Jun 23–Jul 9',time:'',format:'HYBRID',tags:['validator','builder'],desc:'3-session series: Kickoff, Check-in, Final Showcase. Full commitment required.',link:''},
+    {id:'launch',active:true,name:"Summer Launch Party at Felipe's",con:'Community',cbg:'#FFC7C8',ctx:'#711213',date:'Jun 24',time:'6:00 PM',format:'INPERSON',tags:['community','explorer','validator','builder','propeller','impact'],desc:'Connect with student and alumni founders over margaritas and tacos.',link:''},
+    {id:'sysdy',active:true,name:"System Dynamics for HC + Life Sciences",con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',date:'Jun 25',time:'12:00 PM',format:'INPERSON',tags:['lifesci'],desc:'Map feedback loops, stakeholder dynamics, and commercialization realities specific to your sector.',link:''},
+    {id:'siff_ev',active:true,name:"SIFF Fund",con:'SIFF',cbg:'#cee5f7',ctx:'#2a5a80',date:'Apps open',time:'',format:'HYBRID',tags:['impact','socialimpact'],desc:'A competitive program for 6 social impact teams — coaching, design support, and real funding.',link:''},
+    {id:'cd_ooh',active:true,name:"Group Office Hours: Customer Discovery",con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',date:'Jun 29 + Jul 24',time:'12:00 PM',format:'REMOTE',tags:['validator','builder','explorer','impact'],desc:"For students conducting interviews, validating assumptions, or making sense of what they're learning.",link:''},
+    {id:'f_joiner',active:true,name:"Founder/Joiner Connections: Pizza + Pitch",con:'Community',cbg:'#FFC7C8',ctx:'#711213',date:'Jul 2 + Jul 28',time:'6:00 PM',format:'INPERSON',tags:['explorer','validator','community'],desc:"Pitch what you're building, share what you need, connect with co-founders.",link:''},
+    {id:'byers',active:true,name:"Founder Talk: Allison Byers",con:'Venture Growth',cbg:'#cbcafa',ctx:'#232262',date:'Jul 7',time:'12:00 PM',format:'INPERSON',tags:['propeller','impact','builder','validator'],desc:'Fundraising strategy, resilience, and navigating uncertainty as a founder.',link:''},
+    {id:'f_circle',active:true,name:"Founder Circle: Pizza + Problem-Solving",con:'Community',cbg:'#FFC7C8',ctx:'#711213',date:'Jul 8',time:'12:00 PM',format:'INPERSON',tags:['community','validator','builder','explorer'],desc:'Peer problem-solving over pizza. Bring your biggest startup challenge.',link:''},
+    {id:'vf_circle',active:true,name:"Virtual Founder Circle",con:'Community',cbg:'#FFC7C8',ctx:'#711213',date:'Jul 9',time:'12:00 PM',format:'REMOTE',tags:['community','validator','explorer','impact'],desc:"Same peer problem-solving energy — on Zoom.",link:''},
+    {id:'hackathon',active:true,name:"B2C Hackathon: Concept to Testing with AI",con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',date:'Jul 14 + 16',time:'9:00 AM',format:'INPERSON',tags:['explorer','deeptech'],desc:'Use AI to move from concept to testable idea, then return with real user feedback.',link:''},
+    {id:'yc',active:true,name:"Accelerator Info Session: Y Combinator",con:'Venture Growth',cbg:'#cbcafa',ctx:'#232262',date:'Jul 15',time:'12:00 PM',format:'INPERSON',tags:['propeller','builder'],desc:"YC Partner Ankit Gupta + a panel of YC founders. Open Q&A.",link:''},
+    {id:'vibe',active:true,name:"Vibe Coding Workshop",con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',date:'Jul 15',time:'12:00 PM',format:'INPERSON',tags:['builder','deeptech'],desc:'Hands-on product iteration workshop for founders actively building.',link:''},
+    {id:'ai_agents',active:true,name:"AI Agents to Run Your B2C Business",con:'Venture Growth',cbg:'#cbcafa',ctx:'#232262',date:'Jul 15',time:'12:00 PM',format:'INPERSON',tags:['propeller','deeptech'],desc:'How AI agents can run and automate core parts of your B2C venture.',link:''},
+    {id:'ai_pr',active:true,name:"AI for PR (and How Not To)",con:'Venture Growth',cbg:'#cbcafa',ctx:'#232262',date:'Jul 22',time:'12:00 PM',format:'REMOTE',tags:['propeller','builder'],desc:'Build your communications strategy using AI tools.',link:''},
+    {id:'mvp',active:true,name:"MVP Feedback Session",con:'Venture Growth',cbg:'#cbcafa',ctx:'#232262',date:'Jul 22',time:'12:00 PM',format:'INPERSON',tags:['validator','builder'],desc:"Bring a product, prototype, or landing page for structured peer feedback.",link:''},
+    {id:'elliott',active:true,name:"Founder Talk: Brian Elliott + Murph VanderVelde",con:'Venture Growth',cbg:'#cbcafa',ctx:'#232262',date:'Jul 23',time:'12:00 PM',format:'INPERSON',tags:['propeller','builder','deeptech'],desc:"Inside Blitzy — one of Boston's fastest-growing AI companies.",link:''}
+  ],
+  ohs: [
+    {id:'ideas_ooh',active:true,name:'Group Office Hours: Ideas Into Impact',con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',sched:'Jun 22',fmt:'Drop-in · Remote',format:'REMOTE',cta:'Sign up',tags:['explorer','community'],desc:'For students actively working through an idea. Facilitated by Becca Xiong.',link:''},
+    {id:'cd_ooh',active:true,name:'Group Office Hours: Customer Discovery',con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',sched:'Jun 29 + Jul 24',fmt:'Drop-in · Remote',format:'REMOTE',cta:'Sign up',tags:['validator','builder','explorer','impact'],desc:"Bring interviews to discuss, assumptions to test, or patterns you can't make sense of yet.",link:''},
+    {id:'dropin',active:true,name:'Staff Drop-In & General Advising',con:'Membership',cbg:'#FFC7C8',ctx:'#711213',sched:'Ongoing',fmt:'Drop-in · In-Person',format:'INPERSON',cta:'Drop in — no registration needed',tags:['explorer','validator','builder','propeller','impact','community'],desc:'Come with any question — which program fits, how to apply, or what to prioritize.',link:''},
+    {id:'siff_c',active:true,name:'SIFF Pitch Coaching',con:'SIFF',cbg:'#cee5f7',ctx:'#2a5a80',sched:'By appointment',fmt:'1:1 · Virtual or In-Person',format:'HYBRID',cta:'Book a session',tags:['impact'],desc:'Personalized pitch coaching for SIFF participants and applicants.',link:''}
+  ],
+  steps: {
+    community:[
+      {sector:'all',step:1,u:true, fmt:'INPERSON',linkKey:'#',ll:'Start here →',a:'Complete your i-lab Membership intake',d:'Unlocks everything — coworking, Slack, events, and the weekly newsletter. Takes five minutes.'},
+      {sector:'all',step:2,u:false,fmt:'INPERSON',linkKey:'FOUNDER_CIRCLE_INPERSON',ll:'Register →',a:'Come to Founder Circles this summer',d:'In-person (Jul 8) and virtual (Jul 9). Bring a challenge, get peer input. No prep needed.'},
+      {sector:'all',step:3,u:false,fmt:'INPERSON',linkKey:'LAUNCH_PARTY',ll:'Register →',a:"Join the Summer Launch Party at Felipe's (Jun 24)",d:"Margaritas and tacos with founders from across Harvard. The easiest way to meet people."}
+    ],
+    impact:[
+      {sector:'all',step:1,u:true, fmt:'HYBRID',  linkKey:'SIFF_APPLICATION',ll:'Learn more + apply →',a:'Apply to the SIFF Fund',d:'A competitive program for 6 teams with months of coaching and real funding.'},
+      {sector:'all',step:2,u:true, fmt:'INPERSON',linkKey:'TALK_BYERS',ll:'Register →',a:'Register: Founder Talk — Allison Byers (Jul 7)',d:'Practical fundraising strategy and lessons from building a mission-driven company.'},
+      {sector:'all',step:3,u:false,fmt:'REMOTE',  linkKey:'OOH_SIGNUP',ll:'Sign up →',a:'Drop into Customer Discovery Office Hours',d:"Jun 29 + Jul 24 — especially useful if you're still testing your impact model."}
+    ],
+    explorer:[
+      {sector:'all',    step:1,u:true, fmt:'INPERSON',linkKey:'#',ll:'Start here →',a:'Complete your i-lab Membership intake',d:'Unlocks everything — coworking, Slack, events, and the weekly newsletter. Takes five minutes.'},
+      {sector:'deeptech',step:2,u:true, fmt:'INPERSON',linkKey:'HACKATHON_SIGNUP',ll:'Register →',a:'Register for the B2C Hackathon (Jul 14 + 16)',d:'Use AI to move from concept to testable idea, then return with real user feedback.'},
+      {sector:'default',step:2,u:true, fmt:'REMOTE',  linkKey:'PRIMER_SUBSCRIBE',ll:'Sign up →',a:'Sign up for the Customer Discovery Primer',d:'A self-paced email journey — proven discovery frameworks, no cohort or commitment required.'},
+      {sector:'all',    step:3,u:false,fmt:'REMOTE',  linkKey:'OOH_SIGNUP',ll:'Sign up →',a:'Drop into Group Office Hours: Ideas Into Impact (Jun 22)',d:'Bring your idea, your questions, or just show up. Facilitated by Becca Xiong.'}
+    ],
+    validator:[
+      {sector:'lifesci',step:1,u:true, fmt:'INPERSON',linkKey:'SYSTEM_DYNAMICS_SIGNUP',ll:'Register →',a:'Register: System Dynamics for HC + Life Sciences (Jun 25)',d:'Map feedback loops, stakeholder dynamics, and commercialization realities specific to your sector.'},
+      {sector:'default',step:1,u:true, fmt:'REMOTE',  linkKey:'PRIMER_SUBSCRIBE',ll:'Sign up →',a:'Sign up for the Customer Discovery Primer',d:"A self-paced email journey — proven customer discovery frameworks on your own schedule."},
+      {sector:'all',    step:2,u:true, fmt:'REMOTE',  linkKey:'OOH_SIGNUP',ll:'Sign up →',a:'Join Customer Discovery Office Hours (Jun 29 + Jul 24)',d:"Bring interviews to discuss, assumptions to test, or patterns you can't make sense of yet."},
+      {sector:'all',    step:3,u:false,fmt:'INPERSON',linkKey:'MVP_FEEDBACK',ll:'Register →',a:'Register for MVP Feedback Session (Jul 22)',d:'Bring a prototype, product, or landing page for real-time structured feedback.'}
+    ],
+    builder:[
+      {sector:'lifesci', step:1,u:true, fmt:'INPERSON',linkKey:'SYSTEM_DYNAMICS_SIGNUP',ll:'Register →',a:'Register: System Dynamics for HC + Life Sciences (Jun 25)',d:'Essential context on feedback loops and commercialization for HC/LS founders.'},
+      {sector:'deeptech',step:1,u:true, fmt:'INPERSON',linkKey:'VIBE_CODING_SIGNUP',ll:'Register →',a:'Register: Vibe Coding Workshop (Jul 15)',d:'Hands-on product iteration for founders actively building.'},
+      {sector:'default', step:1,u:true, fmt:'HYBRID',  linkKey:'SPRINT_SIGNUP',ll:'Register →',a:'Commit to the Customer Discovery Sprint (Jun 23 – Jul 9)',d:'Multi-session series: Kickoff, Check-in, Final Showcase. The highest-intensity discovery program we offer.'},
+      {sector:'lifesci', step:2,u:true, fmt:'HYBRID',  linkKey:'SPRINT_SIGNUP',ll:'Register →',a:'Commit to the Customer Discovery Sprint (Jun 23 – Jul 9)',d:'Multi-session series: Kickoff, Check-in, Final Showcase. Full commitment required.'},
+      {sector:'deeptech',step:2,u:true, fmt:'HYBRID',  linkKey:'SPRINT_SIGNUP',ll:'Register →',a:'Commit to the Customer Discovery Sprint (Jun 23 – Jul 9)',d:'Multi-session series: Kickoff, Check-in, Final Showcase. Full commitment required.'},
+      {sector:'all',     step:3,u:false,fmt:'INPERSON',linkKey:'MVP_FEEDBACK',ll:'Register →',a:'Register for MVP Feedback Session (Jul 22)',d:"Bring what you've built for structured, real-time peer feedback from fellow founders."}
+    ],
+    propeller:[
+      {sector:'all',step:1,u:true, fmt:'INPERSON',linkKey:'TECHSTARS_SIGNUP',ll:'Register →',a:'Register: Accelerator Info Session — Techstars (Jun 23)',d:"Steve Bernard on what Techstars looks for in founders and how to position your application."},
+      {sector:'all',step:2,u:true, fmt:'INPERSON',linkKey:'YC_SIGNUP',ll:'Register →',a:'Register: Accelerator Info Session — Y Combinator (Jul 15)',d:"YC Partner Ankit Gupta + a panel of YC founders. Open Q&A and networking over lunch."},
+      {sector:'all',step:3,u:false,fmt:'INPERSON',linkKey:'TALK_BYERS',ll:'Register →',a:'Attend Founder Talk: Allison Byers (Jul 7)',d:"Fundraising strategy, investor relations, and practical lessons from a founder who's built her own path."}
+    ]
+  }
+};
+
+// ─── TAB SWITCHING ────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  const btn = document.querySelector(`.nav-link[onclick="switchTab('${name}')"]`);
+  if (btn) btn.classList.add('active');
+}
+
+// ─── XLSX IMPORT ─────────────────────────────────────────────────
+function excelDateToString(serial) {
+  if (!serial || isNaN(serial)) return '';
+  const date = new Date((serial - 25569) * 86400 * 1000);
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 30);
+}
+
+function mapFormat(raw) {
+  if (!raw) return 'INPERSON';
+  const r = raw.toLowerCase();
+  if (r.includes('virtual') || r.includes('remote') || r.includes('zoom')) return 'REMOTE';
+  if (r.includes('hybrid')) return 'HYBRID';
+  return 'INPERSON';
+}
+
+function mapCon(focus) {
+  return FOCUS_TO_CAT[focus] || 'Membership';
+}
+
+function handleDragOver(e) { e.preventDefault(); document.getElementById('dropzone').classList.add('drag-over'); }
+function handleDragLeave(e) { document.getElementById('dropzone').classList.remove('drag-over'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropzone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file);
+}
+function handleFileInput(e) { if (e.target.files[0]) processFile(e.target.files[0]); }
+
+let pendingImport = [];
+
+function processFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const wb = XLSX.read(e.target.result, { type: 'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+
+    pendingImport = rows.map(row => {
+      const name = row['Task Name'] || '';
+      const status = (row['Status'] || '').trim().toUpperCase();
+      const include = (row['Include_on_website (drop down)'] || '').trim().toLowerCase();
+      const isPublished = status === 'PUBLISHED EB';
+      const dateRaw = row['Due Date'];
+      const dateStr = typeof dateRaw === 'number' ? excelDateToString(dateRaw) : String(dateRaw || '');
+      const formatRaw = row['Event Format (labels)'] || '';
+      const focus = row['Focus Area (drop down)'] || '';
+      const con = mapCon(focus);
+      const colors = CAT_COLORS[con] || { cbg: '#eee', ctx: '#555' };
+      const desc = row['Preview Summary (short text)'] || row['Session Description (short text)'] || '';
+      const link = row['Registration Link'] || row['registration_link'] || row['Link'] || '';
+
+      return {
+        _import: true,
+        _status: status,
+        _include: include,
+        _publish: isPublished,
+        id: slugify(name) || ('ev_' + Date.now()),
+        active: isPublished,
+        name,
+        con,
+        cbg: colors.cbg,
+        ctx: colors.ctx,
+        date: dateStr,
+        time: '',
+        format: mapFormat(formatRaw),
+        tags: [],
+        desc: desc.length > 300 ? desc.slice(0, 297) + '…' : desc,
+        link: link,
+      };
+    }).filter(r => r.name && r.name !== '(140 characters max)');
+
+    showImportPreview();
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function showImportPreview() {
+  const pub = pendingImport.filter(r => r._publish);
+  const skip = pendingImport.filter(r => !r._publish);
+
+  const previewEl = document.getElementById('import-preview');
+  previewEl.style.display = 'block';
+  previewEl.innerHTML = `
+    <div class="import-preview">
+      <h3>Found ${pendingImport.length} events — ${pub.length} will be imported (PUBLISHED EB), ${skip.length} skipped</h3>
+      <div style="max-height:240px;overflow-y:auto">
+        ${pub.map(r => `
+          <div class="preview-row">
+            <span class="ev-name">${r.name}</span>
+            <span class="ev-date">${r.date}</span>
+            <span class="badge badge-${conToBadge(r.con)}">${r.con}</span>
+            <span class="ev-status status-pub">Import</span>
+          </div>`).join('')}
+        ${skip.slice(0,5).map(r => `
+          <div class="preview-row" style="opacity:0.45">
+            <span class="ev-name">${r.name}</span>
+            <span class="ev-date">${r._status}</span>
+            <span class="ev-status status-skip">Skip</span>
+          </div>`).join('')}
+        ${skip.length > 5 ? `<div style="font-size:12px;color:var(--text-muted);padding:8px 0">…and ${skip.length - 5} more skipped</div>` : ''}
+      </div>
+      <div class="import-actions">
+        <button class="btn btn-primary" onclick="confirmImport()">Import ${pub.length} events</button>
+        <button class="btn" onclick="cancelImport()">Cancel</button>
+      </div>
+    </div>`;
+}
+
+function confirmImport() {
+  const toImport = pendingImport.filter(r => r._publish);
+  // merge: update existing by name match, add new ones
+  toImport.forEach(ev => {
+    const existing = state.events.findIndex(e => e.name === ev.name || e.id === ev.id);
+    if (existing >= 0) {
+      // preserve tags and update rest
+      const savedTags = state.events[existing].tags;
+      state.events[existing] = { ...ev, tags: savedTags };
+    } else {
+      state.events.push(ev);
+    }
+  });
+  document.getElementById('import-preview').style.display = 'none';
+  pendingImport = [];
+  renderEvents();
+}
+
+function cancelImport() {
+  document.getElementById('import-preview').style.display = 'none';
+  pendingImport = [];
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────────
+function conToBadge(con) {
+  const map = { 'Community':'pink', 'Founder Fundamentals':'green', 'Venture Growth':'purple', 'SIFF':'blue', 'Membership':'pink' };
+  return map[con] || 'gray';
+}
+
+function catOptions(selected) {
+  return Object.keys(CAT_COLORS).map(c =>
+    `<option ${c === selected ? 'selected' : ''}>${c}</option>`
+  ).join('');
+}
+
+function tagPillsHtml(selected, type) {
+  const tags = type === 'persona' ? PERSONA_TAGS : type === 'sector' ? SECTOR_TAGS : ALL_TAGS;
+  const cls = type === 'sector' ? 'sector' : '';
+  return tags.map(t =>
+    `<span class="tag-pill ${cls} ${selected.includes(t) ? 'selected' : ''}" onclick="this.classList.toggle('selected')">${t}</span>`
+  ).join('');
+}
+
+function fmtPillsHtml(selected) {
+  return FORMATS.map(f =>
+    `<span class="fmt-pill ${f === selected ? 'active' : ''}" onclick="selectFmt(this)">${f}</span>`
+  ).join('');
+}
+
+function selectFmt(el) {
+  el.parentElement.querySelectorAll('.fmt-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function getSelectedTags(container) {
+  return [...container.querySelectorAll('.tag-pill.selected')].map(el => el.textContent.trim());
+}
+
+function getActiveFmt(container) {
+  const active = container.querySelector('.fmt-pill.active');
+  return active ? active.textContent.trim() : 'INPERSON';
+}
+
+// ─── RENDER EVENTS ────────────────────────────────────────────────
+function renderEvents() {
+  const el = document.getElementById('events-list');
+  el.innerHTML = state.events.map((ev, i) => `
+    <div class="card" id="ev-card-${i}">
+      <div class="card-header">
+        <div class="toggle-wrap">
+          <button class="toggle ${ev.active ? 'on' : 'off'}" onclick="toggleActive('events',${i},this)" title="${ev.active ? 'Active — showing in results' : 'Hidden'}"></button>
+          <span class="toggle-label">${ev.active ? 'Active' : 'Hidden'}</span>
+        </div>
+        <div class="card-title">${ev.name}</div>
+        <div class="card-meta">
+          <span class="badge badge-${conToBadge(ev.con)}">${ev.con}</span>
+          <button class="btn btn-sm btn-danger" onclick="removeItem('events',${i})">Remove</button>
+        </div>
+      </div>
+
+      <div class="field-grid field-grid-2">
+        <div class="field-group">
+          <label>Event name</label>
+          <input type="text" value="${ev.name.replace(/"/g,'&quot;')}" oninput="state.events[${i}].name=this.value">
+        </div>
+        <div class="field-group">
+          <label>Category</label>
+          <select onchange="state.events[${i}].con=this.value;updateCatColors(${i},this.value)">${catOptions(ev.con)}</select>
+        </div>
+      </div>
+
+      <div class="field-grid field-grid-3">
+        <div class="field-group">
+          <label>Date</label>
+          <input type="text" value="${ev.date}" placeholder="Jun 23 or Jun 23–Jul 9" oninput="state.events[${i}].date=this.value">
+        </div>
+        <div class="field-group">
+          <label>Time</label>
+          <input type="text" value="${ev.time}" placeholder="12:00 PM or blank" oninput="state.events[${i}].time=this.value">
+        </div>
+        <div class="field-group">
+          <label>Format</label>
+          <div class="fmt-row" id="ev-fmt-${i}">${fmtPillsHtml(ev.format)}</div>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-bottom:10px">
+        <label>Registration link</label>
+        <input type="url" value="${(ev.link||'').replace(/"/g,'&quot;')}" placeholder="https://..." oninput="state.events[${i}].link=this.value">
+      </div>
+
+      <div class="field-group" style="margin-bottom:10px">
+        <label>Description (shown on card)</label>
+        <textarea oninput="state.events[${i}].desc=this.value">${ev.desc}</textarea>
+      </div>
+
+      <div class="field-group" style="margin-bottom:6px">
+        <label>Persona tags — who sees this event?</label>
+        <div class="tags-wrap" id="ev-ptags-${i}">${tagPillsHtml(ev.tags, 'persona')}</div>
+      </div>
+      <div class="field-group">
+        <label>Sector tags — surfaces first for these sectors</label>
+        <div class="tags-wrap" id="ev-stags-${i}">${tagPillsHtml(ev.tags, 'sector')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateCatColors(i, con) {
+  const colors = CAT_COLORS[con] || { cbg: '#eee', ctx: '#555' };
+  state.events[i].cbg = colors.cbg;
+  state.events[i].ctx = colors.ctx;
+}
+
+function addEvent() {
+  state.events.push({ id: 'ev_' + Date.now(), active: true, name: 'New event', con: 'Founder Fundamentals', cbg: '#C1F4A8', ctx: '#27500A', date: '', time: '', format: 'INPERSON', tags: [], desc: '', link: '' });
+  renderEvents();
+  document.getElementById('ev-card-' + (state.events.length - 1)).scrollIntoView({ behavior: 'smooth' });
+}
+
+// ─── RENDER OHS ───────────────────────────────────────────────────
+function renderOHs() {
+  const el = document.getElementById('ohs-list');
+  el.innerHTML = state.ohs.map((oh, i) => `
+    <div class="card" id="oh-card-${i}">
+      <div class="card-header">
+        <div class="toggle-wrap">
+          <button class="toggle ${oh.active ? 'on' : 'off'}" onclick="toggleActive('ohs',${i},this)"></button>
+          <span class="toggle-label">${oh.active ? 'Active' : 'Hidden'}</span>
+        </div>
+        <div class="card-title">${oh.name}</div>
+        <div class="card-meta">
+          <span class="badge badge-${conToBadge(oh.con)}">${oh.con}</span>
+          <button class="btn btn-sm btn-danger" onclick="removeItem('ohs',${i})">Remove</button>
+        </div>
+      </div>
+
+      <div class="field-grid field-grid-2">
+        <div class="field-group">
+          <label>Name</label>
+          <input type="text" value="${oh.name.replace(/"/g,'&quot;')}" oninput="state.ohs[${i}].name=this.value">
+        </div>
+        <div class="field-group">
+          <label>Category</label>
+          <select onchange="state.ohs[${i}].con=this.value;updateOHColors(${i},this.value)">${catOptions(oh.con)}</select>
+        </div>
+      </div>
+
+      <div class="field-grid field-grid-2">
+        <div class="field-group">
+          <label>Schedule</label>
+          <input type="text" value="${oh.sched}" placeholder="Jun 29 + Jul 24" oninput="state.ohs[${i}].sched=this.value">
+        </div>
+        <div class="field-group">
+          <label>Format display text</label>
+          <input type="text" value="${oh.fmt}" placeholder="Drop-in · Remote" oninput="state.ohs[${i}].fmt=this.value">
+        </div>
+      </div>
+
+      <div class="field-grid field-grid-2">
+        <div class="field-group">
+          <label>CTA button label</label>
+          <input type="text" value="${oh.cta}" oninput="state.ohs[${i}].cta=this.value">
+        </div>
+        <div class="field-group">
+          <label>Format</label>
+          <div class="fmt-row" id="oh-fmt-${i}">${fmtPillsHtml(oh.format)}</div>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-bottom:10px">
+        <label>Registration / info link</label>
+        <input type="url" value="${(oh.link||'').replace(/"/g,'&quot;')}" placeholder="https://..." oninput="state.ohs[${i}].link=this.value">
+      </div>
+
+      <div class="field-group" style="margin-bottom:10px">
+        <label>Description</label>
+        <textarea oninput="state.ohs[${i}].desc=this.value">${oh.desc}</textarea>
+      </div>
+
+      <div class="field-group">
+        <label>Visible to (tags)</label>
+        <div class="tags-wrap" id="oh-tags-${i}">${tagPillsHtml(oh.tags, 'all')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateOHColors(i, con) {
+  const colors = CAT_COLORS[con] || { cbg: '#eee', ctx: '#555' };
+  state.ohs[i].cbg = colors.cbg;
+  state.ohs[i].ctx = colors.ctx;
+}
+
+function addOH() {
+  state.ohs.push({ id: 'oh_' + Date.now(), active: true, name: 'New office hours', con: 'Founder Fundamentals', cbg: '#C1F4A8', ctx: '#27500A', sched: '', fmt: 'Drop-in · Remote', format: 'REMOTE', cta: 'Sign up', tags: [], desc: '', link: '' });
+  renderOHs();
+  document.getElementById('oh-card-' + (state.ohs.length - 1)).scrollIntoView({ behavior: 'smooth' });
+}
+
+// ─── RENDER STEPS ─────────────────────────────────────────────────
+function renderSteps() {
+  const linkKeys = Object.keys(state.links);
+  const el = document.getElementById('steps-list');
+  el.innerHTML = PERSONAS.map(persona => `
+    <div class="persona-block">
+      <div class="persona-label">${personaEmoji(persona)} ${persona}</div>
+      ${state.steps[persona].map((s, i) => `
+        <div class="card" style="margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+            <span class="step-number ${s.u ? 'urgent' : ''}">S${s.step}</span>
+            <div class="field-group" style="flex-direction:row;align-items:center;gap:6px;margin:0">
+              <label style="margin:0;white-space:nowrap">Sector:</label>
+              <select style="width:130px" onchange="state.steps['${persona}'][${i}].sector=this.value">
+                ${SECTORS.map(sec => `<option ${s.sector === sec ? 'selected' : ''}>${sec}</option>`).join('')}
+              </select>
+            </div>
+            <label style="font-size:12px;display:flex;align-items:center;gap:5px;cursor:pointer;color:var(--text-muted)">
+              <input type="checkbox" ${s.u ? 'checked' : ''} onchange="state.steps['${persona}'][${i}].u=this.checked;this.closest('.step-number') && this.closest('.step-number').classList.toggle('urgent',this.checked)">
+              urgent (red)
+            </label>
+            <div class="fmt-row" id="step-fmt-${persona}-${i}" style="margin-left:auto">${fmtPillsHtml(s.fmt)}</div>
+          </div>
+          <div class="field-group" style="margin-bottom:8px">
+            <label>Action title</label>
+            <input type="text" value="${s.a.replace(/"/g,'&quot;')}" oninput="state.steps['${persona}'][${i}].a=this.value">
+          </div>
+          <div class="field-grid field-grid-2">
+            <div class="field-group">
+              <label>Link (LINKS key or # for none)</label>
+              <select onchange="state.steps['${persona}'][${i}].linkKey=this.value">
+                <option value="#" ${s.linkKey === '#' ? 'selected' : ''}># (no link)</option>
+                ${linkKeys.map(k => `<option value="${k}" ${s.linkKey === k ? 'selected' : ''}>${k}</option>`).join('')}
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Link label</label>
+              <input type="text" value="${s.ll.replace(/"/g,'&quot;')}" oninput="state.steps['${persona}'][${i}].ll=this.value">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Description</label>
+            <textarea oninput="state.steps['${persona}'][${i}].d=this.value">${s.d}</textarea>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function personaEmoji(p) {
+  return { community:'🤝', impact:'💚', explorer:'🌱', validator:'🧪', builder:'🏗️', propeller:'🚀' }[p] || '';
+}
+
+// ─── RENDER LINKS ─────────────────────────────────────────────────
+function renderLinks() {
+  const el = document.getElementById('links-list');
+  el.innerHTML = Object.entries(state.links).map(([k, v]) => `
+    <div class="link-row">
+      <span class="link-key">${k}</span>
+      <input type="url" value="${v}" placeholder="https://..." oninput="state.links['${k}']=this.value">
+    </div>
+  `).join('');
+}
+
+// ─── SHARED HELPERS ───────────────────────────────────────────────
+function toggleActive(collection, i, btn) {
+  state[collection][i].active = !state[collection][i].active;
+  btn.className = 'toggle ' + (state[collection][i].active ? 'on' : 'off');
+  btn.nextElementSibling.textContent = state[collection][i].active ? 'Active' : 'Hidden';
+}
+
+function removeItem(collection, i) {
+  if (!confirm('Remove this item?')) return;
+  state[collection].splice(i, 1);
+  collection === 'events' ? renderEvents() : renderOHs();
+}
+
+// ─── SYNC FROM DOM ────────────────────────────────────────────────
+function syncFromDOM() {
+  // Events
+  state.events.forEach((ev, i) => {
+    const card = document.getElementById('ev-card-' + i);
+    if (!card) return;
+    const ptags = [...card.querySelectorAll('#ev-ptags-' + i + ' .tag-pill.selected')].map(e => e.textContent.trim());
+    const stags = [...card.querySelectorAll('#ev-stags-' + i + ' .tag-pill.selected')].map(e => e.textContent.trim());
+    ev.tags = [...new Set([...ptags, ...stags])];
+    ev.format = getActiveFmt(card.querySelector('#ev-fmt-' + i));
+  });
+  // OHs
+  state.ohs.forEach((oh, i) => {
+    const card = document.getElementById('oh-card-' + i);
+    if (!card) return;
+    oh.tags = getSelectedTags(card.querySelector('#oh-tags-' + i));
+    oh.format = getActiveFmt(card.querySelector('#oh-fmt-' + i));
+  });
+  // Steps
+  PERSONAS.forEach(persona => {
+    state.steps[persona].forEach((s, i) => {
+      const fmtEl = document.getElementById(`step-fmt-${persona}-${i}`);
+      if (fmtEl) s.fmt = getActiveFmt(fmtEl);
+    });
+  });
+}
+
+// ─── EXPORT ───────────────────────────────────────────────────────
+function j(v) { return JSON.stringify(v); }
+
+function buildExport() {
+  syncFromDOM();
+  const now = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  const linkLines = Object.entries(state.links)
+    .map(([k, v]) => `  ${(k + ':').padEnd(26)} ${j(v)},`)
+    .join('\n');
+
+  const eventLines = state.events.map(ev => {
+    const linkLine = ev.link ? `\n    link:${j(ev.link)},` : '';
+    return `  {
+    id:${j(ev.id)}, active:${ev.active},
+    name:${j(ev.name)},
+    con:${j(ev.con)}, cbg:${j(ev.cbg)}, ctx:${j(ev.ctx)},
+    date:${j(ev.date)}, time:${j(ev.time)}, format:${j(ev.format)},
+    tags:${j(ev.tags)},
+    desc:${j(ev.desc)},${linkLine}
+  }`;
+  }).join(',\n');
+
+  const ohLines = state.ohs.map(oh => {
+    const linkLine = oh.link ? `\n    link:${j(oh.link)},` : '';
+    return `  {
+    id:${j(oh.id)}, active:${oh.active},
+    name:${j(oh.name)},
+    con:${j(oh.con)}, cbg:${j(oh.cbg)}, ctx:${j(oh.ctx)},
+    sched:${j(oh.sched)}, fmt:${j(oh.fmt)}, format:${j(oh.format)},
+    cta:${j(oh.cta)},
+    tags:${j(oh.tags)},
+    desc:${j(oh.desc)},${linkLine}
+  }`;
+  }).join(',\n');
+
+  const stepLines = PERSONAS.map(persona => {
+    const rows = state.steps[persona].map(s => {
+      const linkRef = s.linkKey === '#' ? "'#'" : `LINKS.${s.linkKey}`;
+      return `    { sector:${j(s.sector)}, step:${s.step}, u:${s.u}, fmt:${j(s.fmt)}, link:${linkRef}, ll:${j(s.ll)}, a:${j(s.a)}, d:${j(s.d)} },`;
+    }).join('\n');
+    return `  ${persona}: [\n${rows}\n  ]`;
+  }).join(',\n\n');
+
+  const activeCount = state.events.filter(e => e.active).length;
+  document.getElementById('export-summary').textContent =
+    `${activeCount} active events · ${state.ohs.filter(o => o.active).length} office hours · Updated ${now}`;
+
+  const output = `// ════════════════════════════════════════════════════════════════
+// ilab-data.js — i-lab Program Finder · Content Data
+// Harvard Innovation Labs
+// Last updated: ${now}
+// ════════════════════════════════════════════════════════════════
+//
+// THIS IS THE ONLY FILE YOU UPDATE EACH SEMESTER.
+// Edit in the Data Editor at: /summer_reference/data-editor.html
+//
+// ════════════════════════════════════════════════════════════════
+
+
+// ── SECTION 1: LINKS ─────────────────────────────────────────────
+const LINKS = {
+${linkLines}
+};
+
+
+// ── SECTION 2: EVENTS ────────────────────────────────────────────
+const EVENTS = [
+${eventLines}
+];
+
+
+// ── SECTION 3: OFFICE HOURS ───────────────────────────────────────
+const OHS = [
+${ohLines}
+];
+
+
+// ── SECTION 4: STEPS ─────────────────────────────────────────────
+const STEPS_DATA = {
+
+${stepLines}
+
+};
+
+
+// ── STEP RESOLVER ─────────────────────────────────────────────────
+function getSteps(persona) {
+  const sector = window._QUIZ_SECTOR || 'general';
+  const rows   = STEPS_DATA[persona] || [];
+  const resolved = [];
+  const stepNums = [...new Set(rows.map(r => r.step))].sort();
+  stepNums.forEach(n => {
+    const candidates = rows.filter(r => r.step === n);
+    const specific   = candidates.find(r => r.sector === sector);
+    const def        = candidates.find(r => r.sector === 'default');
+    const all        = candidates.find(r => r.sector === 'all');
+    const chosen     = specific || def || all;
+    if (chosen) resolved.push(chosen);
+  });
+  return resolved.slice(0, 3);
+}
+
+
+// ── EVENT + OH RESOLVERS ──────────────────────────────────────────
+function getEvents(persona, sector, userFormat) {
+  const FMT_MAP = { remote:'REMOTE', hybrid:'HYBRID', inperson:'INPERSON' };
+  const prefFmt = FMT_MAP[userFormat] || 'HYBRID';
+  const seen    = new Set();
+  const all     = [];
+  EVENTS.filter(e => e.active).forEach(e => {
+    if (!seen.has(e.id) && e.tags.includes(sector)) { seen.add(e.id); all.push(e); }
+  });
+  EVENTS.filter(e => e.active).forEach(e => {
+    if (!seen.has(e.id) && e.tags.includes(persona)) { seen.add(e.id); all.push(e); }
+  });
+  all.sort((a, b) => {
+    const rank = f => f === prefFmt ? 0 : f === 'HYBRID' ? 1 : 2;
+    return rank(a.format) - rank(b.format);
+  });
+  return all.slice(0, 4);
+}
+
+function getOHs(persona) {
+  return OHS.filter(o => o.active && o.tags.includes(persona)).slice(0, 4);
+}`;
+
+  document.getElementById('export-out').textContent = output;
+}
+
+function copyExport() {
+  const text = document.getElementById('export-out').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const fb = document.getElementById('copy-feedback');
+    fb.classList.add('show');
+    setTimeout(() => fb.classList.remove('show'), 2500);
+  });
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────
+renderEvents();
+renderOHs();
+renderSteps();
+renderLinks();
+</script>
+</body>
+</html>
