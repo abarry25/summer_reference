@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Founder Journey Flows — HIL Summer 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #F8F7F4; color: #2C2C2A; }
+
+  /* Nav — matches your existing pages */
+  .nav { background: #fff; border-bottom: 1px solid #E8E6E0; padding: 10px 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .nav-brand { font-size: 12px; font-weight: 500; color: #888780; margin-right: 8px; }
+  .nav a { font-size: 12px; color: #5F5E5A; text-decoration: none; padding: 4px 8px; border-radius: 5px; }
+  .nav a:hover { background: #F1EFE8; color: #2C2C2A; }
+  .nav a.active { background: #2C2C2A; color: #fff; }
+
+  .page { max-width: 900px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  .page-eyebrow { font-size: 10px; font-weight: 500; letter-spacing: .08em; color: #888780; text-transform: uppercase; margin-bottom: 8px; }
+  .page-title { font-size: 26px; font-weight: 500; color: #2C2C2A; margin-bottom: 8px; line-height: 1.2; }
+  .page-desc { font-size: 13px; color: #5F5E5A; line-height: 1.7; margin-bottom: 20px; }
+  code { font-size: 11px; background: #F1EFE8; padding: 1px 5px; border-radius: 3px; font-family: monospace; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; padding: 10px 14px; border-radius: 8px; background: #F1EFE8; align-items: center; }
+  .legend-label { font-size: 10px; color: #5F5E5A; margin-right: 4px; }
+  .legend-pill { font-size: 10px; padding: 3px 9px; border-radius: 99px; font-weight: 500; border-width: 1.5px; border-style: solid; }
+
+  .controls { display: flex; gap: 8px; margin-bottom: 14px; }
+  .btn-sm { font-size: 10px; padding: 4px 12px; border-radius: 6px; background: transparent; border: 1px solid #D3D1C7; color: #5F5E5A; cursor: pointer; }
+  .btn-sm:hover { background: #F1EFE8; }
+
+  .persona-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .persona-card { border-radius: 10px; border-width: 2px; border-style: solid; overflow: hidden; background: #fff; }
+
+  .persona-header { width: 100%; display: flex; align-items: center; gap: 10px; padding: 12px 16px; border: none; cursor: pointer; text-align: left; }
+  .persona-header:hover { filter: brightness(0.97); }
+  .persona-emoji { font-size: 20px; flex-shrink: 0; }
+  .persona-meta { flex: 1; min-width: 0; }
+  .persona-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .persona-name { font-size: 15px; font-weight: 500; }
+  .persona-sub { font-size: 11px; opacity: .7; }
+  .persona-trigger { font-size: 10px; opacity: .6; margin-top: 3px; font-family: monospace; }
+  .override-badge { font-size: 9px; font-weight: 500; padding: 2px 7px; border-radius: 99px; background: currentColor; letter-spacing: .05em; }
+  .override-badge span { color: #fff; font-size: 9px; }
+  .chevron { font-size: 10px; opacity: .5; flex-shrink: 0; }
+
+  .persona-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+
+  .sector-tabs { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .sector-tab-label { font-size: 10px; color: #888780; margin-right: 2px; }
+  .sector-tab { font-size: 10px; padding: 4px 10px; border-radius: 99px; border: 1px solid #D3D1C7; background: transparent; color: #888780; cursor: pointer; }
+  .sector-tab.active { font-weight: 500; border-color: var(--pc); background: var(--pl); color: var(--pc); }
+
+  .sector-rows { display: flex; flex-direction: column; gap: 8px; }
+
+  .sector-row { border-radius: 8px; border: 1px solid #D3D1C7; overflow: hidden; background: #fff; }
+  .sector-row-head { display: flex; align-items: center; gap: 6px; padding: 7px 12px; border-bottom: 1px solid #D3D1C7; }
+  .sector-row-head-label { font-size: 11px; font-weight: 500; }
+  .sector-override-note { font-size: 9px; opacity: .6; margin-left: auto; }
+
+  .steps-row { display: grid; grid-template-columns: 1fr 28px 1fr 28px 1fr; align-items: start; gap: 6px; padding: 10px 12px; }
+
+  .arrow-cell { display: flex; align-items: center; justify-content: center; padding-top: 26px; }
+  .arrow-line { position: relative; width: 100%; height: 1px; background: #B4B2A9; }
+  .arrow-line.dashed { background: none; border-top: 1.5px dashed #B4B2A9; }
+  .arrow-line::after { content: "›"; position: absolute; right: -5px; top: -8px; font-size: 12px; color: #888780; }
+
+  .step-col { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .step-type-label { font-size: 9px; font-weight: 500; opacity: .7; text-transform: uppercase; letter-spacing: .04em; }
+  .step-box { border-radius: 6px; padding: 6px 10px; border-width: 1.5px; border-style: solid; }
+  .step-name { font-size: 12px; font-weight: 500; line-height: 1.3; }
+  .step-note { font-size: 10px; opacity: .7; margin-top: 2px; }
+
+  .trigger-pill { font-size: 10px; padding: 5px 10px; border-radius: 6px; background: #F1EFE8; color: #5F5E5A; font-family: monospace; border-left-width: 3px; border-left-style: solid; }
+  .override-note-text { font-size: 11px; color: #5F5E5A; font-style: italic; }
+
+  .fallback-row { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; border: 1px dashed #B4B2A9; background: #F1EFE8; }
+  .fallback-icon { font-size: 12px; }
+  .fallback-text { font-size: 10px; color: #5F5E5A; }
+
+  .sector-note { font-size: 10px; color: #5F5E5A; padding: 6px 10px; border-radius: 6px; background: #F1EFE8; line-height: 1.5; }
+
+  .scoring-box { margin-top: 20px; padding: 14px; border-radius: 8px; border: 1px solid #D3D1C7; background: #F1EFE8; }
+  .scoring-title { font-size: 11px; font-weight: 500; color: #3d3d3a; margin-bottom: 10px; }
+  .scoring-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
+  .scoring-cell { font-size: 10px; padding: 5px 8px; border-radius: 5px; background: #fff; border: 1px solid #D3D1C7; }
+  .scoring-cell-label { font-weight: 500; color: #3d3d3a; margin-bottom: 2px; }
+  .scoring-cell-val { color: #5F5E5A; }
+  .scoring-footnote { font-size: 10px; color: #888780; margin-top: 10px; }
+
+  .footer { font-size: 10px; color: #B4B2A9; margin-top: 16px; text-align: center; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-brand">HIL Summer 2026</span>
+  <a href="hil_summer_2026_programming.html">Program View</a>
+  <a href="the_bot.html">Bot</a>
+  <a href="xp_creator.html">XP Builder</a>
+  <a href="decision_logic.html">Decision Logic</a>
+  <a href="journey_flows.html" class="active">Journey Flows</a>
+  <a href="founder_xp_generator.html">Start Here</a>
+</nav>
+
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState } = React;
+
+const PERSONAS = [
+  {
+    id: "explorer", emoji: "🌱", label: "Explorer",
+    subtitle: "Explore stage · any sector",
+    trigger: "Stage = Explore OR (Test + low combined score)",
+    color: "#1D9E75", light: "#E1F5EE",
+    sectors: [
+      { id: "lifesci", label: "Life Sciences", emoji: "🧬", hasOverride: false,
+        step1: { name: "Expert Office Hours", type: "office-hours", note: "open access, sector-relevant" },
+        step2: { name: "Customer Validation Primer", type: "program", note: "async self-paced" },
+        step3: { name: "Life Lab (if apply window open)", type: "selective", note: "apply when ready" } },
+      { id: "climate", label: "Climate", emoji: "🌿", hasOverride: false,
+        step1: { name: "Expert Office Hours", type: "office-hours", note: "open access, sector-relevant" },
+        step2: { name: "Customer Validation Primer", type: "program", note: "async self-paced" },
+        step3: { name: "Climate Circle (if apply window open)", type: "selective", note: "apply when ready" } },
+      { id: "deeptech", label: "Deep Tech / AI", emoji: "⚙️", hasOverride: false,
+        step1: { name: "Expert Office Hours", type: "office-hours", note: "open access, sector-relevant" },
+        step2: { name: "Customer Validation Primer", type: "program", note: "async self-paced" },
+        step3: { name: "Hackathon", type: "event", note: "build prototype + customer feedback" } },
+      { id: "general", label: "General", emoji: "🌐", hasOverride: false,
+        step1: { name: "Expert Office Hours", type: "office-hours", note: "open to all members" },
+        step2: { name: "Customer Validation Primer", type: "program", note: "async self-paced" },
+        step3: { name: "Hackathon or Founder Circles", type: "event", note: "community + build" } },
+    ],
+  },
+  {
+    id: "validator", emoji: "🧪", label: "Validator",
+    subtitle: "Test stage · moderate+ time",
+    trigger: "Stage = Test + Goal = Feedback/Milestones",
+    color: "#534AB7", light: "#EEEDFE",
+    sectors: [
+      { id: "lifesci", label: "Life Sciences", emoji: "🧬", hasOverride: true, overrideLabel: "step 1 override",
+        step1: { name: "System Dynamics for HC + Life Sci", type: "event", note: "sector-specific — replaces default" },
+        step2: { name: "Expert Office Hours", type: "office-hours", note: "life sci advisor support" },
+        step3: { name: "Life Lab application (if open)", type: "selective", note: "when apply window opens" } },
+      { id: "climate", label: "Climate", emoji: "🌿", hasOverride: false,
+        step1: { name: "Customer Validation Primer", type: "program", note: "default — no climate step 1 override" },
+        step2: { name: "Expert Office Hours", type: "office-hours", note: "advisor support" },
+        step3: { name: "Climate Circle (if open)", type: "selective", note: "when apply window opens" } },
+      { id: "deeptech", label: "Deep Tech / AI", emoji: "⚙️", hasOverride: false,
+        step1: { name: "Customer Validation Primer", type: "program", note: "default — no deep tech step 1 override" },
+        step2: { name: "Expert Office Hours", type: "office-hours", note: "advisor support" },
+        step3: { name: "Hackathon", type: "event", note: "build + validate assumptions" } },
+      { id: "general", label: "General", emoji: "🌐", hasOverride: false,
+        step1: { name: "Customer Validation Primer", type: "program", note: "default path" },
+        step2: { name: "Expert Office Hours", type: "office-hours", note: "advisor support" },
+        step3: { name: "Customer Discovery Sprint", type: "program", note: "3-week cohort, kickoff required" } },
+    ],
+  },
+  {
+    id: "builder", emoji: "🏗️", label: "Sprint Builder",
+    subtitle: "Test/Propel stage · heavy time commitment",
+    trigger: "Heavy time + Goal = Milestones (Builder score wins)",
+    color: "#BA7517", light: "#FAEEDA",
+    sectors: [
+      { id: "lifesci", label: "Life Sciences", emoji: "🧬", hasOverride: true, overrideLabel: "step 1 override",
+        step1: { name: "System Dynamics for HC + Life Sci", type: "event", note: "sector-specific — replaces Sprint at step 1" },
+        step2: { name: "Customer Discovery Sprint", type: "program", note: "3-week cohort" },
+        step3: { name: "Venture Incubation (VIP)", type: "selective", note: "milestone-gated, apply required" } },
+      { id: "climate", label: "Climate", emoji: "🌿", hasOverride: false,
+        step1: { name: "Customer Discovery Sprint", type: "program", note: "default — no climate step 1 override" },
+        step2: { name: "Expert Office Hours", type: "office-hours", note: "advisor support" },
+        step3: { name: "Climate Circle", type: "selective", note: "apply if eligible" } },
+      { id: "deeptech", label: "Deep Tech / AI", emoji: "⚙️", hasOverride: true, overrideLabel: "step 1 override",
+        step1: { name: "Vibe Coding Workshop", type: "event", note: "sector-specific — replaces Sprint at step 1" },
+        step2: { name: "Customer Discovery Sprint", type: "program", note: "3-week cohort" },
+        step3: { name: "Venture Incubation (VIP)", type: "selective", note: "milestone-gated, apply required" } },
+      { id: "general", label: "General", emoji: "🌐", hasOverride: false,
+        step1: { name: "Customer Discovery Sprint", type: "program", note: "default path" },
+        step2: { name: "MVP Feedback Session", type: "event", note: "open to all builders" },
+        step3: { name: "Venture Incubation (VIP)", type: "selective", note: "milestone-gated, apply required" } },
+    ],
+  },
+  {
+    id: "propeller", emoji: "🚀", label: "Growth Founder",
+    subtitle: "Propel stage · heavy or full-time",
+    trigger: "Stage = Propel + Goal = Funding/Milestones (Propeller score wins)",
+    color: "#185FA5", light: "#E6F1FB",
+    sectors: [
+      { id: "lifesci", label: "Life Sciences", emoji: "🧬", hasOverride: false,
+        step1: { name: "Acceleration cohort sessions", type: "selective", note: "if open + eligible" },
+        step2: { name: "Expert Office Hours", type: "office-hours", note: "Life Lab / life sci advisors" },
+        step3: { name: "LLX — Launch Lab X", type: "selective", note: "post pitch-event selection" } },
+      { id: "climate", label: "Climate", emoji: "🌿", hasOverride: false,
+        step1: { name: "Acceleration cohort sessions", type: "selective", note: "if open + eligible" },
+        step2: { name: "Expert Office Hours", type: "office-hours", note: "climate advisors" },
+        step3: { name: "LLX — Launch Lab X", type: "selective", note: "post pitch-event selection" } },
+      { id: "deeptech", label: "Deep Tech / AI", emoji: "⚙️", hasOverride: true, overrideLabel: "step 1 override",
+        step1: { name: "AI Agents Workshop", type: "event", note: "sector-specific — surfaces before Acceleration" },
+        step2: { name: "Acceleration cohort sessions", type: "selective", note: "if open + eligible" },
+        step3: { name: "LLX — Launch Lab X", type: "selective", note: "post pitch-event selection" } },
+      { id: "general", label: "General", emoji: "🌐", hasOverride: false,
+        step1: { name: "Acceleration cohort sessions", type: "selective", note: "if open + eligible" },
+        step2: { name: "Fundraising talk / Expert Office Hours", type: "office-hours", note: "open to all members" },
+        step3: { name: "LLX — Launch Lab X", type: "selective", note: "post pitch-event selection" } },
+    ],
+  },
+  {
+    id: "impact", emoji: "💚", label: "Impact Founder",
+    subtitle: "Hard override: sector = Social Impact",
+    trigger: "Q4 = Social Impact → bypasses all scoring, routes directly here",
+    color: "#3B6D11", light: "#EAF3DE",
+    isOverride: true,
+    overrideNote: "SIFF pathway — sector column becomes irrelevant once routed here. All social impact founders land here regardless of stage, goal, or time.",
+    steps: [
+      { name: "Submit SIFF application", type: "selective", note: "structured review + interview process" },
+      { name: "Coaching + Design consultation", type: "program", note: "staff-managed pitch coaching + deck design" },
+      { name: "Pitch Day + funding decision", type: "selective", note: "external judges, impact funding awarded" },
+    ],
+    fallback: "If not selected → Customer Validation Primer or Customer Discovery Sprint (not-ready path)",
+  },
+  {
+    id: "community", emoji: "🤝", label: "Community First",
+    subtitle: "Hard override: time = Light (a few hours here and there)",
+    trigger: "Q3 = Light time → bypasses all scoring, routes directly here",
+    color: "#D85A30", light: "#FAECE7",
+    isOverride: true,
+    overrideNote: "Community-only path — sector, stage, and goal are all irrelevant. Light time commitment is the single deciding factor.",
+    steps: [
+      { name: "Open Community events", type: "event", note: "social events, Launch Party, Member Appreciation" },
+      { name: "Founder Circles", type: "event", note: "peer circles — in-person + virtual options" },
+      { name: "Founder / Joiner Pizza + Pitch", type: "event", note: "co-founder connections, Slack post" },
+    ],
+    fallback: "Upgrade path: if bandwidth grows → Customer Validation Primer is the natural next step",
+  },
+];
+
+const TYPE_STYLES = {
+  program:       { bg: "#E1F5EE", border: "#1D9E75", text: "#085041", label: "Program" },
+  event:         { bg: "#EEEDFE", border: "#534AB7", text: "#26215C", label: "Event" },
+  "office-hours":{ bg: "#FAEEDA", border: "#BA7517", text: "#412402", label: "Office Hours" },
+  selective:     { bg: "#E6F1FB", border: "#185FA5", text: "#042C53", label: "Selective" },
+};
+
+function StepBox({ step, index }) {
+  const s = TYPE_STYLES[step.type] || TYPE_STYLES.program;
+  return (
+    <div className="step-col">
+      <div className="step-type-label" style={{ color: s.text }}>Step {index + 1} · {s.label}</div>
+      <div className="step-box" style={{ background: s.bg, borderColor: s.border }}>
+        <div className="step-name" style={{ color: s.text }}>{step.name}</div>
+        <div className="step-note" style={{ color: s.text }}>{step.note}</div>
+      </div>
+    </div>
+  );
+}
+
+function ArrowCell() {
+  return (
+    <div className="arrow-cell">
+      <div style={{ position: "relative", width: "100%", height: 1, background: "#B4B2A9" }}>
+        <span style={{ position: "absolute", right: -6, top: -8, fontSize: 13, color: "#888780" }}>›</span>
+      </div>
+    </div>
+  );
+}
+
+function SectorRow({ sector, personaColor, personaLight }) {
+  return (
+    <div className="sector-row">
+      <div className="sector-row-head" style={{ background: personaLight, borderBottomColor: "#D3D1C7" }}>
+        <span>{sector.emoji}</span>
+        <span className="sector-row-head-label" style={{ color: personaColor }}>{sector.label}</span>
+        {sector.hasOverride && (
+          <span className="sector-override-note" style={{ color: personaColor }}>
+            ⚡ {sector.overrideLabel}
+          </span>
+        )}
+      </div>
+      <div className="steps-row">
+        <StepBox step={sector.step1} index={0} />
+        <ArrowCell />
+        <StepBox step={sector.step2} index={1} />
+        <ArrowCell />
+        <StepBox step={sector.step3} index={2} />
+      </div>
+    </div>
+  );
+}
+
+function ScoredPersonaCard({ persona, isOpen, onToggle }) {
+  const [view, setView] = useState("all");
+  const activeSector = persona.sectors.find(s => s.id === view);
+
+  return (
+    <div className="persona-card" style={{ borderColor: persona.color }}>
+      <button
+        className="persona-header"
+        style={{ background: persona.light }}
+        onClick={onToggle}
+      >
+        <span className="persona-emoji">{persona.emoji}</span>
+        <div className="persona-meta">
+          <div className="persona-name-row">
+            <span className="persona-name" style={{ color: persona.color }}>{persona.label}</span>
+            <span className="persona-sub" style={{ color: persona.color }}>· {persona.subtitle}</span>
+          </div>
+          <div className="persona-trigger" style={{ color: persona.color }}>Scored: {persona.trigger}</div>
+        </div>
+        <span className="chevron" style={{ color: persona.color }}>{isOpen ? "▲ collapse" : "▼ expand"}</span>
+      </button>
+
+      {isOpen && (
+        <div className="persona-body">
+          <div className="sector-tabs">
+            <span className="sector-tab-label">View by sector:</span>
+            {[{ id: "all", label: "All sectors", emoji: "" }, ...persona.sectors.map(s => ({ id: s.id, label: s.label, emoji: s.emoji }))].map(opt => (
+              <button
+                key={opt.id}
+                className={"sector-tab" + (view === opt.id ? " active" : "")}
+                style={{ "--pc": persona.color, "--pl": persona.light }}
+                onClick={() => setView(opt.id)}
+              >
+                {opt.emoji} {opt.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="sector-rows">
+            {view === "all"
+              ? persona.sectors.map(s => <SectorRow key={s.id} sector={s} personaColor={persona.color} personaLight={persona.light} />)
+              : activeSector ? <SectorRow sector={activeSector} personaColor={persona.color} personaLight={persona.light} /> : null
+            }
+          </div>
+
+          <div className="sector-note">
+            <strong>How sector overrides work:</strong> For each step, the system checks for a sector-specific row first.
+            If one exists (marked ⚡), it replaces the default. Otherwise the default row fires.
+            Sectors marked ⚡ above have an explicit step 1 override for this persona; others fall to the default path.
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function OverridePersonaCard({ persona, isOpen, onToggle }) {
+  return (
+    <div className="persona-card" style={{ borderColor: persona.color }}>
+      <button
+        className="persona-header"
+        style={{ background: persona.light }}
+        onClick={onToggle}
+      >
+        <span className="persona-emoji">{persona.emoji}</span>
+        <div className="persona-meta">
+          <div className="persona-name-row">
+            <span className="persona-name" style={{ color: persona.color }}>{persona.label}</span>
+            <span style={{
+              fontSize: 9, fontWeight: 500, padding: "2px 7px", borderRadius: 99,
+              background: persona.color, color: "#fff", letterSpacing: ".05em", flexShrink: 0
+            }}>HARD OVERRIDE</span>
+          </div>
+          <div className="persona-sub" style={{ color: persona.color, marginTop: 2 }}>{persona.subtitle}</div>
+        </div>
+        <span className="chevron" style={{ color: persona.color }}>{isOpen ? "▲ collapse" : "▼ expand"}</span>
+      </button>
+
+      {isOpen && (
+        <div className="persona-body">
+          <div className="trigger-pill" style={{ borderLeftColor: persona.color }}>{persona.trigger}</div>
+          <div className="override-note-text">{persona.overrideNote}</div>
+
+          <div style={{ borderRadius: 8, border: `1px solid ${persona.color}33`, overflow: "hidden", background: persona.light }}>
+            <div className="steps-row">
+              {persona.steps.map((step, i) => (
+                <React.Fragment key={i}>
+                  <StepBox step={step} index={i} />
+                  {i < 2 && <ArrowCell />}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+
+          <div className="fallback-row">
+            <span className="fallback-icon">↩</span>
+            <span className="fallback-text">{persona.fallback}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function App() {
+  const [open, setOpen] = useState(new Set(["explorer"]));
+
+  const toggle = id => setOpen(prev => {
+    const n = new Set(prev);
+    n.has(id) ? n.delete(id) : n.add(id);
+    return n;
+  });
+
+  return (
+    <div className="page">
+      <div className="page-eyebrow">Harvard Innovation Labs · Summer 2026</div>
+      <h1 className="page-title">Founder Journey Flows</h1>
+      <p className="page-desc">
+        Six personas × four sectors. Each row shows the exact resources the wayfinder recommends —
+        sourced directly from the <code>STEPS_DATA</code> lookup table in <code>ilab-data.js</code>.
+        Hard overrides (💚 Impact, 🤝 Community) bypass scoring entirely and route based on a single answer.
+      </p>
+
+      <div className="legend">
+        <span className="legend-label">Resource types:</span>
+        {Object.entries(TYPE_STYLES).map(([type, s]) => (
+          <span key={type} className="legend-pill" style={{ background: s.bg, borderColor: s.border, color: s.text }}>
+            {s.label}
+          </span>
+        ))}
+        <span style={{ fontSize: 10, color: "#888780", marginLeft: 6 }}>⚡ = sector-specific step 1 override</span>
+      </div>
+
+      <div className="controls">
+        <button className="btn-sm" onClick={() => setOpen(new Set(PERSONAS.map(p => p.id)))}>Expand all</button>
+        <button className="btn-sm" onClick={() => setOpen(new Set())}>Collapse all</button>
+      </div>
+
+      <div className="persona-list">
+        {PERSONAS.map(p => p.isOverride
+          ? <OverridePersonaCard key={p.id} persona={p} isOpen={open.has(p.id)} onToggle={() => toggle(p.id)} />
+          : <ScoredPersonaCard   key={p.id} persona={p} isOpen={open.has(p.id)} onToggle={() => toggle(p.id)} />
+        )}
+      </div>
+
+      <div className="scoring-box">
+        <div className="scoring-title">Scoring reference — calcPersona() point table</div>
+        <div className="scoring-grid">
+          {[
+            { q: "Stage = Explore",      s: "Explorer +5" },
+            { q: "Stage = Test",         s: "Validator +3, Builder +2" },
+            { q: "Stage = Propel",       s: "Propeller +5, Builder +1" },
+            { q: "Goal = Feedback",      s: "Explorer +2, Validator +3" },
+            { q: "Goal = Milestones",    s: "Builder +3, Validator +1" },
+            { q: "Goal = Community",     s: "Explorer +2, Validator +1" },
+            { q: "Goal = Funding",       s: "Propeller +3, Builder +1" },
+            { q: "Time = Moderate",      s: "Explorer +1, Validator +2" },
+            { q: "Time = Heavy",         s: "Builder +3, Propeller +1" },
+          ].map(r => (
+            <div key={r.q} className="scoring-cell">
+              <div className="scoring-cell-label">{r.q}</div>
+              <div className="scoring-cell-val">{r.s}</div>
+            </div>
+          ))}
+        </div>
+        <div className="scoring-footnote">
+          Hard overrides fire before scoring: Social Impact → 💚 Impact · Light time → 🤝 Community. First match wins, skips the table above entirely.
+        </div>
+      </div>
+
+      <div className="footer">Harvard Innovation Labs · Summer 2026 · journey_flows.html</div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+</script>
+</body>
+</html>
