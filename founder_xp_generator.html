@@ -575,7 +575,7 @@ function renderResults(personaKey) {
   const p     = PERSONAS[personaKey];
   const steps = getSteps(personaKey);              // reads window._QUIZ_SECTOR internally
   const evs   = getEvents(personaKey, sector, format);
-  const ohs   = getOHs(personaKey);
+  const ohs   = getOHs(personaKey, sector, steps);
 
   // ── Persona stack ──────────────────────────────
   const stackHtml = p.stack.map((s, i) => `
