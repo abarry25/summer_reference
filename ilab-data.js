@@ -230,10 +230,24 @@ const EVENTS = [
 // These appear in the bottom grid ("Office hours for you").
 //
 // FIELDS:
-//   tags   — same options as Events. Controls which persona sees this OH.
-//   format — 'REMOTE', 'INPERSON', or 'HYBRID'
-//   cta    — the link button label (e.g. 'Sign up', 'Drop in', 'Book a session')
-//   active — true/false
+//   tags       — persona tags, same options as Events. Controls which
+//                persona sees this OH at all.
+//   sectorTags — array of sector tags. Use ['all'] to show for every
+//                sector within a matching persona, or list specific
+//                sectors: 'lifesci' 'deeptech' 'climate' 'socialimpact'.
+//                Mirrors the sector-tag pattern used for Expert advisors.
+//   stepLinks  — OPTIONAL array. Ties this office hour to one or more
+//                specific rows in STEPS_DATA so it's promoted to the
+//                top of the grid whenever that exact step is shown to
+//                the founder. Each entry is { persona, sector, step }
+//                and must match a STEPS_DATA row exactly (same persona
+//                key, same sector key — 'all'/'default'/specific — and
+//                same step number). Leave as [] if this office hour
+//                isn't tied to a specific step; it will still show
+//                based on tags/sectorTags alone, just without the boost.
+//   format     — 'REMOTE', 'INPERSON', or 'HYBRID'
+//   cta        — the link button label (e.g. 'Sign up', 'Drop in', 'Book a session')
+//   active     — true/false
 // ─────────────────────────────────────────────────────────────────
 
 const OHS = [
@@ -244,6 +258,10 @@ const OHS = [
     sched:'Jun 22', fmt:'Drop-in · Remote', format:'REMOTE',
     cta:'Sign up',
     tags:['explorer','community'],
+    sectorTags:['all'],
+    stepLinks:[
+      { persona:'explorer', sector:'all', step:3 }
+    ],
     desc:'For students actively working through an idea. Works well after starting the Discovery Primer. Facilitated by Becca Xiong.'
   },
   {
@@ -253,6 +271,11 @@ const OHS = [
     sched:'Jun 29 + Jul 24', fmt:'Drop-in · Remote', format:'REMOTE',
     cta:'Sign up',
     tags:['validator','builder','explorer','impact'],
+    sectorTags:['all'],
+    stepLinks:[
+      { persona:'validator', sector:'all', step:2 },
+      { persona:'impact',    sector:'all', step:3 }
+    ],
     desc:"Bring interviews to discuss, assumptions to test, or patterns you can't make sense of yet. Facilitated by Becca Xiong."
   },
   {
@@ -262,6 +285,8 @@ const OHS = [
     sched:'Ongoing', fmt:'Drop-in · In-Person', format:'INPERSON',
     cta:'Drop in — no registration needed',
     tags:['explorer','validator','builder','propeller','impact','community'],
+    sectorTags:['all'],
+    stepLinks:[],
     desc:'Come with any question — which program fits, how to apply, or what to prioritize this summer.'
   },
   {
@@ -271,6 +296,10 @@ const OHS = [
     sched:'By appointment', fmt:'1:1 · Virtual or In-Person', format:'HYBRID',
     cta:'Book a session',
     tags:['impact'],
+    sectorTags:['all'],
+    stepLinks:[
+      { persona:'impact', sector:'all', step:1 }
+    ],
     desc:'Personalized pitch coaching for SIFF participants and applicants. Work directly with the SIFF team.'
   },
 ];
@@ -473,6 +502,29 @@ function getEvents(persona, sector, userFormat) {
   return all.slice(0, 4);
 }
 
-function getOHs(persona) {
-  return OHS.filter(o => o.active && o.tags.includes(persona)).slice(0, 4);
+function getOHs(persona, sector, resolvedSteps) {
+  sector = sector || 'general';
+  resolvedSteps = resolvedSteps || [];
+
+  // Build a quick lookup of which {sector, step} combos this founder is
+  // actually seeing right now, so we can match against stepLinks below.
+  const activeStepKeys = resolvedSteps.map(s => `${s.sector}:${s.step}`);
+
+  const matches = OHS.filter(o => {
+    if (!o.active) return false;
+    if (!o.tags.includes(persona)) return false;
+    const sectorTags = o.sectorTags || ['all'];
+    return sectorTags.includes('all') || sectorTags.includes(sector);
+  });
+
+  // Step-linked office hours float to the top — they're the most
+  // specific, relevant match for the exact path this founder is on.
+  matches.sort((a, b) => {
+    const linked = o => (o.stepLinks || []).some(link =>
+      link.persona === persona && activeStepKeys.includes(`${link.sector}:${link.step}`)
+    ) ? 1 : 0;
+    return linked(b) - linked(a);
+  });
+
+  return matches.slice(0, 4);
 }
