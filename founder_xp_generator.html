@@ -459,8 +459,9 @@ a.link-btn { display: inline-block; }
 </div><!-- /page-wrap -->
 
 <!-- ─────────────────────────────────────────────────────────────
-     ilab-data.js loads first — it defines EVENTS, OHS, PERSONAS,
-     STEPS_DATA, LINKS, getSteps(), getEvents(), getOHs()
+     ilab-data.js loads first — it defines EVENTS, OHS, EXPERTS,
+     PERSONAS, STEPS_DATA, LINKS, getSteps(), getEvents(),
+     getExperts(), getOHs()
      This script below only contains quiz logic and rendering.
 ────────────────────────────────────────────────────────────── -->
 <script src="ilab-data.js"></script>
@@ -572,12 +573,11 @@ function renderResults(personaKey) {
   const prefFmt = FMT_MAP[format] || 'HYBRID';
 
   // Pull data from ilab-data.js
-  const p     = PERSONAS[personaKey];
-  const steps = getSteps(personaKey);              // reads window._QUIZ_SECTOR internally
-  const evs   = getEvents(personaKey, sector, format);
-  const ohs   = getOHs(personaKey, sector, steps);
-  const ohs   = getOHs(personaKey, sector, steps);
-const experts = getExperts(personaKey, sector);   // ← add this
+  const p       = PERSONAS[personaKey];
+  const steps   = getSteps(personaKey);              // reads window._QUIZ_SECTOR internally
+  const evs     = getEvents(personaKey, sector, format);
+  const ohs     = getOHs(personaKey, sector, steps);
+  const experts = getExperts(personaKey, sector);
 
   // ── Persona stack ──────────────────────────────
   const stackHtml = p.stack.map((s, i) => `
@@ -640,13 +640,17 @@ const experts = getExperts(personaKey, sector);   // ← add this
       <button class="link-btn">${o.cta} →</button>
     </div>`).join('');
 
+  // ── Expert advisors — own section, above office hours ──────
+  // NOTE: EXPERTS objects (from ilab-data.js / data-editor.html)
+  // have { name, role, org, photo, bookingUrl, canHelp, tags } —
+  // NOT con/cbg/ctx/title/bio/link/cta. Use the real fields.
   const expertsHtml = experts.map(x => `
     <div class="oh-cell">
-      <span class="oh-tag" style="background:${x.cbg};color:${x.ctx}">${x.con}</span>
+      <span class="oh-tag" style="background:#EEEDFE;color:#232262">Advisor</span>
       <div class="oh-name">${x.name}</div>
-      <div class="oh-sched">${x.title}</div>
-      <div class="oh-desc">${x.bio}</div>
-      ${x.link ? `<a href="${x.link}" target="_blank" class="link-btn">${x.cta || 'Connect'} →</a>` : ''}
+      <div class="oh-sched">${[x.role, x.org].filter(Boolean).join(' · ')}</div>
+      <div class="oh-desc">${x.canHelp || ''}</div>
+      ${x.bookingUrl ? `<a href="${x.bookingUrl}" target="_blank" class="link-btn">Book a session →</a>` : ''}
     </div>`).join('');
 
   // ── Gap note — shown for sectors with no specific programming ──
@@ -690,10 +694,10 @@ const experts = getExperts(personaKey, sector);   // ← add this
     </div>
 
     ${experts.length ? `
-  <div class="oh-wrap">
-    <p class="sec-label">🧑‍🏫 Advisors for you</p>
-    <div class="oh-grid">${expertsHtml}</div>
-  </div>` : ''}
+      <div class="oh-wrap">
+        <p class="sec-label">🧑‍🏫 Advisors for you</p>
+        <div class="oh-grid">${expertsHtml}</div>
+      </div>` : ''}
 
     ${ohs.length ? `
       <div class="oh-wrap">
