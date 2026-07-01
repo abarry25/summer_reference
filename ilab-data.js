@@ -304,6 +304,38 @@ const OHS = [
   },
 ];
 
+// ── SECTION 3B: EXPERT ADVISORS ───────────────────────────────────
+// These appear in the "Advisors for you" section of results.
+// Up to 3 shown per results page.
+//
+// FIELDS:
+//   tags       — persona tags. Controls which founder stage sees this
+//                expert at all. Options: 'explorer' 'validator' 'builder'
+//                'propeller' 'impact' 'community'
+//   sectorTags — array of sector tags. Use ['all'] to show for every
+//                sector within a matching persona, or list specific
+//                sectors: 'lifesci' 'deeptech' 'climate' 'socialimpact'.
+//                Sector-specific matches are surfaced before 'all' matches.
+//   con/cbg/ctx — category badge (e.g. "EIR", "Advisor", "Mentor")
+//   title      — role/org line shown under the name
+//   bio        — short description
+//   link       — booking/contact link (use a LINKS.KEY or raw URL)
+//   cta        — link button label (e.g. 'Book a session', 'Connect')
+//   active     — true/false
+// ─────────────────────────────────────────────────────────────────
+
+const EXPERTS = [
+  {
+    id:'example_expert', active:false,
+    name:'Jane Doe',
+    con:'EIR', cbg:'#EEEDFE', ctx:'#232262',
+    title:'Entrepreneur in Residence, Life Sciences',
+    bio:'Former founder and operator advising on go-to-market and clinical validation.',
+    link:'#', cta:'Book a session',
+    tags:['validator','builder'],
+    sectorTags:['lifesci'],
+  },
+];
 
 // ── SECTION 4: STEPS ─────────────────────────────────────────────
 // These appear in the left column ("Start right here") of results.
