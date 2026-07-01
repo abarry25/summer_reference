@@ -27,7 +27,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .nav-r a { margin-left: 20px; text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); border-bottom: 1px solid transparent; padding-bottom: 1px; }
 .nav-r a:hover { border-bottom-color: var(--blue); }
 .nav-r a.active { color: var(--ink); border-bottom-color: var(--ink); }
-  
+
 nav { background: #1a0a0c; padding: 0 2rem; display: flex; align-items: center; gap: 2rem; height: 52px; position: sticky; top: 0; z-index: 100; }
 nav .wordmark { color: white; font-size: 13px; font-weight: 600; opacity: 0.9; white-space: nowrap; }
 nav .nav-links { display: flex; gap: 2px; flex: 1; overflow-x: auto; }
@@ -142,6 +142,10 @@ textarea { resize: vertical; min-height: 68px; line-height: 1.5; }
 .photo-preview { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
 .photo-fallback { width: 44px; height: 44px; border-radius: 50%; background: var(--crimson-light); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; color: var(--crimson); border: 1px solid var(--border); flex-shrink: 0; }
 
+.steplink-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+.steplink-row select { width: auto; flex: 1; }
+.steplink-row input[type=text] { width: 60px; flex: none; }
+
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
@@ -228,6 +232,10 @@ textarea { resize: vertical; min-height: 68px; line-height: 1.5; }
     <h2>Office hours</h2>
     <p>Group sessions shown in the bottom grid of results pages.</p>
   </div>
+  <div class="notice">
+    <span>💡</span>
+    <span><strong>Sector tags</strong> control which sectors see this office hour (use "all" for every sector within a matching persona). <strong>Step links</strong> are optional — they promote this office hour to the top of the grid whenever the founder is seeing that exact persona/sector/step combination on their results page.</span>
+  </div>
   <div id="ohs-list"></div>
   <div class="add-card" onclick="addOH()">+ Add office hours</div>
 </div>
@@ -280,6 +288,8 @@ const ALL_TAGS     = [...PERSONA_TAGS, ...SECTOR_TAGS];
 const FORMATS      = ['REMOTE','INPERSON','HYBRID'];
 const PERSONAS     = ['community','impact','explorer','validator','builder','propeller'];
 const SECTORS      = ['all','default','lifesci','deeptech','climate','socialimpact','general'];
+// Sector-tag options specifically for Office Hours (mirrors Expert sector tags — 'all' means every sector)
+const OH_SECTOR_OPTIONS = ['all','lifesci','deeptech','climate','socialimpact','general'];
 const CAT_COLORS   = {
   'Community':           {cbg:'#FFC7C8',ctx:'#711213'},
   'Founder Fundamentals':{cbg:'#C1F4A8',ctx:'#27500A'},
@@ -334,10 +344,10 @@ let state = {
   ],
   experts: [],
   ohs: [
-    {id:'ideas_ooh',active:true,name:'Group Office Hours: Ideas Into Impact',con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',sched:'Jun 22',fmt:'Drop-in · Remote',format:'REMOTE',cta:'Sign up',tags:['explorer','community'],desc:'For students actively working through an idea. Facilitated by Becca Xiong.',link:''},
-    {id:'cd_ooh',active:true,name:'Group Office Hours: Customer Discovery',con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',sched:'Jun 29 + Jul 24',fmt:'Drop-in · Remote',format:'REMOTE',cta:'Sign up',tags:['validator','builder','explorer','impact'],desc:"Bring interviews to discuss, assumptions to test, or patterns you can't make sense of yet.",link:''},
-    {id:'dropin',active:true,name:'Staff Drop-In & General Advising',con:'Membership',cbg:'#FFC7C8',ctx:'#711213',sched:'Ongoing',fmt:'Drop-in · In-Person',format:'INPERSON',cta:'Drop in — no registration needed',tags:['explorer','validator','builder','propeller','impact','community'],desc:'Come with any question — which program fits, how to apply, or what to prioritize.',link:''},
-    {id:'siff_c',active:true,name:'SIFF Pitch Coaching',con:'SIFF',cbg:'#cee5f7',ctx:'#2a5a80',sched:'By appointment',fmt:'1:1 · Virtual or In-Person',format:'HYBRID',cta:'Book a session',tags:['impact'],desc:'Personalized pitch coaching for SIFF participants and applicants.',link:''}
+    {id:'ideas_ooh',active:true,name:'Group Office Hours: Ideas Into Impact',con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',sched:'Jun 22',fmt:'Drop-in · Remote',format:'REMOTE',cta:'Sign up',tags:['explorer','community'],sectorTags:['all'],stepLinks:[{persona:'explorer',sector:'all',step:3}],desc:'For students actively working through an idea. Facilitated by Becca Xiong.',link:''},
+    {id:'cd_ooh',active:true,name:'Group Office Hours: Customer Discovery',con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',sched:'Jun 29 + Jul 24',fmt:'Drop-in · Remote',format:'REMOTE',cta:'Sign up',tags:['validator','builder','explorer','impact'],sectorTags:['all'],stepLinks:[{persona:'validator',sector:'all',step:2},{persona:'impact',sector:'all',step:3}],desc:"Bring interviews to discuss, assumptions to test, or patterns you can't make sense of yet.",link:''},
+    {id:'dropin',active:true,name:'Staff Drop-In & General Advising',con:'Membership',cbg:'#FFC7C8',ctx:'#711213',sched:'Ongoing',fmt:'Drop-in · In-Person',format:'INPERSON',cta:'Drop in — no registration needed',tags:['explorer','validator','builder','propeller','impact','community'],sectorTags:['all'],stepLinks:[],desc:'Come with any question — which program fits, how to apply, or what to prioritize.',link:''},
+    {id:'siff_c',active:true,name:'SIFF Pitch Coaching',con:'SIFF',cbg:'#cee5f7',ctx:'#2a5a80',sched:'By appointment',fmt:'1:1 · Virtual or In-Person',format:'HYBRID',cta:'Book a session',tags:['impact'],sectorTags:['all'],stepLinks:[{persona:'impact',sector:'all',step:1}],desc:'Personalized pitch coaching for SIFF participants and applicants.',link:''}
   ],
   steps: {
     community:[
@@ -577,6 +587,36 @@ function tagPillsHtml(selected, type) {
   const cls = type==='sector' ? 'sector' : '';
   return tags.map(t => `<span class="tag-pill ${cls} ${selected.includes(t)?'selected':''}" onclick="this.classList.toggle('selected')">${t}</span>`).join('');
 }
+function ohSectorTagsHtml(selected) {
+  selected = (selected && selected.length) ? selected : ['all'];
+  return OH_SECTOR_OPTIONS.map(t => `<span class="tag-pill sector ${selected.includes(t)?'selected':''}" onclick="this.classList.toggle('selected')">${t}</span>`).join('');
+}
+function stepLinksHtml(ohIndex) {
+  const links = state.ohs[ohIndex].stepLinks || [];
+  const rows = links.map((l, j) => `
+    <div class="steplink-row">
+      <select onchange="state.ohs[${ohIndex}].stepLinks[${j}].persona=this.value">
+        ${PERSONAS.map(p=>`<option value="${p}" ${l.persona===p?'selected':''}>${p}</option>`).join('')}
+      </select>
+      <select onchange="state.ohs[${ohIndex}].stepLinks[${j}].sector=this.value">
+        ${SECTORS.map(s=>`<option value="${s}" ${l.sector===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <input type="text" value="${l.step}" placeholder="step #" oninput="state.ohs[${ohIndex}].stepLinks[${j}].step=parseInt(this.value)||1">
+      <button class="btn btn-sm btn-danger" onclick="removeStepLink(${ohIndex},${j})">×</button>
+    </div>`).join('');
+  return rows + `<button class="btn btn-sm" onclick="addStepLink(${ohIndex})">+ Add step link</button>`;
+}
+function addStepLink(i) {
+  syncFromDOM();
+  if (!state.ohs[i].stepLinks) state.ohs[i].stepLinks = [];
+  state.ohs[i].stepLinks.push({persona:'explorer', sector:'all', step:1});
+  renderOHs();
+}
+function removeStepLink(i, j) {
+  syncFromDOM();
+  state.ohs[i].stepLinks.splice(j,1);
+  renderOHs();
+}
 function fmtPillsHtml(selected) {
   return FORMATS.map(f => `<span class="fmt-pill ${f===selected?'active':''}" onclick="selectFmt(this)">${f}</span>`).join('');
 }
@@ -585,7 +625,7 @@ function selectFmt(el) {
   el.classList.add('active');
 }
 function getSelectedTags(container) {
-  return [...container.querySelectorAll('.tag-pill.selected')].map(e => e.textContent.trim());
+  return container ? [...container.querySelectorAll('.tag-pill.selected')].map(e => e.textContent.trim()) : [];
 }
 function getActiveFmt(container) {
   const a = container && container.querySelector('.fmt-pill.active');
@@ -721,11 +761,19 @@ function renderOHs() {
       </div>
       <div class="field-group" style="margin-bottom:10px"><label>Link</label><input type="url" value="${(oh.link||'').replace(/"/g,'&quot;')}" placeholder="https://..." oninput="state.ohs[${i}].link=this.value"></div>
       <div class="field-group" style="margin-bottom:10px"><label>Description</label><textarea oninput="state.ohs[${i}].desc=this.value">${oh.desc}</textarea></div>
-      <div class="field-group"><label>Visible to (tags)</label><div class="tags-wrap" id="oh-tags-${i}">${tagPillsHtml(oh.tags,'all')}</div></div>
+      <div class="field-group" style="margin-bottom:10px"><label>Visible to (persona tags)</label><div class="tags-wrap" id="oh-tags-${i}">${tagPillsHtml(oh.tags,'all')}</div></div>
+      <div class="field-group" style="margin-bottom:10px">
+        <label>Sector tags — which sectors see this? <span style="font-weight:400;color:var(--text-muted)">("all" = every sector within a matching persona)</span></label>
+        <div class="tags-wrap" id="oh-sectags-${i}">${ohSectorTagsHtml(oh.sectorTags)}</div>
+      </div>
+      <div class="field-group">
+        <label>Step links <span style="font-weight:400;color:var(--text-muted)">(optional — promotes this to the top when the founder sees that exact step)</span></label>
+        <div id="oh-steplinks-${i}">${stepLinksHtml(i)}</div>
+      </div>
     </div>`).join('');
 }
 function addOH() {
-  state.ohs.push({id:'oh_'+Date.now(),active:true,name:'New office hours',con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',sched:'',fmt:'Drop-in · Remote',format:'REMOTE',cta:'Sign up',tags:[],desc:'',link:''});
+  state.ohs.push({id:'oh_'+Date.now(),active:true,name:'New office hours',con:'Founder Fundamentals',cbg:'#C1F4A8',ctx:'#27500A',sched:'',fmt:'Drop-in · Remote',format:'REMOTE',cta:'Sign up',tags:[],sectorTags:['all'],stepLinks:[],desc:'',link:''});
   renderOHs();
   document.getElementById('oh-card-'+(state.ohs.length-1)).scrollIntoView({behavior:'smooth'});
 }
@@ -790,6 +838,13 @@ function syncFromDOM() {
     if (!card) return;
     oh.tags = getSelectedTags(card.querySelector('#oh-tags-'+i));
     oh.format = getActiveFmt(card.querySelector('#oh-fmt-'+i));
+    const secEl = card.querySelector('#oh-sectags-'+i);
+    if (secEl) {
+      const sel = getSelectedTags(secEl);
+      oh.sectorTags = sel.length ? sel : ['all'];
+    }
+    // stepLinks are written directly into state.ohs[i].stepLinks via
+    // their own oninput/onchange handlers — nothing to sync here.
   });
   PERSONAS.forEach(persona => {
     state.steps[persona].forEach((s, i) => {
@@ -818,7 +873,7 @@ function buildExport() {
   ).join(',\n');
 
   const ohLines = state.ohs.map(oh =>
-    `  { id:${j(oh.id)}, active:${oh.active}, name:${j(oh.name)},\n    con:${j(oh.con)}, cbg:${j(oh.cbg)}, ctx:${j(oh.ctx)},\n    sched:${j(oh.sched)}, fmt:${j(oh.fmt)}, format:${j(oh.format)},\n    cta:${j(oh.cta)}, tags:${j(oh.tags)}, desc:${j(oh.desc)},\n    link:${j(oh.link||'')} }`
+    `  { id:${j(oh.id)}, active:${oh.active}, name:${j(oh.name)},\n    con:${j(oh.con)}, cbg:${j(oh.cbg)}, ctx:${j(oh.ctx)},\n    sched:${j(oh.sched)}, fmt:${j(oh.fmt)}, format:${j(oh.format)},\n    cta:${j(oh.cta)}, tags:${j(oh.tags)},\n    sectorTags:${j((oh.sectorTags&&oh.sectorTags.length)?oh.sectorTags:['all'])},\n    stepLinks:${j(oh.stepLinks||[])},\n    desc:${j(oh.desc)},\n    link:${j(oh.link||'')} }`
   ).join(',\n');
 
   const stepLines = PERSONAS.map(persona => {
@@ -855,6 +910,10 @@ const EXPERTS = [
 ${exLines}
 ];
 
+// ── OFFICE HOURS ──────────────────────────────────────────────────
+// sectorTags: ['all'] shows for every sector within a matching persona.
+// stepLinks: optional — promotes this office hour to the top of the
+// grid whenever the founder is seeing that exact persona/sector/step.
 const OHS = [
 ${ohLines}
 ];
@@ -905,8 +964,30 @@ function getExperts(persona, sector) {
   return all.slice(0,3);
 }
 
-function getOHs(persona) {
-  return OHS.filter(o=>o.active && o.tags.includes(persona)).slice(0,4);
+// getOHs(persona, sector, resolvedSteps) — sector-aware, with
+// step-linked office hours promoted to the top of the results.
+function getOHs(persona, sector, resolvedSteps) {
+  sector = sector || 'general';
+  resolvedSteps = resolvedSteps || [];
+  var activeStepKeys = resolvedSteps.map(function(s){ return s.sector + ':' + s.step; });
+
+  var matches = OHS.filter(function(o) {
+    if (!o.active) return false;
+    if (o.tags.indexOf(persona) === -1) return false;
+    var sectorTags = o.sectorTags || ['all'];
+    return sectorTags.indexOf('all') !== -1 || sectorTags.indexOf(sector) !== -1;
+  });
+
+  matches.sort(function(a, b) {
+    function linked(o) {
+      return (o.stepLinks || []).some(function(link) {
+        return link.persona === persona && activeStepKeys.indexOf(link.sector + ':' + link.step) !== -1;
+      }) ? 1 : 0;
+    }
+    return linked(b) - linked(a);
+  });
+
+  return matches.slice(0, 4);
 }`;
 }
 
