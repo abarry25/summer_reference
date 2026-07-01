@@ -576,6 +576,8 @@ function renderResults(personaKey) {
   const steps = getSteps(personaKey);              // reads window._QUIZ_SECTOR internally
   const evs   = getEvents(personaKey, sector, format);
   const ohs   = getOHs(personaKey, sector, steps);
+  const ohs   = getOHs(personaKey, sector, steps);
+const experts = getExperts(personaKey, sector);   // ← add this
 
   // ── Persona stack ──────────────────────────────
   const stackHtml = p.stack.map((s, i) => `
@@ -638,6 +640,15 @@ function renderResults(personaKey) {
       <button class="link-btn">${o.cta} →</button>
     </div>`).join('');
 
+  const expertsHtml = experts.map(x => `
+    <div class="oh-cell">
+      <span class="oh-tag" style="background:${x.cbg};color:${x.ctx}">${x.con}</span>
+      <div class="oh-name">${x.name}</div>
+      <div class="oh-sched">${x.title}</div>
+      <div class="oh-desc">${x.bio}</div>
+      ${x.link ? `<a href="${x.link}" target="_blank" class="link-btn">${x.cta || 'Connect'} →</a>` : ''}
+    </div>`).join('');
+
   // ── Gap note — shown for sectors with no specific programming ──
   const gapNote = (sector === 'climate')
     ? `<div class="gap-note">
@@ -677,6 +688,12 @@ function renderResults(personaKey) {
         ${evsHtml}
       </div>
     </div>
+
+    ${experts.length ? `
+  <div class="oh-wrap">
+    <p class="sec-label">🧑‍🏫 Advisors for you</p>
+    <div class="oh-grid">${expertsHtml}</div>
+  </div>` : ''}
 
     ${ohs.length ? `
       <div class="oh-wrap">
