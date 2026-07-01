@@ -181,6 +181,7 @@ textarea { resize: vertical; min-height: 68px; line-height: 1.5; }
     <button class="nav-link" onclick="switchTab('experts')">Experts</button>
     <button class="nav-link" onclick="switchTab('ohs')">Office hours</button>
     <button class="nav-link" onclick="switchTab('steps')">Steps</button>
+    <button class="nav-link" onclick="switchTab('personas')">Personas</button>
     <button class="nav-link" onclick="switchTab('links')">Links</button>
   </div>
   <button class="export-btn" onclick="switchTab('export');buildExport()">Export ilab-data.js</button>
@@ -251,6 +252,19 @@ textarea { resize: vertical; min-height: 68px; line-height: 1.5; }
     <span>Use <strong>sector: all</strong> for everyone in that persona. Use <strong>default</strong> as the fallback. Sector-specific rows win over default.</span>
   </div>
   <div id="steps-list"></div>
+</div>
+
+<!-- PERSONAS -->
+<div id="tab-personas" class="tab-content">
+  <div class="section-head">
+    <h2>Personas</h2>
+    <p>Card copy shown at the top of each founder's results page. Colors and the 3-pill "journey stack" are fixed per persona — edit headline and description freely.</p>
+  </div>
+  <div class="notice">
+    <span>⚠️</span>
+    <span>This data is <strong>required</strong> for the quiz to run. If it's ever missing from your exported <code style="background:#fff;padding:1px 5px;border-radius:3px">ilab-data.js</code>, the results page will fail to load with a <code style="background:#fff;padding:1px 5px;border-radius:3px">PERSONAS is not defined</code> error.</span>
+  </div>
+  <div id="personas-list"></div>
 </div>
 
 <!-- LINKS -->
@@ -349,6 +363,74 @@ let state = {
     {id:'dropin',active:true,name:'Staff Drop-In & General Advising',con:'Membership',cbg:'#FFC7C8',ctx:'#711213',sched:'Ongoing',fmt:'Drop-in · In-Person',format:'INPERSON',cta:'Drop in — no registration needed',tags:['explorer','validator','builder','propeller','impact','community'],sectorTags:['all'],stepLinks:[],desc:'Come with any question — which program fits, how to apply, or what to prioritize.',link:''},
     {id:'siff_c',active:true,name:'SIFF Pitch Coaching',con:'SIFF',cbg:'#cee5f7',ctx:'#2a5a80',sched:'By appointment',fmt:'1:1 · Virtual or In-Person',format:'HYBRID',cta:'Book a session',tags:['impact'],sectorTags:['all'],stepLinks:[{persona:'impact',sector:'all',step:1}],desc:'Personalized pitch coaching for SIFF participants and applicants.',link:''}
   ],
+  personas: {
+    explorer: {
+      name:'Explorer', emoji:'🌱',
+      hl:'Start with curiosity. Build toward clarity.',
+      desc:"You're in the most important stage — figuring out whether your idea is worth pursuing before investing months of effort. The right programs will get you real customer feedback fast, build foundational skills, and connect you with peers navigating the exact same questions this summer.",
+      ac:'#84A873', bb:'#C1F4A8', bt:'#27500A',
+      stack:[
+        {n:'Membership',          l:'Your foundation', bg:'#FFC7C8', tx:'#711213'},
+        {n:'Founder Fundamentals',l:'Your track',      bg:'#C1F4A8', tx:'#27500A'},
+        {n:'Community Events',    l:'Your people',     bg:'#FFC7C8', tx:'#711213'},
+      ]
+    },
+    validator: {
+      name:'Validator', emoji:'🧪',
+      hl:'Real answers from real customers — fast.',
+      desc:"You have a specific problem you're solving and you need to know if customers actually care. The Customer Discovery path — Primer, Office Hours, and sector-specific workshops — gives you structured ways to test your assumptions and iterate quickly before committing to a full build.",
+      ac:'#f29138', bb:'#f7e4d0', bt:'#993C1D',
+      stack:[
+        {n:'Membership',        l:'Your foundation', bg:'#FFC7C8', tx:'#711213'},
+        {n:'Customer Discovery',l:'Your track',     bg:'#C1F4A8', tx:'#27500A'},
+        {n:'MVP Feedback',      l:'Your milestone',  bg:'#f7e4d0', tx:'#993C1D'},
+      ]
+    },
+    builder: {
+      name:'Sprint Builder', emoji:'🏗️',
+      hl:'Intensity, structure, and real momentum.',
+      desc:"You're ready to commit. The Customer Discovery Sprint — paired with sector-specific workshops and regular MVP feedback — gives you a high-accountability container for this summer. Show up for all of it, do the work between sessions, and you'll leave with validated insights and a clear next step.",
+      ac:'#232262', bb:'#cbcafa', bt:'#232262',
+      stack:[
+        {n:'Membership',     l:'Your foundation', bg:'#FFC7C8', tx:'#711213'},
+        {n:'Discovery Sprint',l:'Your core',      bg:'#C1F4A8', tx:'#27500A'},
+        {n:'Sector Workshops',l:'Your edge',      bg:'#cbcafa', tx:'#232262'},
+      ]
+    },
+    propeller: {
+      name:'Growth Founder', emoji:'🚀',
+      hl:"Build momentum. Get in front of the right people.",
+      desc:"You have proof points and now it's about growth — fundraising, accelerator pipelines, and getting on the right people's radar. The Accelerator Info Sessions with Techstars and Y Combinator are your most urgent actions, alongside the Founder Talks and workshops that will sharpen your positioning.",
+      ac:'#7482E8', bb:'#EEEDFE', bt:'#3C3489',
+      stack:[
+        {n:'Membership',          l:'Your foundation', bg:'#FFC7C8', tx:'#711213'},
+        {n:'Accelerator Pipeline',l:'Your track',      bg:'#EEEDFE', tx:'#3C3489'},
+        {n:'Venture Growth',      l:'Your edge',       bg:'#cbcafa', tx:'#232262'},
+      ]
+    },
+    impact: {
+      name:'Impact Founder', emoji:'💚',
+      hl:"Your mission deserves the right funding pathway.",
+      desc:"SIFF was built for exactly this. Personalized pitch coaching, design support, and a real funding competition make it the most direct path to capital for social impact ventures at the i-lab. Apply early, show up to every coaching session, and pair it with the broader community to stay grounded.",
+      ac:'#4A90C4', bb:'#cee5f7', bt:'#2a5a80',
+      stack:[
+        {n:'Membership',     l:'Your foundation', bg:'#FFC7C8', tx:'#711213'},
+        {n:'SIFF',           l:'Your flagship',   bg:'#cee5f7', tx:'#2a5a80'},
+        {n:'Community Events',l:'Your people',    bg:'#FFC7C8', tx:'#711213'},
+      ]
+    },
+    community: {
+      name:'Community First', emoji:'🤝',
+      hl:"Connect, stay curious, and come back when you're ready.",
+      desc:"Right now, the best use of the i-lab isn't a program — it's the community. Show up to events, meet founders building interesting things, and stay in the loop. When you're ready to commit more time, come back and retake this quiz — the programs will be here.",
+      ac:'#711213', bb:'#FFC7C8', bt:'#711213',
+      stack:[
+        {n:'Membership',     l:'Your foundation',   bg:'#FFC7C8', tx:'#711213'},
+        {n:'Community Events',l:'Start here',       bg:'#FFC7C8', tx:'#711213'},
+        {n:'Drop-in Hours',  l:"When you're ready", bg:'#C1F4A8', tx:'#27500A'},
+      ]
+    }
+  },
   steps: {
     community:[
       {sector:'all',step:1,u:true, fmt:'INPERSON',linkKey:'#',ll:'Start here →',a:'Complete your i-lab Membership intake',d:'Unlocks everything — coworking, Slack, events, and the weekly newsletter. Takes five minutes.'},
@@ -807,6 +889,22 @@ function renderSteps() {
     </div>`).join('');
 }
 
+// ─── RENDER PERSONAS ──────────────────────────────────────────────
+function renderPersonas() {
+  document.getElementById('personas-list').innerHTML = PERSONAS.map(key => {
+    const p = state.personas[key];
+    return `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">${p.emoji} ${p.name}</div>
+        <span class="badge badge-gray">${key}</span>
+      </div>
+      <div class="field-group" style="margin-bottom:10px"><label>Headline</label><input type="text" value="${p.hl.replace(/"/g,'&quot;')}" oninput="state.personas['${key}'].hl=this.value"></div>
+      <div class="field-group"><label>Description</label><textarea oninput="state.personas['${key}'].desc=this.value">${p.desc}</textarea></div>
+    </div>`;
+  }).join('');
+}
+
 // ─── RENDER LINKS ─────────────────────────────────────────────────
 function renderLinks() {
   document.getElementById('links-list').innerHTML = Object.entries(state.links).map(([k,v]) => `
@@ -884,10 +982,16 @@ function buildExport() {
     return `  ${persona}: [\n${rows}\n  ]`;
   }).join(',\n\n');
 
+  const personaLines = PERSONAS.map(key => {
+    const p = state.personas[key];
+    const stackStr = p.stack.map(s => `{n:${j(s.n)},l:${j(s.l)},bg:${j(s.bg)},tx:${j(s.tx)}}`).join(', ');
+    return `  ${key}: {\n    name:${j(p.name)}, emoji:${j(p.emoji)},\n    hl:${j(p.hl)},\n    desc:${j(p.desc)},\n    ac:${j(p.ac)}, bb:${j(p.bb)}, bt:${j(p.bt)},\n    stack:[${stackStr}]\n  }`;
+  }).join(',\n\n');
+
   const activeEvs = state.events.filter(e=>e.active).length;
   const activeExs = state.experts.filter(e=>e.active).length;
   document.getElementById('export-summary').textContent =
-    `${activeEvs} events · ${activeExs} experts · ${state.ohs.filter(o=>o.active).length} office hours · ${now}`;
+    `${activeEvs} events · ${activeExs} experts · ${state.ohs.filter(o=>o.active).length} office hours · 6 personas · ${now}`;
 
   document.getElementById('export-out').textContent = `// ════════════════════════════════════════════════════════════════
 // ilab-data.js — i-lab Program Finder · Content Data
@@ -921,6 +1025,14 @@ ${ohLines}
 const STEPS_DATA = {
 
 ${stepLines}
+
+};
+
+// ── PERSONAS ───────────────────────────────────────────────────────
+// Persona card copy and colors. Edit at: /summer_reference/data-editor.html
+const PERSONAS = {
+
+${personaLines}
 
 };
 
@@ -1004,6 +1116,7 @@ renderEvents();
 renderExperts();
 renderOHs();
 renderSteps();
+renderPersonas();
 renderLinks();
 </script>
 </body>
