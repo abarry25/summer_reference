@@ -549,6 +549,25 @@ function getOHs(persona, sector, resolvedSteps) {
     return sectorTags.includes('all') || sectorTags.includes(sector);
   });
 
+  function getExperts(persona, sector) {
+  sector = sector || 'general';
+
+  const matches = EXPERTS.filter(x => {
+    if (!x.active) return false;
+    if (!x.tags.includes(persona)) return false;
+    const sectorTags = x.sectorTags || ['all'];
+    return sectorTags.includes('all') || sectorTags.includes(sector);
+  });
+
+  // Sector-specific matches surface before general ('all') matches
+  matches.sort((a, b) => {
+    const specific = x => (x.sectorTags || ['all']).includes(sector) && !(x.sectorTags || ['all']).includes('all') ? 1 : 0;
+    return specific(b) - specific(a);
+  });
+
+  return matches.slice(0, 3);
+}
+
   // Step-linked office hours float to the top — they're the most
   // specific, relevant match for the exact path this founder is on.
   matches.sort((a, b) => {
