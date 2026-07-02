@@ -6,7 +6,7 @@
 <title>The Routing Desk — Harvard Innovation Labs</title>
 <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #EBEAE3;
@@ -35,7 +35,6 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ── body as full-height flex column ── */
   body {
     background: var(--cream);
     color: var(--ink);
@@ -50,400 +49,88 @@
   }
 
   /* ── TOP NAV ── */
-  .top-nav {
-    flex-shrink: 0;
-    background: #fff;
-    border-bottom: 1px solid var(--rule);
-    height: 45px;
-    z-index: 100;
-  }
-  .top-nav-inner {
-    height: 100%;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .brand {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: #888;
-  }
-  .top-nav-right a {
-    margin-left: 20px;
-    text-decoration: none;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--amber);
-    border-bottom: 1px solid transparent;
-    padding-bottom: 1px;
-    transition: border-color .15s;
-  }
+  .top-nav { flex-shrink: 0; background: #fff; border-bottom: 1px solid var(--rule); height: 45px; z-index: 100; }
+  .top-nav-inner { height: 100%; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+  .brand { font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #888; }
+  .top-nav-right a { margin-left: 20px; text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); border-bottom: 1px solid transparent; padding-bottom: 1px; transition: border-color .15s; }
   .top-nav-right a:hover { border-bottom-color: var(--blue); }
   .top-nav-right a.active { color: var(--ink); border-bottom-color: var(--ink); }
 
   /* ── TOOL HEADER ── */
-  .tool-header {
-    flex-shrink: 0;
-    background: white;
-    border-bottom: 1px solid var(--rule);
-    padding: 16px 28px;
-  }
-  .tool-header-inner {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .staff-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--coral);
-    background: var(--coral-light);
-    padding: 2px 9px;
-    border-radius: 20px;
-    margin-bottom: 5px;
-  }
-  .tool-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--ink);
-    letter-spacing: -.01em;
-    line-height: 1.2;
-  }
-  .tool-sub {
-    font-size: 12px;
-    color: var(--ink-light);
-    margin-top: 3px;
-  }
-  .tool-meta {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .tool-meta-chip {
-    font-size: 11px;
-    color: var(--ink-light);
-    background: var(--cream);
-    padding: 4px 10px;
-    border-radius: 20px;
-    border: 1px solid var(--rule);
-  }
+  .tool-header { flex-shrink: 0; background: white; border-bottom: 1px solid var(--rule); padding: 16px 28px; }
+  .tool-header-inner { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .staff-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--coral); background: var(--coral-light); padding: 2px 9px; border-radius: 20px; margin-bottom: 5px; }
+  .tool-title { font-family: 'Playfair Display', Georgia, serif; font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -.01em; line-height: 1.2; }
+  .tool-sub { font-size: 12px; color: var(--ink-light); margin-top: 3px; max-width: 520px; }
+  .tool-meta { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .tool-meta-chip { font-size: 11px; color: var(--ink-light); background: var(--cream); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--rule); }
 
   /* ── ROUTING LAYOUT ── */
-  .routing-layout {
-    flex: 1;
-    min-height: 0;     /* critical for overflow to work */
-    display: flex;
-    align-items: stretch;
-  }
+  .routing-layout { flex: 1; min-height: 0; display: flex; align-items: stretch; }
 
   /* ── HELP MASCOT + BUBBLE ── */
-#help-mascot {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
+  #help-mascot { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  #help-mascot .help-bubble { position: relative; background: #ffffff; color: var(--ink-mid); font-size: 12px; font-weight: 500; padding: 8px 12px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); white-space: nowrap; }
+  #help-mascot .help-bubble::after { content: ""; position: absolute; right: -6px; bottom: 12px; border-width: 6px; border-style: solid; border-color: transparent transparent transparent #ffffff; }
+  #help-mascot button { border: none; background: none; padding: 0; cursor: pointer; }
+  #help-mascot img { width: 70px; height: auto; display: block; }
+  @media (max-width: 600px) { #help-mascot .help-bubble { display: none; } }
 
-/* speech bubble */
-#help-mascot .help-bubble {
-  position: relative;
-  background: #ffffff;
-  color: var(--ink-mid);
-  font-size: 12px;
-  font-weight: 500;
-  padding: 8px 12px;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-  white-space: nowrap;
-}
-
-/* little tail */
-#help-mascot .help-bubble::after {
-  content: "";
-  position: absolute;
-  right: -6px;
-  bottom: 12px;
-  border-width: 6px;
-  border-style: solid;
-  border-color: transparent transparent transparent #ffffff;
-}
-
-/* mascot button */
-#help-mascot button {
-  border: none;
-  background: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-#help-mascot img {
-  width: 70px;   /* tweak size as you like */
-  height: auto;
-  display: block;
-}
-
-/* On small screens, hide bubble text so it doesn't crowd */
-@media (max-width: 600px) {
-  #help-mascot .help-bubble {
-    display: none;
-  }
-}
-
-  /* ══════════════════════════════════
-     SIGNAL PANEL (left)
-  ══════════════════════════════════ */
-  .signal-panel {
-    width: 290px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    background: white;
-    border-right: 1px solid var(--rule);
-    overflow: hidden;
-  }
-
-  .signal-panel-header {
-    flex-shrink: 0;
-    padding: 14px 16px 10px;
-    border-bottom: 1px solid var(--rule);
-  }
-  .signal-panel-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 2px;
-  }
-  .signal-panel-sub {
-    font-size: 11px;
-    color: var(--ink-light);
-    line-height: 1.4;
-  }
-
-  .signal-groups {
-    flex: 1;
-    overflow-y: auto;
-  }
-
-  .signal-group {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--rule);
-  }
+  /* ══ SIGNAL PANEL (left) ══ */
+  .signal-panel { width: 300px; flex-shrink: 0; display: flex; flex-direction: column; background: white; border-right: 1px solid var(--rule); overflow: hidden; }
+  .signal-panel-header { flex-shrink: 0; padding: 14px 16px 10px; border-bottom: 1px solid var(--rule); }
+  .signal-panel-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  .signal-panel-sub { font-size: 11px; color: var(--ink-light); line-height: 1.4; }
+  .signal-groups { flex: 1; overflow-y: auto; }
+  .signal-group { padding: 12px 16px; border-bottom: 1px solid var(--rule); }
   .signal-group:last-child { border-bottom: none; }
-
-  .signal-group-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    margin-bottom: 7px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .multi-hint {
-    font-size: 9px;
-    background: var(--cream);
-    color: var(--ink-light);
-    padding: 1px 6px;
-    border-radius: 10px;
-    font-weight: 500;
-    letter-spacing: 0;
-    text-transform: none;
-  }
-
-  .chip-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-  }
-
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 4px 10px;
-    border-radius: 20px;
-    border: 1.5px solid var(--rule);
-    background: white;
-    color: var(--ink-mid);
-    cursor: pointer;
-    transition: all .1s;
-    user-select: none;
-    line-height: 1.2;
-    font-family: inherit;
-  }
+  .signal-group.staff-only { background: #FFFBEF; }
+  .signal-group-label { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 7px; display: flex; align-items: center; gap: 5px; }
+  .multi-hint { font-size: 9px; background: var(--cream); color: var(--ink-light); padding: 1px 6px; border-radius: 10px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 5px; }
+  .chip { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 20px; border: 1.5px solid var(--rule); background: white; color: var(--ink-mid); cursor: pointer; transition: all .1s; user-select: none; line-height: 1.2; font-family: inherit; }
   .chip:hover { border-color: var(--ink-mid); color: var(--ink); }
-  .chip.selected {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: white;
-  }
+  .chip.selected { background: var(--ink); border-color: var(--ink); color: white; }
   .chip.selected:hover { background: #333; border-color: #333; }
 
-  /* Signal footer */
-  .signal-footer {
-    flex-shrink: 0;
-    padding: 10px 16px 12px;
-    border-top: 1px solid var(--rule);
-    background: white;
-  }
-  .clear-btn {
-    width: 100%;
-    background: none;
-    border: 1.5px solid var(--rule);
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--ink-light);
-    cursor: pointer;
-    transition: all .12s;
-    font-family: inherit;
-  }
+  .signal-footer { flex-shrink: 0; padding: 10px 16px 12px; border-top: 1px solid var(--rule); background: white; }
+  .clear-btn { width: 100%; background: none; border: 1.5px solid var(--rule); border-radius: 20px; padding: 5px 12px; font-size: 11px; font-weight: 500; color: var(--ink-light); cursor: pointer; transition: all .12s; font-family: inherit; }
   .clear-btn:hover { border-color: var(--ink-mid); color: var(--ink); background: var(--cream); }
+  .active-count { font-size: 10px; color: var(--ink-light); text-align: center; margin-top: 5px; min-height: 13px; }
 
-  .active-count {
-    font-size: 10px;
-    color: var(--ink-light);
-    text-align: center;
-    margin-top: 5px;
-    min-height: 13px;
-  }
+  /* ══ RESULTS PANEL (right) ══ */
+  .results-panel { flex: 1; min-width: 0; overflow-y: auto; padding: 22px 28px 60px; }
 
-  /* ══════════════════════════════════
-     RESULTS PANEL (right)
-  ══════════════════════════════════ */
-  .results-panel {
-    flex: 1;
-    min-width: 0;
-    overflow-y: auto;
-    padding: 22px 28px 60px;
-  }
-
-  /* ── Empty state ── */
-  .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 400px;
-    text-align: center;
-  }
+  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; text-align: center; }
   .empty-icon { font-size: 36px; margin-bottom: 14px; opacity: .45; }
   .empty-headline { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
-  .empty-sub { font-size: 12px; color: var(--ink-light); max-width: 300px; margin-bottom: 22px; line-height: 1.5; }
-  .empty-tips {
-    background: white;
-    border: 1px solid var(--rule);
-    border-radius: 10px;
-    padding: 14px 18px;
-    text-align: left;
-    max-width: 380px;
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-  }
+  .empty-sub { font-size: 12px; color: var(--ink-light); max-width: 320px; margin-bottom: 22px; line-height: 1.5; }
+  .empty-tips { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 14px 18px; text-align: left; max-width: 400px; display: flex; flex-direction: column; gap: 7px; }
   .empty-tip { font-size: 12px; color: var(--ink-mid); line-height: 1.5; }
 
-  /* ── Context banner ── */
-  .context-banner {
-    background: white;
-    border: 1px solid var(--rule);
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: 12px;
-    color: var(--ink-mid);
-    margin-bottom: 10px;
-    line-height: 1.55;
-  }
+  .context-banner { background: white; border: 1px solid var(--rule); border-radius: 10px; padding: 10px 14px; font-size: 12px; color: var(--ink-mid); margin-bottom: 10px; line-height: 1.55; }
   .context-banner strong { color: var(--ink); font-weight: 600; }
 
-  /* ── Quick tip ── */
-  .quick-tip {
-    background: #FFFBEF;
-    border: 1px solid #E8D87A;
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: 12px;
-    color: #6B5200;
-    margin-bottom: 14px;
-    line-height: 1.55;
-    display: flex;
-    align-items: flex-start;
-    gap: 7px;
-  }
+  .quick-tip { background: #FFFBEF; border: 1px solid #E8D87A; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #6B5200; margin-bottom: 14px; line-height: 1.55; display: flex; align-items: flex-start; gap: 7px; }
   .quick-tip-icon { flex-shrink: 0; }
 
-  /* ── Results header ── */
-  .results-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
-  }
-  .results-count {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-  }
+  .results-header { display: flex; align-items: center; margin-bottom: 12px; }
+  .results-count { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); }
 
-  /* ── No results ── */
-  .no-results {
-    text-align: center;
-    padding: 40px 24px;
-    background: white;
-    border: 1px solid var(--rule);
-    border-radius: 12px;
-  }
-  .no-results p { font-size: 14px; color: var(--ink-mid); margin-bottom: 4px; }
+  .no-results { text-align: center; padding: 24px 24px; background: white; border: 1px solid var(--rule); border-radius: 12px; }
+  .no-results p { font-size: 13px; color: var(--ink-mid); margin-bottom: 4px; }
   .no-results .no-results-sub { font-size: 12px; color: var(--ink-light); }
 
-  /* ══════════════════════════════════
-     RESULT CARDS
-  ══════════════════════════════════ */
-  .results-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  /* ── Persona summary card (same visual language as founder_xp_generator.html) ── */
+  .pcard { background: #fff; border: 1px solid var(--rule); border-top-width: 3px; border-radius: 14px; padding: 22px 24px; margin-bottom: 16px; }
+  .pbadge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; }
+  .phl { font-family: 'DM Serif Display', Georgia, serif; font-size: 21px; color: var(--ink); line-height: 1.25; margin-bottom: 8px; }
+  .pdesc { font-size: 13px; color: var(--ink-mid); line-height: 1.6; max-width: 640px; }
 
-  .result-card {
-    background: white;
-    border: 1px solid var(--rule);
-    border-left: 4px solid var(--rule);
-    border-radius: 12px;
-    overflow: hidden;
-    animation: fadeUp .14s ease-out;
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(5px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Theme left borders */
+  /* ══ RESULT CARDS ══ */
+  .results-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .result-card { background: white; border: 1px solid var(--rule); border-left: 4px solid var(--rule); border-radius: 12px; overflow: hidden; animation: fadeUp .14s ease-out; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
   .result-card.theme-coral  { border-left-color: var(--coral);  }
   .result-card.theme-green  { border-left-color: var(--green);  }
   .result-card.theme-amber  { border-left-color: var(--amber);  }
@@ -451,372 +138,64 @@
   .result-card.theme-teal   { border-left-color: var(--teal);   }
   .result-card.theme-blue   { border-left-color: var(--blue);   }
 
-  /* Card header */
-  .rc-header {
-    padding: 12px 14px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 10px;
-    border-bottom: 1px solid var(--rule);
-  }
+  .rc-header { padding: 12px 14px; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--rule); }
   .rc-header-left { display: flex; align-items: flex-start; gap: 9px; }
-  .rc-icon {
-    width: 30px;
-    height: 30px;
-    border-radius: 7px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    flex-shrink: 0;
-  }
-  .rc-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--ink);
-    letter-spacing: -.01em;
-    margin-bottom: 2px;
-  }
+  .rc-icon { width: 30px; height: 30px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .rc-name { font-size: 13px; font-weight: 600; color: var(--ink); letter-spacing: -.01em; margin-bottom: 2px; }
   .rc-tagline { font-size: 11px; color: var(--ink-light); line-height: 1.4; }
+  .rc-header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
 
-  .rc-header-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 3px;
-    flex-shrink: 0;
-  }
+  .match-badge { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; letter-spacing: .01em; }
+  .match-relevant{ background: var(--cream); color: var(--ink-light); }
 
-  /* ── HELP OVERLAY ───────────────────────────────────────── */
-  .help-overlay-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.45);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-  }
-  .help-overlay-backdrop.open { display: flex; }
+  .rc-why { padding: 9px 14px; font-size: 12px; color: var(--ink-mid); line-height: 1.5; background: #FAFAF8; border-bottom: 1px solid var(--rule); }
 
-  .help-overlay {
-    background: #fff;
-    border-radius: 14px;
-    border: 1px solid var(--rule);
-    max-width: 880px;
-    width: calc(100% - 32px);
-    max-height: calc(100vh - 80px);
-    box-shadow: 0 18px 45px rgba(0,0,0,.18);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .help-header {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--rule);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  .help-title-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .help-title {
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: var(--ink-mid);
-  }
-  .help-subtitle {
-    font-size: 12px;
-    color: var(--ink-light);
-  }
-  .help-close-btn {
-    border: 1px solid var(--rule);
-    border-radius: 999px;
-    padding: 3px 9px;
-    font-size: 11px;
-    font-weight: 500;
-    background: #fff;
-    color: var(--ink-light);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .help-close-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
-
-  .help-body {
-    padding: 14px 18px 16px;
-    display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 14px;
-    overflow-y: auto;
-  }
-
-  .help-col {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .help-section {
-    border: 1px solid var(--rule);
-    border-radius: 10px;
-    padding: 10px 11px;
-    background: #FAFAF8;
-  }
-  .help-section.alt {
-    background: #fff;
-  }
-
-  .help-section-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    margin-bottom: 6px;
-  }
-  .help-section-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 4px;
-  }
-  .help-section-text {
-    font-size: 12px;
-    color: var(--ink-mid);
-    line-height: 1.55;
-  }
-
-  .help-list {
-    font-size: 12px;
-    color: var(--ink-mid);
-    padding-left: 16px;
-    margin-top: 4px;
-  }
-  .help-list li { margin-bottom: 3px; }
-
-  .help-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    border-radius: 999px;
-    border: 1px solid var(--rule);
-    background: var(--cream);
-    color: var(--ink-light);
-    margin-top: 4px;
-  }
-
-  .help-hotspot-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 7px;
-    margin-top: 6px;
-  }
-  .help-hotspot-pill {
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 999px;
-    border: 1px solid var(--rule);
-    background: #fff;
-  }
-  .help-hotspot-desc {
-    font-size: 11px;
-    color: var(--ink-light);
-  }
-
-  .help-footer {
-    padding: 8px 18px 11px;
-    border-top: 1px solid var(--rule);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    font-size: 11px;
-    color: var(--ink-light);
-  }
-  .help-footer strong { color: var(--ink-mid); font-weight: 600; }
-
-  .help-footer-links {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .help-footer-link {
-    font-size: 11px;
-    color: var(--ink-mid);
-    text-decoration: underline;
-    text-decoration-color: var(--rule);
-    text-underline-offset: 2px;
-    cursor: pointer;
-  }
-  .help-footer-link:hover { text-decoration-color: var(--ink); }
-
-  .help-chip {
-    border: 1px solid var(--rule);
-    border-radius: 999px;
-    padding: 3px 10px;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    background: #fff;
-    color: var(--ink-light);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .help-chip:hover { border-color: var(--ink-mid); color: var(--ink); }
-
-  @media (max-width: 720px) {
-    .help-overlay {
-      max-height: calc(100vh - 32px);
-    }
-    .help-body {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* Match badges */
-  .match-badge {
-    font-size: 10px;
-    font-weight: 600;
-    padding: 3px 9px;
-    border-radius: 20px;
-    white-space: nowrap;
-    letter-spacing: .01em;
-  }
-  .match-strong  { background: var(--match-strong-bg); color: var(--match-strong-ink); }
-  .match-good    { background: var(--match-good-bg);   color: var(--match-good-ink);   }
-  .match-relevant{ background: var(--cream);           color: var(--ink-light);         }
-
-  .rc-entry-tag { font-size: 10px; color: var(--ink-light); white-space: nowrap; }
-
-  /* Why it fits */
-  .rc-why {
-    padding: 9px 14px;
-    font-size: 11px;
-    color: var(--ink-mid);
-    font-style: italic;
-    line-height: 1.5;
-    background: #FAFAF8;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  /* Script section */
   .rc-script-wrap { padding: 11px 14px; border-bottom: 1px solid var(--rule); }
-  .rc-section-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .09em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    margin-bottom: 7px;
-  }
-  .rc-script {
-    background: #F8F8F6;
-    border-left: 3px solid var(--ink-faint);
-    border-radius: 0 6px 6px 0;
-    padding: 9px 36px 9px 11px;
-    font-size: 12px;
-    color: var(--ink-mid);
-    line-height: 1.65;
-    position: relative;
-  }
-  .copy-btn {
-    position: absolute;
-    top: 7px;
-    right: 7px;
-    background: white;
-    border: 1px solid var(--rule);
-    border-radius: 5px;
-    padding: 2px 7px;
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--ink-light);
-    cursor: pointer;
-    transition: all .1s;
-    font-family: inherit;
-    line-height: 1.4;
-  }
+  .rc-section-label { font-size: 10px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 7px; }
+  .rc-script { background: #F8F8F6; border-left: 3px solid var(--ink-faint); border-radius: 0 6px 6px 0; padding: 9px 36px 9px 11px; font-size: 12px; color: var(--ink-mid); line-height: 1.65; position: relative; }
+  .copy-btn { position: absolute; top: 7px; right: 7px; background: white; border: 1px solid var(--rule); border-radius: 5px; padding: 2px 7px; font-size: 10px; font-weight: 500; color: var(--ink-light); cursor: pointer; transition: all .1s; font-family: inherit; line-height: 1.4; }
   .copy-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
   .copy-btn.copied { background: var(--match-strong-bg); border-color: var(--match-strong-ink); color: var(--match-strong-ink); }
 
-  /* Action section */
-  .rc-actions {
-    padding: 10px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    background: #FAFAF8;
-  }
-  .rc-action {
-    display: flex;
-    align-items: flex-start;
-    gap: 7px;
-    font-size: 12px;
-    line-height: 1.5;
-  }
+  .rc-actions { padding: 10px 14px; display: flex; flex-direction: column; gap: 7px; background: #FAFAF8; }
+  .rc-action { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; line-height: 1.5; }
   .rc-action-icon { flex-shrink: 0; font-size: 13px; }
   .rc-action-label { font-weight: 600; color: var(--ink); margin-right: 2px; }
   .rc-action-text  { color: var(--ink-mid); }
-  .rc-action-link  {
-    color: var(--ink);
-    font-weight: 500;
-    text-decoration: underline;
-    text-decoration-color: var(--rule);
-    text-underline-offset: 2px;
-    transition: text-decoration-color .12s;
-  }
+  .rc-action-link  { color: var(--ink); font-weight: 500; text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 2px; transition: text-decoration-color .12s; }
   .rc-action-link:hover { text-decoration-color: var(--ink); }
-  .rc-action-question { font-style: italic; }
-  .rc-action.watchout .rc-action-label,
-  .rc-action.watchout .rc-action-text { color: #9A5500; }
 
-  /* Contacts */
-  .rc-contacts {
-    padding: 7px 14px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    flex-wrap: wrap;
-    border-top: 1px solid var(--rule);
-  }
-  .rc-contacts-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    flex-shrink: 0;
-  }
-  .rc-contact-chip {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--ink-mid);
-    background: var(--cream);
-    border: 1px solid var(--rule);
-    padding: 2px 8px;
-    border-radius: 20px;
-  }
-  .rc-contact-chip.secondary { opacity: .65; }
+  /* ── HELP OVERLAY ── */
+  .help-overlay-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; align-items: center; justify-content: center; z-index: 999; }
+  .help-overlay-backdrop.open { display: flex; }
+  .help-overlay { background: #fff; border-radius: 14px; border: 1px solid var(--rule); max-width: 880px; width: calc(100% - 32px); max-height: calc(100vh - 80px); box-shadow: 0 18px 45px rgba(0,0,0,.18); display: flex; flex-direction: column; overflow: hidden; }
+  .help-header { padding: 14px 18px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .help-title-wrap { display: flex; flex-direction: column; gap: 2px; }
+  .help-title { font-size: 15px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-mid); }
+  .help-subtitle { font-size: 12px; color: var(--ink-light); }
+  .help-close-btn { border: 1px solid var(--rule); border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 500; background: #fff; color: var(--ink-light); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+  .help-close-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
+  .help-body { padding: 14px 18px 16px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 14px; overflow-y: auto; }
+  .help-col { display: flex; flex-direction: column; gap: 10px; }
+  .help-section { border: 1px solid var(--rule); border-radius: 10px; padding: 10px 11px; background: #FAFAF8; }
+  .help-section.alt { background: #fff; }
+  .help-section-label { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+  .help-section-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .help-section-text { font-size: 12px; color: var(--ink-mid); line-height: 1.55; }
+  .help-list { font-size: 12px; color: var(--ink-mid); padding-left: 16px; margin-top: 4px; }
+  .help-list li { margin-bottom: 3px; }
+  .help-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--rule); background: var(--cream); color: var(--ink-light); margin-top: 4px; }
+  .help-footer { padding: 8px 18px 11px; border-top: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 11px; color: var(--ink-light); }
+  .help-footer strong { color: var(--ink-mid); font-weight: 600; }
+  .help-footer-links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .help-footer-link { font-size: 11px; color: var(--ink-mid); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 2px; cursor: pointer; }
+  .help-footer-link:hover { text-decoration-color: var(--ink); }
 
-  /* ── RESPONSIVE ── */
+  @media (max-width: 720px) {
+    .help-overlay { max-height: calc(100vh - 32px); }
+    .help-body { grid-template-columns: 1fr; }
+  }
+
   @media (max-width: 720px) {
     body { height: auto; overflow: auto; }
     .routing-layout { flex-direction: column; flex: none; min-height: none; }
@@ -829,18 +208,18 @@
 </head>
 <body>
 
-  <!-- Universal Top Nav -->
+<!-- Universal Top Nav -->
 <nav class="top-nav">
   <div class="top-nav-inner">
     <span class="brand">HIL Summer 2026</span>
     <div class="top-nav-right">
-      <a href="hil_summer_2026_programming.html" >Program View</a>
-       <a href="the_bot.html" class="active">Bot</a>
-           <a href="data-editor.html">Update Data</a>
-       <a href="journey_flows.html">The Flows</a>
+      <a href="hil_summer_2026_programming.html">Program View</a>
+      <a href="the_bot.html" class="active">Bot</a>
+      <a href="data-editor.html">Update Data</a>
+      <a href="journey_flows.html">The Flows</a>
       <a href="xp_creator.html">XP Builder</a>
       <a href="decision_logic.html">Decision Logic</a>
-      <a href="founder_xp_generator.html" >Start Here</a>
+      <a href="founder_xp_generator.html">Start Here</a>
     </div>
   </div>
 </nav>
@@ -851,13 +230,14 @@
     <div>
       <div><span class="staff-badge">🔒 Staff Tool</span></div>
       <div class="tool-title">The Routing Desk</div>
-      <div class="tool-sub">Translate what you're hearing from a founder into the right i-lab offering — in real time.</div>
+      <div class="tool-sub">Same 5 questions a founder answers in Find Your Path. Reads live from <code>ilab-data.js</code> and the shared persona logic — whatever you select here is exactly what that founder would get.</div>
     </div>
-<div class="tool-meta">
-      <span class="tool-meta-chip">⚡ Updates in real time</span>
-      <span class="tool-meta-chip">✏️ All data editable in source file</span>
-      <span class="tool-meta-chip">💬 Scripts ready to use word-for-word</span>
+    <div class="tool-meta">
+      <span class="tool-meta-chip">🔗 Reads live from ilab-data.js</span>
+      <span class="tool-meta-chip">🎯 Same persona logic as Find Your Path</span>
+      <span class="tool-meta-chip">💬 Scripts built from real step/event copy</span>
     </div>
+  </div>
 </header>
 
 <!-- ── ROUTING LAYOUT ── -->
@@ -867,11 +247,9 @@
   <aside class="signal-panel">
     <div class="signal-panel-header">
       <div class="signal-panel-title">What are you hearing?</div>
-      <div class="signal-panel-sub">Select everything that applies. Results update instantly.</div>
+      <div class="signal-panel-sub">Same questions as Find Your Path (Q1–Q5), plus one staff-only eligibility check. Results update instantly.</div>
     </div>
-    <div class="signal-groups" id="signalGroups">
-      <!-- rendered by JS -->
-    </div>
+    <div class="signal-groups" id="signalGroups"><!-- rendered by JS --></div>
     <div class="signal-footer">
       <button class="clear-btn" onclick="clearAll()">✕ Clear all signals</button>
       <div class="active-count" id="activeCount"></div>
@@ -881,385 +259,75 @@
   <!-- ══ RESULTS PANEL ══ -->
   <section class="results-panel">
 
-    <!-- Empty state -->
     <div class="empty-state" id="emptyState">
       <div class="empty-icon">🧭</div>
-      <div class="empty-headline">Select signals to see program recommendations</div>
-      <p class="empty-sub">Start with who you're talking to, then layer in what they need.</p>
+      <div class="empty-headline">Select Stage, Goal, and Time to see a recommendation</div>
+      <p class="empty-sub">Those three drive the persona. Sector and Format refine it further — same as the founder-facing quiz.</p>
       <div class="empty-tips">
         <p class="empty-tip">💡 Always check: are they already a member? That's step zero for everyone.</p>
-        <p class="empty-tip">💡 Stage + needs gives the most accurate match. Add more signals for better results.</p>
-        <p class="empty-tip">💡 Select a focus area (Life Sciences, Climate, Social Impact) to surface specialized programs.</p>
-        <p class="empty-tip">💡 Every result card includes a script you can use word-for-word in the conversation.</p>
+        <p class="empty-tip">💡 Selecting a Sector unlocks sector-specific steps (Life Sci, Climate, Deep Tech, Social Impact).</p>
+        <p class="empty-tip">💡 No Sector or Format selected yet? Recommendations default to General / Hybrid — exactly like the quiz does.</p>
+        <p class="empty-tip">💡 The eligibility chips at the top are staff-only — they don't affect the founder's persona or routing.</p>
       </div>
     </div>
 
-    <!-- Live results -->
     <div id="resultsWrap" style="display:none;">
+      <div id="personaCardWrap"></div>
       <div class="context-banner" id="contextBanner"></div>
       <div class="quick-tip" id="quickTip" style="display:none;">
         <span class="quick-tip-icon">💡</span>
         <span id="quickTipText"></span>
       </div>
-      <div class="results-header">
-        <span class="results-count" id="resultsCount"></span>
-      </div>
-      <div class="results-container" id="resultsContainer"></div>
+
+      <div class="results-header"><span class="results-count" id="stepsLabel">🎯 Start right here</span></div>
+      <div class="results-container" id="stepsContainer"></div>
+
+      <div class="results-header"><span class="results-count" id="eventsLabel">📅 Also relevant</span></div>
+      <div class="results-container" id="eventsContainer"></div>
+
+      <div class="results-header"><span class="results-count" id="expertsLabel">🧑‍🏫 Advisors to loop in</span></div>
+      <div class="results-container" id="expertsContainer"></div>
+
+      <div class="results-header"><span class="results-count" id="ohsLabel">🕐 Office hours to point them to</span></div>
+      <div class="results-container" id="ohsContainer"></div>
     </div>
 
   </section>
 </div><!-- /.routing-layout -->
 
+<!-- ─────────────────────────────────────────────────────────────
+     ilab-data.js loads first — it defines EVENTS, OHS, EXPERTS,
+     PERSONAS, STEPS_DATA, LINKS, getSteps(), getEvents(),
+     getExperts(), getOHs(), and calcPersonaFromAnswers().
+     This tool contains NO hardcoded program data and NO separate
+     scoring logic — everything below reads from that file so this
+     tool can never silently drift from what founders see.
+────────────────────────────────────────────────────────────── -->
+<script src="ilab-data.js"></script>
 <script>
 
 /* ═══════════════════════════════════════════════════════════════════════
    ✏️  HOW TO UPDATE THIS TOOL
    ───────────────────────────────────────────────────────────────────────
-   Everything lives in the PROGRAMS array below. To update any talking
-   point, next step, or follow-up question — edit the relevant field.
-   To add a new program — copy an existing object, give it a unique id.
-
-   VALID VALUES FOR MATCHING FIELDS
-   ──────────────────────────────────
-   stages:       'exploring' | 'idea' | 'validation' | 'building' | 'growth' | 'raising'
-   needs:        'getting-started' | 'community' | 'cofounder' | 'accountability' |
-                 'customer-discovery' | 'skill-building' | 'mentorship' | 'funding' |
-                 'pitch-prep' | 'product-feedback' | 'networking' | 'lab-space' | 'scaling'
-   focus:        'general' | 'social-impact' | 'life-sciences' | 'climate'
-   commitment:   'minimal' | 'low' | 'medium' | 'high'
-   requiredFocus: if set, program ONLY appears when that exact focus is selected
-                  (or when no focus is selected — it will score low either way).
-                  Set to null for programs open to any focus area.
-   excludedAffiliations: array of affiliation values that should NEVER see this program.
-                  e.g. ['alumni'] hides the program when Alumni Founder is selected.
-                  Valid values: 'current-student' | 'recent-grad' | 'team-member' | 'alumni'
-                  Set to [] or omit the field entirely for programs open to all affiliations.
+   This file has NO program data of its own. To change what staff see:
+     - Content (events, office hours, experts, steps, persona copy)
+       → edit via data-editor.html, export, push ilab-data.js
+     - Persona scoring logic (which answers → which persona)
+       → edit calcPersonaFromAnswers() inside ilab-data.js. Do NOT
+       add scoring logic here — it would silently diverge from the
+       founder-facing quiz in founder_xp_generator.html.
+     - Signal chip wording (labels only, not values)
+       → edit SIGNAL_CONFIG below. Do not change any `value` field —
+       those must exactly match the data-val codes founder_xp_generator.html
+       uses (see the table in "How to Edit the Quiz Logic").
 ═══════════════════════════════════════════════════════════════════════ */
-
-const PROGRAMS = [
-
-  // ── MEMBERSHIP ──────────────────────────────────────────────────────
-  {
-    id: 'membership',
-    name: 'Membership',
-    icon: '🔑',
-    theme: 'coral',
-    tagline: 'The foundation — unlocks everything at the i-lab',
-    entryModel: 'Supported activation',
-    requiredFocus: null,
-    excludedAffiliations: ['alumni'],
-    format: 'HYBRID', // works for both remote + in-person
-
-    stages:     ['exploring','idea','validation','building','growth','raising'],
-    needs:      ['getting-started','community','networking','cofounder'],
-    commitment: ['minimal','low','medium','high'],
-
-    script: "The first thing we'd do is get you set up as a member — it's free, takes a few minutes, and it unlocks everything: our coworking space, all our events, the weekly newsletter, and every program we've been talking about.",
-    nextStep:   'Send the membership intake form',
-    nextStepLink: 'https://innovationlabs.harvard.edu/membership/',
-    followUp:   "Have you had a chance to explore our website? I want to make sure we get you plugged into the right things from the start.",
-    whyItFits:  "The universal first step. Check this before anything else — nothing else works without it.",
-    watchOut:   "If they're already a member, skip straight to program routing. Don't waste their time.",
-    contacts: [
-      { name: 'Lexi Barry',        role: 'Lead' },
-      { name: 'Lauren Koppelson',  role: 'Facilitator' },
-      { name: 'Ashley Olafsen',    role: 'Facilitator' },
-    ]
-  },
-
-  // ── FOUNDER FUNDAMENTALS — PRIMER ───────────────────────────────────
-  {
-    id: 'ff-primer',
-    name: 'FF — Customer Discovery Primer',
-    icon: '🌱',
-    theme: 'green',
-    tagline: 'Async, self-paced email series for solo validation',
-    entryModel: 'Supported activation',
-    requiredFocus: null,
-    format: 'REMOTE',
-
-    stages:     ['exploring','idea','validation'],
-    needs:      ['customer-discovery','skill-building','getting-started'],
-    commitment: ['minimal','low'],
-
-    script: "We have a self-paced email series called the Customer Discovery Primer — it's fully async, no schedule, and walks you through the validation process step by step. Great if you want to start learning right now without committing to a group schedule.",
-    nextStep:   'Share the Primer signup link',
-    nextStepLink: 'https://innovationlabs.harvard.edu/how-to/customer-validation-2',
-    followUp:   "Are you someone who works well with async learning, or do you tend to do better with a group and a set schedule? That'll help me figure out whether this or our Sprint is the better fit.",
-    whyItFits:  "Ideal for founders who want to explore at their own pace — low barrier, high value, no schedule required.",
-    watchOut:   "Requires self-motivation. If they seem like they need external accountability, push toward the Sprint instead.",
-    contacts: [
-      { name: 'Tom Samph',  role: 'Lead' },
-      { name: 'Lexi Barry', role: 'Lead' },
-    ]
-  },
-
-  // ── FOUNDER FUNDAMENTALS — SPRINT ───────────────────────────────────
-  {
-    id: 'ff-sprint',
-    name: 'FF — Customer Discovery Sprint',
-    icon: '🌱',
-    theme: 'green',
-    tagline: '3-week cohort: kickoff → field work → check-in → showcase',
-    entryModel: 'Supported activation',
-    requiredFocus: null,
-    format: 'HYBRID',
-
-    stages:     ['idea','validation'],
-    needs:      ['customer-discovery','accountability','skill-building','community'],
-    commitment: ['low','medium'],
-
-    script: "We run a Customer Discovery Sprint — a 3-week cohort where you show up to a kickoff, spend a week doing real customer interviews in the field, come back for a check-in, and share what you learned at a showcase. It's structured but not heavy — probably 2–4 hours of actual work outside the sessions — and you leave with real validation data and a cohort of peers who've been through it with you.",
-    nextStep:   'Register for the next Sprint cohort',
-    nextStepLink: 'https://innovationlabs.harvard.edu/how-to/customer-discovery-sprint',
-    followUp:   "Can you commit 3 weeks to this? It's not huge — maybe a few hours outside the sessions — but it does require showing up to all four touchpoints. Does that work with your schedule this summer?",
-    whyItFits:  "Ideal for founders who benefit from external accountability and peer energy. Better than the Primer if they need structure.",
-    watchOut:   "Make sure they can attend all 4 sessions before signing up. If they travel a lot or have a packed schedule, the async Primer may be smarter.",
-    contacts: [
-      { name: 'Tom Samph',      role: 'Lead' },
-      { name: 'Lexi Barry',     role: 'Lead' },
-      { name: 'Phil Green',     role: 'Facilitator' },
-      { name: 'Pete Gladstone', role: 'Facilitator' },
-      { name: 'Ashley Olafsen', role: 'Facilitator' },
-      { name: 'Becca Xiong',    role: 'Facilitator' },
-    ]
-  },
-
-  // ── VENTURE INCUBATION ───────────────────────────────────────────────
-  {
-    id: 'venture-incubation',
-    name: 'Venture Incubation Program (VIP)',
-    icon: '🏛️',
-    theme: 'amber',
-    tagline: 'Milestone-gated, advisor-led progression through venture stages',
-    entryModel: 'Supported activation + selection',
-    requiredFocus: null,
-    format: 'INPERSON',
-
-    stages:     ['validation','building'],
-    needs:      ['accountability','mentorship','skill-building'],
-    commitment: ['medium','high'],
-
-    script: "The Venture Incubation Program is our structured track for founders who are past the idea stage and actively working toward real milestones. You're matched with an advisor, you have regular check-ins, and your progress is tracked against a clear set of venture milestones. There's an application and interview — it's selective, but from what you're describing, it sounds like exactly where you are.",
-    nextStep:   'Walk them through the VIP application — loop in Tom Samph',
-    nextStepLink: '#',
-    followUp:   "Are you able to commit 3–7 hours a week to this? And are you solo, or do you have a team? That helps us figure out the right advisor match.",
-    whyItFits:  "For founders with a clear venture thesis who are ready to make real progress with structured advisor accountability.",
-    watchOut:   "Application + interview required — don't promise acceptance. Tom Samph owns this program. Loop him in early.",
-    contacts: [
-      { name: 'Tom Samph', role: 'Lead' },
-    ]
-  },
-
-  // ── SIFF ─────────────────────────────────────────────────────────────
-  {
-    id: 'siff',
-    name: 'Social Impact Fellowship Fund (SIFF)',
-    icon: '💸',
-    theme: 'blue',
-    tagline: 'Funded fellowship for social impact ventures — pitch coaching + Pitch Day',
-    entryModel: 'Supported activation + selection',
-    requiredFocus: 'social-impact',
-    format: 'INPERSON',
-
-    stages:     ['building','growth','raising'],
-    needs:      ['funding','mentorship','pitch-prep','accountability'],
-    commitment: ['high'],
-
-    script: "Because their venture has a social impact focus, we have a Fellowship Fund specifically designed for that — it includes actual funding, intensive pitch coaching, design support for their deck, and culminates in a Pitch Day in front of external judges. If social impact is central to what they're building, this is the most direct path to resources at the i-lab.",
-    nextStep:   'Connect with Rebekah Emanuel or Lauren Koppelson',
-    nextStepLink: '#',
-    followUp:   "How would you describe the social impact angle of your venture — is it the core of what you're building or more of a byproduct? And are you able to go close to full-time on this this summer?",
-    whyItFits:  "Purpose-built for social impact founders. If the focus matches, this is almost always the right primary recommendation.",
-    watchOut:   "Selective — don't promise acceptance. Social impact must be genuine and central, not peripheral. Expect ~10 hrs/week. Led by Rebekah + Lauren.",
-    contacts: [
-      { name: 'Rebekah Emanuel',  role: 'Lead' },
-      { name: 'Lauren Koppelson', role: 'Lead' },
-      { name: 'Phil Green',       role: 'Facilitator' },
-      { name: 'Julia Berman',     role: 'Facilitator' },
-      { name: 'Lexi Barry',       role: 'Facilitator' },
-    ]
-  },
-
-  // ── ACCELERATION ─────────────────────────────────────────────────────
-  {
-    id: 'acceleration',
-    name: 'Summer Acceleration',
-    icon: '🚀',
-    theme: 'purple',
-    tagline: 'Cohort-based company building — workshops, clinics, lunches, pitch event',
-    entryModel: 'Supported activation + selection',
-    requiredFocus: null,
-    format: 'INPERSON',
-
-    stages:     ['building','growth','raising'],
-    needs:      ['accountability','mentorship','pitch-prep','scaling','networking','skill-building'],
-    commitment: ['high'],
-
-    script: "Our Summer Accelerator is the most intensive program we run — weekly workshops, board meeting-style advisor check-ins, community lunches with the full cohort, and a final pitch event. It's alumni and student founders together, which makes the peer dynamic really strong. If they're going all-in this summer, this is the program to be in.",
-    nextStep:   'Connect directly with Rym Baouendi or Joanna Furgiuele',
-    nextStepLink: '#',
-    followUp:   "This is a full-time-level commitment. Are they working on their venture full-time this summer, or split with other things? That'll determine if this is realistic.",
-    whyItFits:  "The highest-intensity offering. Best for founders who are fully committed and ready to sprint through summer with structured accountability.",
-    watchOut:   "Cohort is selected before summer begins — if you're talking to them close to June, check with Rym/Joanna on whether the window is still open.",
-    contacts: [
-      { name: 'Rym Baouendi',     role: 'Lead' },
-      { name: 'Joanna Furgiuele', role: 'Lead' },
-    ]
-  },
-
-  // ── LAUNCH LAB X ─────────────────────────────────────────────────────
-  {
-    id: 'llx',
-    name: 'Launch Lab X (LLX)',
-    icon: '⚡',
-    theme: 'purple',
-    tagline: 'Post-accelerator residency — equity-free, year-round space + support',
-    entryModel: 'Via Summer Accelerator pitch only',
-    requiredFocus: null,
-    format: 'INPERSON',
-
-    stages:     ['growth','raising'],
-    needs:      ['scaling','funding','mentorship','networking','pitch-prep'],
-    commitment: ['high'],
-
-    script: "Launch Lab X is where the most advanced ventures land after the Accelerator pitch event — it's a year-round residency at the i-lab, equity-free, with access to a full advisor network and a Demo Day for investors. But the entry is always through the Summer Accelerator pitch — so the conversation really starts there. Let me connect you to Rym or Joanna.",
-    nextStep:   'Explain the Accelerator → LLX pathway. Route to Rym/Joanna.',
-    nextStepLink: '#',
-    followUp:   "Are they aware that LLX entry happens through the Summer Accelerator pitch event — not a direct application? Let's make sure they're pointed at the right starting point.",
-    whyItFits:  "The destination for the most advanced ventures. Entry is never direct — it always flows through the Accelerator.",
-    watchOut:   "⚠️ Entry is ONLY via the Accelerator pitch — there is no direct LLX application. Don't create false expectations of another pathway.",
-    contacts: [
-      { name: 'Rym Baouendi',     role: 'Lead' },
-      { name: 'Joanna Furgiuele', role: 'Lead' },
-    ]
-  },
-
-  // ── VENTURE GROWTH ────────────────────────────────────────────────────
-  {
-    id: 'venture-growth',
-    name: 'Venture Growth Events',
-    icon: '📈',
-    theme: 'teal',
-    tagline: 'Open events — founder talks, workshops, accelerator info sessions',
-    entryModel: 'Independent activation',
-    requiredFocus: null,
-    format: 'HYBRID',
-
-    stages:     ['idea','validation','building','growth','raising'],
-    needs:      ['networking','skill-building','product-feedback','pitch-prep','mentorship'],
-    commitment: ['minimal','low'],
-
-    script: "We run open events all summer — founder talks from operators and investors, workshops on specific topics, YC and Techstars info sessions, expert office hours, and more. No application, no commitment — register and show up. It's a great way to get real value right now while we figure out the right program fit.",
-    nextStep:   'Share the events calendar or newsletter signup',
-    nextStepLink: '#',
-    followUp:   "What topics are most relevant to where you are right now? I can flag the sessions that would be most worth your time.",
-    whyItFits:  "The lowest-barrier way to get immediate value. Works as a standalone entry point or as a complement to any other program.",
-    watchOut:   "These are self-serve — no staff follow-up needed. Best used as 'and also do this' rather than a sole recommendation.",
-    contacts: [
-      { name: 'Tom Samph',      role: 'Lead' },
-      { name: 'Lexi Barry',     role: 'Lead' },
-      { name: 'Phil Green',     role: 'Facilitator' },
-      { name: 'Pete Gladstone', role: 'Facilitator' },
-      { name: 'Julien Pham',    role: 'Facilitator' },
-    ]
-  },
-
-  // ── OPEN COMMUNITY ────────────────────────────────────────────────────
-  {
-    id: 'open-community',
-    name: 'Open Community',
-    icon: '🤝',
-    theme: 'coral',
-    tagline: 'Social events, peer circles, co-founder connections',
-    entryModel: 'Independent activation',
-    requiredFocus: null,
-    format: 'HYBRID',
-
-    stages:     ['exploring','idea','validation','building','growth'],
-    needs:      ['community','cofounder','networking','getting-started'],
-    commitment: ['minimal','low'],
-
-    script: "Beyond the programs, we have a real community here — social events, Founder Circles where small groups work through problems together, and a Founder/Joiner Pizza + Pitch night where founders and potential collaborators connect. It's not a program with a curriculum — it's the thing that makes all the other programs better. I'd add this to whatever else we're talking about.",
-    nextStep:   'Add them to the community events list / share upcoming events',
-    nextStepLink: '#',
-    followUp:   "Are you actively looking for a co-founder or collaborator right now? We have specific events designed exactly for that.",
-    whyItFits:  "Essential for community-seekers and co-founder hunters. Works best alongside a primary program — it's the connective tissue.",
-    watchOut:   "Register and show up — no staff follow-up needed. Keep your investment light here.",
-    contacts: [
-      { name: 'Ashley Olafsen', role: 'Lead' },
-      { name: 'Lexi Barry',     role: 'Lead' },
-    ]
-  },
-
-  // ── LIFE LAB ──────────────────────────────────────────────────────────
-  {
-    id: 'life-lab',
-    name: 'Life Lab',
-    icon: '🧬',
-    theme: 'green',
-    tagline: 'Life sciences coworking, wet lab space, and expert programming',
-    entryModel: 'Supported activation + selection',
-    requiredFocus: 'life-sciences',
-    format: 'INPERSON',
-
-    stages:     ['exploring','idea','validation','building','growth'],
-    needs:      ['lab-space','community','mentorship','networking','skill-building'],
-    commitment: ['medium','high'],
-
-    script: "Because they're working in life sciences, we have a dedicated program — Life Lab. It's a coworking and wet lab space with a community of life sciences founders in residence, expert seminars, and advisor office hours specific to biotech and health tech. It's not just space — it's an ecosystem built specifically for where they are.",
-    nextStep:   'Connect with Courtney Ho or Michelle Liu',
-    nextStepLink: '#',
-    followUp:   "Is their work primarily bench science, computational, or a mix? And are they looking for lab access, a peer community, expert programming — or all of it?",
-    whyItFits:  "The dedicated home for life sciences founders at the i-lab. Strong focus match = always surface this first.",
-    watchOut:   "Requires application and review — not drop-in access. Always route through Courtney Ho or Michelle Liu.",
-    contacts: [
-      { name: 'Courtney Ho',    role: 'Lead' },
-      { name: 'Michelle Liu',   role: 'Lead' },
-      { name: 'Emma Sikora',    role: 'Facilitator' },
-      { name: 'Allegra Thomas', role: 'Facilitator' },
-    ]
-  },
-
-  // ── CLIMATE CIRCLE ────────────────────────────────────────────────────
-  {
-    id: 'climate-circle',
-    name: 'Climate Circle',
-    icon: '🌍',
-    theme: 'teal',
-    tagline: 'Climate tech cohort — peer learning, accountability, expert speakers',
-    entryModel: 'Supported activation + selection',
-    requiredFocus: 'climate',
-    format: 'INPERSON',
-
-    stages:     ['exploring','idea','validation','building'],
-    needs:      ['community','accountability','mentorship','networking','skill-building'],
-    commitment: ['low','medium'],
-
-    script: "For climate-focused founders, we run the Climate Circle — a cohort with weekly sessions, expert speakers from across the climate tech world (investors, operators, policy folks), and a real peer community of people building in the same space. It ends with a showcase. If climate is central to what they're building, this is the most directly relevant thing we run.",
-    nextStep:   'Direct to Rebekah Emanuel for Climate Circle enrollment',
-    nextStepLink: '#',
-    followUp:   "What area of climate are they working in — energy, food systems, mobility, carbon? That helps me flag which sessions and speakers will be most relevant.",
-    whyItFits:  "Purpose-built for climate founders. Strong focus match should almost always mean recommending this.",
-    watchOut:   "Application-based cohort — selective. Led by Rebekah Emanuel. Don't promise acceptance.",
-    contacts: [
-      { name: 'Rebekah Emanuel', role: 'Lead' },
-    ]
-  },
-
-]; // ═══ END PROGRAMS ════════════════════════════════════════════════════
-
-
-/* ══════════════════════════════════════════════════════════════════════
-   SIGNAL CONFIG — chip labels, groupings, and valid values
-   (safe to edit labels, do NOT change 'value' strings)
-══════════════════════════════════════════════════════════════════════ */
 
 const SIGNAL_CONFIG = [
   {
     id: 'affiliation',
-    label: "Who are you talking to?",
-    multi: false,
+    label: 'Eligibility check',
+    hint: 'staff-only',
+    staffOnly: true,
     options: [
       { value: 'current-student', label: '🎓 Current Student' },
       { value: 'recent-grad',     label: '🤝 Recent Grad (May 2026)' },
@@ -1269,504 +337,308 @@ const SIGNAL_CONFIG = [
   },
   {
     id: 'stage',
-    label: "Where are they?",
-    multi: false,
+    label: 'Q1 — Founder journey stage',
     options: [
-      { value: 'exploring',   label: '🌱 Just exploring' },
-      { value: 'idea',        label: '💡 Has an idea' },
-      { value: 'validation',  label: '🔬 Testing / validating' },
-      { value: 'building',    label: '🛠️ Building a product' },
-      { value: 'growth',      label: '📈 Post-revenue / growing' },
-      { value: 'raising',     label: '💰 Actively fundraising' },
+      { value: 'explore', label: '🌱 Explore — has an idea, figuring it out' },
+      { value: 'test',    label: '🧪 Test — validating a specific problem' },
+      { value: 'propel',  label: '🚀 Propel — has traction, building momentum' },
     ]
   },
   {
-    id: 'needs',
-    label: "What do they need?",
-    hint: "pick multiple",
-    multi: true,
+    id: 'goal',
+    label: 'Q2 — What would make this summer a success?',
     options: [
-      { value: 'getting-started',    label: '🚪 Getting started' },
-      { value: 'community',          label: '🤝 Community' },
-      { value: 'cofounder',          label: '👥 Co-founder / collaborator' },
-      { value: 'accountability',     label: '📋 Accountability + structure' },
-      { value: 'customer-discovery', label: '🔬 Customer discovery' },
-      { value: 'skill-building',     label: '📚 Skills + learning' },
-      { value: 'mentorship',         label: '🧠 Mentorship + advisors' },
-      { value: 'funding',            label: '💸 Funding / grants' },
-      { value: 'pitch-prep',         label: '🎤 Pitch preparation' },
-      { value: 'product-feedback',   label: '🧪 Product feedback' },
-      { value: 'networking',         label: '🌐 Networking + experts' },
-      { value: 'lab-space',          label: '🏥 Lab / workspace' },
-      { value: 'scaling',            label: '📈 Scaling strategy' },
+      { value: 'feedback',   label: '🔍 Real customer feedback' },
+      { value: 'milestones', label: '📋 Clear milestones + accountability' },
+      { value: 'community',  label: '🤝 Co-founders / community' },
+      { value: 'funding',    label: '💰 Funding / investor visibility' },
     ]
   },
   {
-    id: 'focus',
-    label: "Focus area",
-    multi: false,
+    id: 'time',
+    label: 'Q3 — Time they can commit',
     options: [
-      { value: 'general',       label: '⚡ General / Tech' },
-      { value: 'social-impact', label: '💚 Social Impact' },
-      { value: 'life-sciences', label: '🧬 Life Sciences / Biotech' },
-      { value: 'climate',       label: '🌍 Climate / Sustainability' },
+      { value: 'light',    label: '⚡ A few hours here and there' },
+      { value: 'moderate', label: '🗓️ 4–10 hrs/week, consistently' },
+      { value: 'heavy',    label: '🔥 10+ hrs — main focus' },
     ]
   },
   {
-    id: 'commitment',
-    label: "Time they can commit",
-    multi: false,
+    id: 'sector',
+    label: 'Q4 — Space they\u2019re building in',
     options: [
-      { value: 'minimal', label: '⚡ Drop-in only' },
-      { value: 'low',     label: '🕐 1–3 hrs / week' },
-      { value: 'medium',  label: '🕑 3–7 hrs / week' },
-      { value: 'high',    label: '⏰ Full-time focus' },
+      { value: 'lifesci',      label: '🧬 Life Sciences / Health Care' },
+      { value: 'climate',      label: '🌿 Climate / Sustainability' },
+      { value: 'deeptech',     label: '⚙️ Deep Tech / AI / Engineering' },
+      { value: 'socialimpact', label: '💚 Social Impact' },
+      { value: 'general',      label: '🌐 General / Not sure yet' },
     ]
   },
   {
     id: 'format',
-    label: "How can they participate?",
-    multi: false,
+    label: 'Q5 — Preferred participation format',
     options: [
-      { value: 'remote',   label: '🟢 Remote / not in Boston' },
-      { value: 'hybrid',   label: '🟡 Either remote or in person' },
-      { value: 'inperson', label: '🔵 In person in Boston' },
+      { value: 'remote',   label: '🟢 Remote' },
+      { value: 'hybrid',   label: '🟡 Hybrid' },
+      { value: 'inperson', label: '🔵 In-Person' },
     ]
   },
 ];
 
+const SECTOR_LABELS = {
+  lifesci: 'Life Sciences', climate: 'Climate', deeptech: 'Deep Tech / AI',
+  socialimpact: 'Social Impact', general: 'General',
+};
+const FORMAT_LABELS = { remote: 'Remote', hybrid: 'Hybrid', inperson: 'In-Person' };
 
-/* ══════════════════════════════════════════════════════════════════════
-   STATE
-══════════════════════════════════════════════════════════════════════ */
-
+/* ── STATE — same shape as the founder quiz's answers ── */
 const state = {
-  affiliation: null,
-  stage:       null,
-  needs:       new Set(),
-  focus:       null,
-  commitment:  null,
-  format:      null,  // 'remote' | 'hybrid' | 'inperson'
+  affiliation: null, // staff-only, never passed into calcPersonaFromAnswers()
+  stage: null, goal: null, time: null, sector: null, format: null,
 };
-
 
 /* ══════════════════════════════════════════════════════════════════════
-   SCORING
-══════════════════════════════════════════════════════════════════════ */
-
-function programIsStructured(p) {
-  // programs that should NOT be shown to drop-in-only founders
-  return ['acceleration', 'venture-incubation', 'llx', 'siff', 'climate-circle'].includes(p.id);
-}
-
-function formatMatchesUser(programFormat, userFormat) {
-  if (!programFormat || !userFormat) return true;
-  // user hybrid → everything is allowed
-  if (userFormat === 'hybrid') return true;
-  if (userFormat === 'remote') {
-    // remote only: block in-person only
-    return programFormat === 'REMOTE' || programFormat === 'HYBRID';
-  }
-  if (userFormat === 'inperson') {
-    // in-person user can attend anything, but we'll soft-score matches below
-    return true;
-  }
-  return true;
-}
-
-function scoreProgram(p) {
-
-    // ── Affiliation hard exclusions ──
-  if (p.excludedAffiliations && state.affiliation) {
-    if (p.excludedAffiliations.includes(state.affiliation)) return -999;
-  }
-  // ── HARD AVAILABILITY RULES ─────────────────────
-  if (state.commitment === 'minimal' && programIsStructured(p)) {
-    // Someone who can only do drop-in shouldn't do acceleration/incubation/diff-like things
-    return -999;
-  }
-
-  // ── HARD FORMAT RULES ───────────────────────────
-  if (!formatMatchesUser(p.format, state.format)) {
-    // e.g. remote user and program is INPERSON only
-    return -999;
-  }
-
-  let score = 0;
-
-  // ── Focus (hard filter + bonus) ──
-  if (p.requiredFocus) {
-    if (state.focus && state.focus !== p.requiredFocus) return -999; // exclude
-    if (state.focus === p.requiredFocus) score += 6;   // strong match
-    if (!state.focus) score -= 4;                      // no focus selected: low score
-  }
-
-  // ── Stage ──
-  if (state.stage) {
-    score += p.stages.includes(state.stage) ? 3 : -1;
-  }
-
-  // ── Needs ──
-  state.needs.forEach(need => {
-    if (p.needs.includes(need)) score += 2;
-  });
-
-  // ── Commitment ──
-  if (state.commitment) {
-    score += p.commitment.includes(state.commitment) ? 1 : -1;
-  }
-
-  // ── Format (soft preference) ──
-  if (state.format) {
-    if (state.format === 'remote' && p.format === 'REMOTE') score += 2;
-    if (state.format === 'inperson' && p.format === 'INPERSON') score += 2;
-    if (state.format === 'hybrid' && p.format === 'HYBRID') score += 1;
-  }
-
-  return score;
-}
-
-function getMatchStrength(score) {
-  if (score >= 7) return { label: '⭑ Strong match', cls: 'match-strong'   };
-  if (score >= 3) return { label: 'Good match',      cls: 'match-good'     };
-  if (score >= 1) return { label: 'Relevant',        cls: 'match-relevant' };
-  return null;
-}
-
-
-/* ══════════════════════════════════════════════════════════════════════
-   QUICK TIPS — contextual intelligence
-══════════════════════════════════════════════════════════════════════ */
-
-function getQuickTip() {
-  const n = [...state.needs];
-  const { stage, focus, commitment, affiliation, format } = state;
-
-    // ADD THIS BLOCK FIRST ↓
-  if (affiliation === 'alumni')
-    return "🏛️ Alumni founders aren't eligible for standard Membership — skip straight to program routing. Acceleration, Venture Growth events, and LLX are all open to alumni founders.";
-
-  // ...rest of existing tips unchanged
-
-  if (focus === 'life-sciences')
-    return "🧬 Life Sciences focus detected — Life Lab is purpose-built for this. Lead with it in your conversation and connect to Courtney or Michelle.";
-
-  if (focus === 'climate')
-    return "🌍 Climate focus detected — Climate Circle is the dedicated pathway here. Loop in Rebekah Emanuel early.";
-
-  if (focus === 'social-impact' && n.includes('funding'))
-    return "💸 Social Impact + funding is exactly what SIFF was built for. This is a strong routing opportunity — connect to Rebekah or Lauren right away.";
-
-  if (n.includes('cofounder'))
-    return "👥 They're looking for a co-founder — don't forget Founder/Joiner Pizza + Pitch under Open Community. It's the fastest path to the right connections.";
-
-  if (commitment === 'high' && (stage === 'building' || stage === 'growth' || stage === 'raising'))
-    return "🚀 High commitment + later stage = Acceleration or LLX territory. This conversation belongs with Rym Baouendi or Joanna Furgiuele.";
-
-  if ((stage === 'exploring' || stage === 'idea') && (affiliation === 'current-student' || !affiliation))
-    return "🔑 First: are they already a member? That's always step zero — nothing else opens without it.";
-
-  if (n.includes('customer-discovery') && commitment === 'minimal')
-    return "🌱 Low commitment + customer discovery = the async Primer is likely smarter than the 3-week Sprint. Let their schedule drive the choice.";
-
-  if (n.includes('customer-discovery') && (commitment === 'low' || commitment === 'medium'))
-    return "🌱 They can commit some time AND need customer discovery — the Sprint is probably better than the Primer for accountability and peer energy.";
-
-  if (format === 'remote')
-    return "🟢 They're remote — avoid in-person-only programs like VIP, Summer Accelerator, LLX, and make sure at least one recommendation is fully accessible online.";
-
-  if (n.length >= 4)
-    return "💡 They have a lot of needs — usually that means a primary program for structure, plus community events to fill the gaps. Think about sequencing, not just matching.";
-
-  return null;
-}
-
-
-/* ══════════════════════════════════════════════════════════════════════
-   CONTEXT BANNER — plain-English summary
-══════════════════════════════════════════════════════════════════════ */
-
-const STAGE_LABELS = {
-  exploring:  'exploring / curious',
-  idea:       'idea-stage',
-  validation: 'in validation',
-  building:   'building a product',
-  growth:     'in growth mode',
-  raising:    'actively fundraising',
-};
-const FOCUS_LABELS = {
-  'general':       'general / tech',
-  'social-impact': 'social impact',
-  'life-sciences': 'life sciences / biotech',
-  'climate':       'climate / sustainability',
-};
-const NEED_LABELS = {
-  'getting-started':'getting started','community':'community','cofounder':'a co-founder',
-  'accountability':'accountability','customer-discovery':'customer discovery',
-  'skill-building':'skill building','mentorship':'mentorship','funding':'funding',
-  'pitch-prep':'pitch prep','product-feedback':'product feedback',
-  'networking':'networking','lab-space':'lab space','scaling':'scaling help',
-};
-const COMMIT_LABELS = {
-  minimal:'drop-in only', low:'1–3 hrs/week', medium:'3–7 hrs/week', high:'full-time focus'
-};
-const FORMAT_LABELS = {
-  remote:   'remote only',
-  hybrid:   'either remote or in person',
-  inperson: 'in-person in Boston',
-};
-
-function buildContextText() {
-  const parts = [];
-  if (state.stage) parts.push(`a <strong>${STAGE_LABELS[state.stage]}</strong> founder`);
-  else parts.push('a founder');
-  if (state.focus) parts.push(`focused on <strong>${FOCUS_LABELS[state.focus]}</strong>`);
-  if (state.needs.size > 0) {
-    const list = [...state.needs].map(n => NEED_LABELS[n] || n).join(', ');
-    parts.push(`who needs <strong>${list}</strong>`);
-  }
-  if (state.commitment) parts.push(`able to give <strong>${COMMIT_LABELS[state.commitment]}</strong>`);
-  if (state.format) parts.push(`and <strong>${FORMAT_LABELS[state.format]}</strong> participation`);
-  return 'Routing: ' + parts.join(', ') + '.';
-}
-
-
-/* ══════════════════════════════════════════════════════════════════════
-   RENDER CHIPS
+   CHIPS
 ══════════════════════════════════════════════════════════════════════ */
 
 function renderChips() {
-  const container = document.getElementById('signalGroups');
-  container.innerHTML = SIGNAL_CONFIG.map(group => `
-    <div class="signal-group">
+  document.getElementById('signalGroups').innerHTML = SIGNAL_CONFIG.map(group => `
+    <div class="signal-group${group.staffOnly ? ' staff-only' : ''}">
       <div class="signal-group-label">
         ${group.label}
         ${group.hint ? `<span class="multi-hint">${group.hint}</span>` : ''}
       </div>
       <div class="chip-row" id="chips-${group.id}">
         ${group.options.map(opt => `
-          <button
-            class="chip"
-            data-group="${group.id}"
-            data-value="${opt.value}"
-            onclick="handleChip('${group.id}','${opt.value}',${!!group.multi})"
-          >${opt.label}</button>
+          <button class="chip" data-group="${group.id}" data-value="${opt.value}" onclick="handleChip('${group.id}','${opt.value}')">${opt.label}</button>
         `).join('')}
       </div>
     </div>
   `).join('');
 }
 
-
-/* ══════════════════════════════════════════════════════════════════════
-   CHIP CLICK
-══════════════════════════════════════════════════════════════════════ */
-
-function handleChip(group, value, isMulti) {
-  if (isMulti) {
-    state[group].has(value) ? state[group].delete(value) : state[group].add(value);
-  } else {
-    state[group] = state[group] === value ? null : value;
-  }
+function handleChip(group, value) {
+  state[group] = state[group] === value ? null : value;
   document.querySelectorAll(`#chips-${group} .chip`).forEach(c => {
-    const sel = isMulti ? state[group].has(c.dataset.value) : state[group] === c.dataset.value;
-    c.classList.toggle('selected', sel);
+    c.classList.toggle('selected', state[group] === c.dataset.value);
   });
   renderResults();
   updateActiveCount();
 }
 
-
-/* ══════════════════════════════════════════════════════════════════════
-   RENDER RESULTS
-══════════════════════════════════════════════════════════════════════ */
-
-function renderResults() {
-  const hasSignals = state.stage || state.needs.size > 0 || state.focus
-                  || state.commitment || state.affiliation || state.format;
-
-  const emptyEl   = document.getElementById('emptyState');
-  const wrapEl    = document.getElementById('resultsWrap');
-
-  if (!hasSignals) {
-    emptyEl.style.display = '';
-    wrapEl.style.display  = 'none';
-    return;
-  }
-
-  emptyEl.style.display = 'none';
-  wrapEl.style.display  = '';
-
-  // Context banner
-  document.getElementById('contextBanner').innerHTML = buildContextText();
-
-  // Quick tip
-  const tip   = getQuickTip();
-  const tipEl = document.getElementById('quickTip');
-  if (tip) {
-    tipEl.style.display = 'flex';
-    document.getElementById('quickTipText').textContent = tip;
-  } else {
-    tipEl.style.display = 'none';
-  }
-
-  // Score + sort
-  const results = PROGRAMS
-    .map(p => ({ ...p, score: scoreProgram(p) }))
-    .filter(p => p.score > 0)
-    .sort((a, b) => b.score - a.score);
-
-  document.getElementById('resultsCount').textContent =
-    results.length > 0
-      ? `${results.length} program${results.length > 1 ? 's' : ''} matched — sorted by fit`
-      : '';
-
-  const container = document.getElementById('resultsContainer');
-
-  if (results.length === 0) {
-    container.innerHTML = `
-      <div class="no-results">
-        <p>No strong matches for these signals.</p>
-        <p class="no-results-sub">Try adjusting your selections, or take this to a direct conversation with a program lead.</p>
-      </div>`;
-    return;
-  }
-
-  container.innerHTML = results.map(renderCard).join('');
-}
-
-
-/* ══════════════════════════════════════════════════════════════════════
-   RENDER ONE CARD
-══════════════════════════════════════════════════════════════════════ */
-
-const THEME_COLORS = {
-  coral:  { bg: 'var(--coral-light)',  color: 'var(--coral)'  },
-  green:  { bg: 'var(--green-light)',  color: 'var(--green)'  },
-  amber:  { bg: 'var(--amber-light)',  color: 'var(--amber)'  },
-  purple: { bg: 'var(--purple-light)', color: 'var(--purple)' },
-  teal:   { bg: 'var(--teal-light)',   color: 'var(--teal)'   },
-  blue:   { bg: 'var(--blue-light)',   color: 'var(--blue)'   },
-};
-
-function renderCard(p) {
-  const strength = getMatchStrength(p.score);
-  if (!strength) return '';
-  const tc = THEME_COLORS[p.theme] || THEME_COLORS.coral;
-
-  const leads = (p.contacts || []).filter(c => c.role === 'Lead');
-  const others = (p.contacts || []).filter(c => c.role !== 'Lead');
-
-  const contactsHtml = p.contacts && p.contacts.length ? `
-    <div class="rc-contacts">
-      <span class="rc-contacts-label">Owned by</span>
-      ${leads.map(c => `<span class="rc-contact-chip">${c.name}</span>`).join('')}
-      ${others.length ? others.map(c =>
-        `<span class="rc-contact-chip secondary">${c.name.split(' ')[0]}</span>`
-      ).join('') : ''}
-    </div>` : '';
-
-  const nextStepHtml = p.nextStepLink && p.nextStepLink !== '#'
-    ? `<a href="${p.nextStepLink}" target="_blank" class="rc-action-link">${p.nextStep} →</a>`
-    : `<span class="rc-action-text">${p.nextStep}</span>`;
-
-  return `
-    <div class="result-card theme-${p.theme}">
-
-      <div class="rc-header">
-        <div class="rc-header-left">
-          <div class="rc-icon" style="background:${tc.bg};color:${tc.color}">${p.icon}</div>
-          <div>
-            <div class="rc-name">${p.name}</div>
-            <div class="rc-tagline">${p.tagline}</div>
-          </div>
-        </div>
-        <div class="rc-header-right">
-          <span class="match-badge ${strength.cls}">${strength.label}</span>
-          <span class="rc-entry-tag">${p.entryModel}</span>
-        </div>
-      </div>
-
-      <div class="rc-why">${p.whyItFits}</div>
-
-      <div class="rc-script-wrap">
-        <div class="rc-section-label">💬 Say this to them</div>
-        <div class="rc-script" id="script-${p.id}">
-          <span id="scripttext-${p.id}">"${p.script}"</span>
-          <button class="copy-btn" id="copybtn-${p.id}" onclick="copyScript('${p.id}')">Copy</button>
-        </div>
-      </div>
-
-      <div class="rc-actions">
-        <div class="rc-action">
-          <span class="rc-action-icon">⚡</span>
-          <div><span class="rc-action-label">Next step: </span>${nextStepHtml}</div>
-        </div>
-        <div class="rc-action">
-          <span class="rc-action-icon">❓</span>
-          <div>
-            <span class="rc-action-label">Then ask: </span>
-            <span class="rc-action-text rc-action-question">"${p.followUp}"</span>
-          </div>
-        </div>
-        ${p.watchOut ? `
-        <div class="rc-action watchout">
-          <span class="rc-action-icon">⚠️</span>
-          <div>
-            <span class="rc-action-label">Watch out: </span>
-            <span class="rc-action-text">${p.watchOut}</span>
-          </div>
-        </div>` : ''}
-      </div>
-
-      ${contactsHtml}
-    </div>`;
-}
-
-
-/* ══════════════════════════════════════════════════════════════════════
-   COPY SCRIPT
-══════════════════════════════════════════════════════════════════════ */
-
-function copyScript(id) {
-  const p = PROGRAMS.find(x => x.id === id);
-  if (!p) return;
-  navigator.clipboard.writeText(`"${p.script}"`).then(() => {
-    const btn = document.getElementById(`copybtn-${id}`);
-    if (!btn) return;
-    btn.textContent = 'Copied ✓';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
-  }).catch(() => {
-    // Fallback: select the text
-    const el = document.getElementById(`scripttext-${id}`);
-    if (!el) return;
-    const range = document.createRange();
-    range.selectNode(el);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-  });
-}
-
-
-/* ══════════════════════════════════════════════════════════════════════
-   CLEAR ALL
-══════════════════════════════════════════════════════════════════════ */
-
 function clearAll() {
-  state.affiliation = null;
-  state.stage       = null;
-  state.needs       = new Set();
-  state.focus       = null;
-  state.commitment  = null;
-  state.format      = null;
+  Object.keys(state).forEach(k => state[k] = null);
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
   document.getElementById('emptyState').style.display  = '';
   document.getElementById('resultsWrap').style.display = 'none';
   updateActiveCount();
 }
 
-  /* ══════════════════════════════════════════════════════════════════════
+function updateActiveCount() {
+  const n = Object.values(state).filter(Boolean).length;
+  document.getElementById('activeCount').textContent = n > 0 ? `${n} signal${n > 1 ? 's' : ''} active` : '';
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   QUICK TIPS
+══════════════════════════════════════════════════════════════════════ */
+
+function getQuickTip() {
+  if (state.affiliation === 'alumni')
+    return "🏛️ Alumni founders may not be eligible for standard Membership — verify eligibility before recommending the membership intake step below. This check is staff-only; it doesn't affect the founder's persona.";
+  if (state.sector === 'socialimpact')
+    return "💚 Social Impact triggers a hard override straight to Impact Founder / SIFF — stage, goal, and time don't change this, same as the founder quiz.";
+  if (state.time === 'light')
+    return "🤝 Light time commitment triggers a hard override straight to Community First — stage, goal, and sector don't change this, same as the founder quiz.";
+  if (!state.sector)
+    return "💡 No sector selected yet — steps are showing the General/default path. Ask about their space (Life Sci, Climate, Deep Tech, Social Impact) for sector-specific recommendations.";
+  if (!state.format)
+    return "💡 No format preference set — event sorting is defaulting to Hybrid, same as the founder quiz's own fallback.";
+  return null;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   CONTEXT BANNER
+══════════════════════════════════════════════════════════════════════ */
+
+function buildContextText(p, sector, format) {
+  const sectorLabel = state.sector ? SECTOR_LABELS[sector] : `${SECTOR_LABELS[sector]} (default)`;
+  const formatLabel = state.format ? FORMAT_LABELS[format] : 'Hybrid (default)';
+  return `Routing as: <strong>${p.emoji} ${p.name}</strong> · sector: <strong>${sectorLabel}</strong> · format: <strong>${formatLabel}</strong> — identical to what this founder gets from Find Your Path with the same answers.`;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   RENDER — persona card, steps, events, experts, office hours
+   All content below comes directly from ilab-data.js. No hardcoded
+   program data lives in this file.
+══════════════════════════════════════════════════════════════════════ */
+
+function renderPersonaCard(p) {
+  return `
+    <div class="pcard" style="border-top-color:${p.ac}">
+      <div class="pbadge" style="background:${p.bb};color:${p.bt}">${p.emoji} ${p.name}</div>
+      <div class="phl">${p.hl}</div>
+      <div class="pdesc">${p.desc}</div>
+    </div>`;
+}
+
+function renderStepCard(s, i) {
+  const urgent = !!s.u;
+  return `
+    <div class="result-card theme-${urgent ? 'coral' : 'teal'}">
+      <div class="rc-header">
+        <div class="rc-header-left">
+          <div class="rc-icon" style="background:${urgent ? 'var(--coral-light)' : 'var(--teal-light)'};color:${urgent ? 'var(--coral)' : 'var(--teal)'}">${i + 1}</div>
+          <div>
+            <div class="rc-name">${s.a}</div>
+            <div class="rc-tagline">Step ${i + 1} of ${3} · ${s.sector === 'all' || s.sector === 'default' ? 'all sectors' : SECTOR_LABELS[s.sector] || s.sector}</div>
+          </div>
+        </div>
+        <div class="rc-header-right">${s.fmt ? `<span class="match-badge match-relevant">${s.fmt}</span>` : ''}</div>
+      </div>
+      <div class="rc-script-wrap">
+        <div class="rc-section-label">💬 Say this to them</div>
+        <div class="rc-script">
+          <span id="step-scripttext-${i}">"${s.d}"</span>
+          <button class="copy-btn" onclick="copyText('step-scripttext-${i}', this)">Copy</button>
+        </div>
+      </div>
+      <div class="rc-actions">
+        <div class="rc-action">
+          <span class="rc-action-icon">⚡</span>
+          <div><span class="rc-action-label">Next step: </span>${
+            s.link && s.link !== '#'
+              ? `<a href="${s.link}" target="_blank" class="rc-action-link">${s.ll || 'Open link'}</a>`
+              : `<span class="rc-action-text">${s.ll || 'No link set yet in ilab-data.js'}</span>`
+          }</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderEventCard(e) {
+  return `
+    <div class="result-card theme-blue">
+      <div class="rc-header">
+        <div class="rc-header-left">
+          <div class="rc-icon" style="background:${e.cbg};color:${e.ctx}">📅</div>
+          <div>
+            <div class="rc-name">${e.name}</div>
+            <div class="rc-tagline">${e.con} · ${e.date}${e.time ? ' · ' + e.time : ''}</div>
+          </div>
+        </div>
+        <div class="rc-header-right"><span class="match-badge match-relevant">${e.format}</span></div>
+      </div>
+      <div class="rc-why">${e.desc}</div>
+      ${e.link ? `<div class="rc-actions"><div class="rc-action"><span class="rc-action-icon">⚡</span><div><span class="rc-action-label">Send: </span><a href="${e.link}" target="_blank" class="rc-action-link">Registration link →</a></div></div></div>` : ''}
+    </div>`;
+}
+
+function renderExpertCard(x) {
+  return `
+    <div class="result-card theme-purple">
+      <div class="rc-header">
+        <div class="rc-header-left">
+          <div class="rc-icon" style="background:var(--purple-light);color:var(--purple)">🧑‍🏫</div>
+          <div>
+            <div class="rc-name">${x.name}</div>
+            <div class="rc-tagline">${[x.role, x.org].filter(Boolean).join(' · ')}</div>
+          </div>
+        </div>
+      </div>
+      ${x.canHelp ? `<div class="rc-why">${x.canHelp}</div>` : ''}
+      ${x.bookingUrl ? `<div class="rc-actions"><div class="rc-action"><span class="rc-action-icon">⚡</span><div><span class="rc-action-label">Book: </span><a href="${x.bookingUrl}" target="_blank" class="rc-action-link">Booking page →</a></div></div></div>` : ''}
+    </div>`;
+}
+
+function renderOHCard(o) {
+  return `
+    <div class="result-card theme-amber">
+      <div class="rc-header">
+        <div class="rc-header-left">
+          <div class="rc-icon" style="background:${o.cbg};color:${o.ctx}">🕐</div>
+          <div>
+            <div class="rc-name">${o.name}</div>
+            <div class="rc-tagline">${o.sched} · ${o.fmt}</div>
+          </div>
+        </div>
+      </div>
+      <div class="rc-why">${o.desc}</div>
+      ${o.link ? `<div class="rc-actions"><div class="rc-action"><span class="rc-action-icon">⚡</span><div><span class="rc-action-label">${o.cta}: </span><a href="${o.link}" target="_blank" class="rc-action-link">Link →</a></div></div></div>` : ''}
+    </div>`;
+}
+
+function emptySection(msg) {
+  return `<div class="no-results"><p>${msg}</p></div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   MAIN RENDER
+══════════════════════════════════════════════════════════════════════ */
+
+function renderResults() {
+  const ready = !!(state.stage && state.goal && state.time);
+
+  const emptyEl = document.getElementById('emptyState');
+  const wrapEl  = document.getElementById('resultsWrap');
+
+  if (!ready) {
+    emptyEl.style.display = '';
+    wrapEl.style.display  = 'none';
+    return;
+  }
+  emptyEl.style.display = 'none';
+  wrapEl.style.display  = '';
+
+  // ── Same call every founder's browser makes ──
+  const personaKey = calcPersonaFromAnswers({
+    stage: state.stage, goal: state.goal, time: state.time, sector: state.sector,
+  });
+  const sector = state.sector || 'general';
+  window._QUIZ_SECTOR = sector; // getSteps() reads this exact global
+
+  const p       = PERSONAS[personaKey];
+  const steps   = getSteps(personaKey);
+  const evs     = getEvents(personaKey, sector, state.format);
+  const experts = getExperts(personaKey, sector);
+  const ohs     = getOHs(personaKey, sector, steps);
+
+  document.getElementById('personaCardWrap').innerHTML = renderPersonaCard(p);
+  document.getElementById('contextBanner').innerHTML   = buildContextText(p, sector, state.format);
+
+  const tip = getQuickTip();
+  const tipEl = document.getElementById('quickTip');
+  if (tip) { tipEl.style.display = 'flex'; document.getElementById('quickTipText').textContent = tip; }
+  else { tipEl.style.display = 'none'; }
+
+  document.getElementById('stepsContainer').innerHTML =
+    steps.length ? steps.map(renderStepCard).join('') : emptySection('No steps configured for this persona/sector in ilab-data.js.');
+
+  document.getElementById('eventsContainer').innerHTML =
+    evs.length ? evs.map(renderEventCard).join('') : emptySection('No tagged events for this persona/sector — add tags in the Events tab of the Data Editor.');
+
+  document.getElementById('expertsContainer').innerHTML =
+    experts.length ? experts.map(renderExpertCard).join('') : emptySection('No tagged advisors yet for this persona/sector — add tags in the Experts tab of the Data Editor.');
+
+  document.getElementById('ohsContainer').innerHTML =
+    ohs.length ? ohs.map(renderOHCard).join('') : emptySection('No tagged office hours for this persona — add tags in the Office Hours tab of the Data Editor.');
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   COPY
+══════════════════════════════════════════════════════════════════════ */
+
+function copyText(elId, btn) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(() => {
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════════════
    HELP OVERLAY
 ══════════════════════════════════════════════════════════════════════ */
 
@@ -1774,38 +646,20 @@ function openHelpOverlay() {
   const el = document.getElementById('helpOverlayBackdrop');
   if (el) el.classList.add('open');
 }
-
 function closeHelpOverlay() {
   const el = document.getElementById('helpOverlayBackdrop');
   if (el) el.classList.remove('open');
 }
-
-// Close if clicking on the dark backdrop, but not inside the panel
 function backdropCloseHelp(event) {
-  if (event.target.id === 'helpOverlayBackdrop') {
-    closeHelpOverlay();
-  }
+  if (event.target.id === 'helpOverlayBackdrop') closeHelpOverlay();
 }
-
-
-/* ══════════════════════════════════════════════════════════════════════
-   ACTIVE COUNT
-══════════════════════════════════════════════════════════════════════ */
-
-function updateActiveCount() {
-  const n = (state.affiliation ? 1 : 0) + (state.stage ? 1 : 0)
-          + state.needs.size + (state.focus ? 1 : 0)
-          + (state.commitment ? 1 : 0) + (state.format ? 1 : 0);
-  document.getElementById('activeCount').textContent =
-    n > 0 ? `${n} signal${n > 1 ? 's' : ''} active` : '';
-}
-
 
 /* ── INIT ── */
 renderChips();
 
 </script>
-  <!-- ── HELP OVERLAY ── -->
+
+<!-- ── HELP OVERLAY ── -->
 <div class="help-overlay-backdrop" id="helpOverlayBackdrop" onclick="backdropCloseHelp(event)">
   <div class="help-overlay" role="dialog" aria-modal="true" aria-labelledby="helpOverlayTitle">
     <div class="help-header">
@@ -1817,130 +671,86 @@ renderChips();
     </div>
 
     <div class="help-body">
-      <!-- Left column: How to use -->
       <div class="help-col">
         <div class="help-section">
           <div class="help-section-label">Step 1</div>
-          <div class="help-section-title">Capture what you’re hearing</div>
+          <div class="help-section-title">Capture what you're hearing</div>
           <div class="help-section-text">
-            Use the chips on the left to mirror what the founder is telling you:
+            Select chips for the same 5 questions a founder answers in Find Your Path:
             <ul class="help-list">
-              <li><strong>Who they are</strong> (student, recent grad, alumni, etc.)</li>
-              <li><strong>Stage</strong> (exploring → raising)</li>
-              <li><strong>Needs</strong> (funding, community, accountability, etc.)</li>
-              <li><strong>Focus area</strong> (general, social impact, life sciences, climate)</li>
-              <li><strong>Time</strong> they can commit (drop-in vs. structured)</li>
-              <li><strong>Format</strong> (remote, hybrid, in-person)</li>
+              <li><strong>Stage</strong> — Explore / Test / Propel</li>
+              <li><strong>Goal</strong> — feedback, milestones, community, or funding</li>
+              <li><strong>Time</strong> — light, moderate, or heavy commitment</li>
+              <li><strong>Sector</strong> — Life Sci, Climate, Deep Tech, Social Impact, or General</li>
+              <li><strong>Format</strong> — Remote, Hybrid, or In-Person</li>
             </ul>
-            Results update in real time as you toggle chips on and off.
+            The top "Eligibility check" row is staff-only — it never affects the persona or routing, since founders never answer it.
           </div>
         </div>
 
         <div class="help-section alt">
           <div class="help-section-label">Step 2</div>
-          <div class="help-section-title">Read the routing story at the top</div>
+          <div class="help-section-title">Read the routing banner</div>
           <div class="help-section-text">
-            The <strong>Routing</strong> sentence above the results turns your chips into
-            a one-line summary you can quickly sanity-check. If it doesn’t sound like the
-            founder you’re talking to, adjust the chips until it does.
-          </div>
-          <div class="help-hotspot-row">
-            <span class="help-hotspot-pill">Routing: …</span>
-            <span class="help-hotspot-desc">Plain‑English summary of who you’re routing.</span>
+            The <strong>Routing as:</strong> line names the exact persona this founder would land on
+            in Find Your Path, plus the sector/format used (defaults shown explicitly when unselected —
+            same defaults the quiz itself falls back to).
           </div>
         </div>
 
         <div class="help-section">
           <div class="help-section-label">Step 3</div>
-          <div class="help-section-title">Use the result cards live in conversation</div>
+          <div class="help-section-title">Use the cards live in conversation</div>
           <div class="help-section-text">
-            Each card gives you:
-            <ul class="help-list">
-              <li><strong>Why it fits</strong> — 1–2 sentences of context for you.</li>
-              <li><strong>“Say this to them”</strong> — a script you can read almost verbatim.</li>
-              <li><strong>Next step</strong> — exactly what you should do next (and links where relevant).</li>
-              <li><strong>Then ask</strong> — a follow‑up question to qualify fit.</li>
-              <li><strong>Watch out</strong> — landmines, caveats, or capacity notes.</li>
-            </ul>
-            Use the <strong>Copy</strong> button if you’re writing an email or Slack message.
+            <strong>Start right here</strong> = the persona's 3 steps. <strong>Also relevant</strong> = matched events.
+            <strong>Advisors to loop in</strong> = tagged experts. <strong>Office hours</strong> = tagged sessions —
+            step-linked ones are promoted automatically. All four sections pull live from <code>ilab-data.js</code>.
           </div>
         </div>
       </div>
 
-      <!-- Right column: How to update / logic -->
       <div class="help-col">
         <div class="help-section alt">
           <div class="help-section-label">For editors</div>
-          <div class="help-section-title">How to update programs & scripts</div>
+          <div class="help-section-title">This file has no data of its own</div>
           <div class="help-section-text">
-            Everything is driven by the <code>PROGRAMS</code> array in this file:
+            Unlike the old version of this tool, there is no <code>PROGRAMS</code> array here anymore.
             <ul class="help-list">
-              <li><strong>To edit a talking point</strong> — update <code>script</code>, <code>whyItFits</code>,
-                <code>nextStep</code>, or <code>followUp</code> on the relevant program object.</li>
-              <li><strong>To add a new program</strong> — copy an existing object, give it a new <code>id</code>,
-                fill in <code>stages</code>, <code>needs</code>, <code>focus</code>, <code>commitment</code>, and <code>format</code>.</li>
-              <li><strong>To change who owns it</strong> — edit the <code>contacts</code> array (names + “Lead” vs “Facilitator”).</li>
+              <li><strong>To change content</strong> (events, steps, experts, office hours, persona copy)
+                — edit via <code>data-editor.html</code>, export, and push the new <code>ilab-data.js</code>.</li>
+              <li><strong>To change persona scoring</strong> — edit <code>calcPersonaFromAnswers()</code>
+                inside <code>ilab-data.js</code>. It's called by both this tool and the founder quiz — one
+                change updates both, guaranteed.</li>
+              <li><strong>To change chip labels</strong> — edit <code>SIGNAL_CONFIG</code> in this file, but
+                never touch a chip's <code>value</code> — those must exactly match the founder quiz's codes.</li>
             </ul>
           </div>
-          <div class="help-tag">Tip — search for <code>const PROGRAMS = [</code> in the source.</div>
+          <div class="help-tag">Single source of truth: ilab-data.js</div>
         </div>
 
         <div class="help-section">
-          <div class="help-section-label">Routing rules</div>
-          <div class="help-section-title">How the matching logic works</div>
+          <div class="help-section-label">Why this matters</div>
+          <div class="help-section-title">Guaranteed parity, not coincidental parity</div>
           <div class="help-section-text">
-            The score for each program is based on:
-            <ul class="help-list">
-              <li><strong>Hard filters</strong>
-                <ul class="help-list">
-                  <li>Drop‑in only (<code>commitment = minimal</code>) hides structured programs
-                    like Acceleration, VIP, LLX, SIFF, and Climate Circle.</li>
-                  <li>Remote participants won’t see in‑person‑only programs.</li>
-                  <li>Focus‑specific programs (Life Lab, Climate Circle, SIFF) only appear when that focus is selected.</li>
-                </ul>
-              </li>
-              <li><strong>Soft scoring</strong> on:
-                <ul class="help-list">
-                  <li>Stage alignment</li>
-                  <li>Overlapping needs</li>
-                  <li>Time they can commit</li>
-                  <li>Format preference (remote / in‑person / hybrid)</li>
-                </ul>
-              </li>
-            </ul>
-            The final score determines whether a card shows up and how strong its match badge is.
-          </div>
-        </div>
-
-        <div class="help-section alt">
-          <div class="help-section-label">Signal chips</div>
-          <div class="help-section-title">How to add or change chips</div>
-          <div class="help-section-text">
-            The left‑hand chips are defined in <code>SIGNAL_CONFIG</code>:
-            <ul class="help-list">
-              <li><strong>To rename a chip</strong> — update its <code>label</code> only.</li>
-              <li><strong>To add/remove a chip</strong> — edit the <code>options</code> arrays,
-                then wire the new <code>value</code> into <code>scoreProgram()</code> if needed.</li>
-              <li><strong>To add a new group</strong> — add another group object to <code>SIGNAL_CONFIG</code>
-                and hook it into the <code>state</code> object.</li>
-            </ul>
+            The previous version of this tool had its own hardcoded program list and its own scoring
+            logic — they could (and did) drift from what founders actually see. This version calls the
+            exact same functions the founder-facing quiz calls, so a staff member and a founder giving
+            identical answers will always get identical output.
           </div>
         </div>
       </div>
     </div>
 
     <div class="help-footer">
-      <div>
-        <strong>Working draft.</strong> This tool should evolve as programs and realities change. When in doubt,
-        talk directly to the program lead.
-      </div>
+      <div><strong>Working draft.</strong> When in doubt, talk directly to the program lead.</div>
       <div class="help-footer-links">
         <span class="help-footer-link" onclick="closeHelpOverlay()">Got it — close overlay</span>
       </div>
     </div>
   </div>
 </div>
-  <!-- Mascot + "How this tool works" bubble -->
+
+<!-- Mascot + "How this tool works" bubble -->
 <div id="help-mascot" onclick="openHelpOverlay()">
   <div class="help-bubble">How this tool works</div>
   <button aria-label="How this tool works">
