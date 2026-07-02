@@ -1099,6 +1099,9 @@ function getOHs(persona, sector, resolvedSteps) {
     return linked(b) - linked(a);
   });
 
+  return matches.slice(0, 4);
+}
+
 // ── PERSONA SCORING (single source of truth) ────────────────────────
 // Used by founder_xp_generator.html (the founder-facing quiz) AND
 // the_bot.html (the staff Routing Desk) — both call this exact
