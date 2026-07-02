@@ -59,10 +59,6 @@ const EVENTS = [
 // Shown in results pages — up to 3 per founder, matched by tags.
 // Re-import from advisor CSV each semester to refresh photo URLs.
 const EXPERTS = [
-  { id:"ex_1783003795054", name:"New expert", role:"", org:"",
-    photo:"", bookingUrl:"",
-    canHelp:"",
-    tags:[] },
   { id:"adam_jackson", name:"Adam  Jackson", role:"Partner", org:"Bosch Ventures",
     photo:"https://v5.airtableusercontent.com/v3/u/54/54/1782777600000/3Oh9TNhmYmdXRTwBLHnD0w/KMn1P8icvxKfbZjH8r8DStUOcGdOLMdI8xZ2ONN4sJm4auxHv0G9kDX8pzqprbYHAYJGpZl10v1w0MHTkWtDlwv1AvbEF5eh8hyGmvmkWBKwXNwHnioi6wdzYPwhVFNt_Wb9krO470vvX5BO3PtfJc00ToHK6k3a4h186aIC29k/J95qN14lIMs1FFWU1W4-O-LQx0k4hJLGFlG1_-OqqqI", bookingUrl:"https://airtable.com/app5pdf5nPDsS8Snr/shrsPMrk6yA5XIH0U/tblsRhzSpiewnPyPA?filter_Expert=Adam%20%20Jackson",
     canHelp:"Capital raising\nPitch Decks\nBusiness Model\nFounders issue ",
@@ -786,5 +782,33 @@ function getOHs(persona, sector, resolvedSteps) {
     return linked(b) - linked(a);
   });
 
-  return matches.slice(0, 4);
+// ── PERSONA SCORING (single source of truth) ────────────────────────
+// Used by founder_xp_generator.html (the founder-facing quiz) AND
+// the_bot.html (the staff Routing Desk) — both call this exact
+// function so a staff member and a founder giving the same answers
+// always land on the same persona. Do not duplicate this logic
+// elsewhere; if the scoring model changes, it only needs to change
+// here.
+function calcPersonaFromAnswers(answers) {
+  const { stage, goal, time, sector } = answers;
+
+  // Hard overrides first
+  if (sector === 'socialimpact') return 'impact';
+  if (time === 'light')          return 'community';
+
+  const s = { explorer:0, validator:0, builder:0, propeller:0 };
+
+  if (stage === 'explore') { s.explorer  += 5; }
+  if (stage === 'test')    { s.validator += 3; s.builder   += 2; }
+  if (stage === 'propel')  { s.propeller += 5; s.builder   += 1; }
+
+  if (goal === 'feedback')   { s.explorer  += 2; s.validator += 3; }
+  if (goal === 'milestones') { s.validator += 1; s.builder   += 3; }
+  if (goal === 'community')  { s.explorer  += 2; s.validator += 1; }
+  if (goal === 'funding')    { s.propeller += 3; s.builder   += 1; }
+
+  if (time === 'moderate') { s.validator += 2; s.explorer  += 1; }
+  if (time === 'heavy')    { s.builder   += 3; s.propeller += 1; }
+
+  return Object.entries(s).sort((a,b) => b[1]-a[1])[0][0];
 }
