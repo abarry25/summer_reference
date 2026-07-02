@@ -1099,7 +1099,35 @@ function getOHs(persona, sector, resolvedSteps) {
     return linked(b) - linked(a);
   });
 
-  return matches.slice(0, 4);
+// ── PERSONA SCORING (single source of truth) ────────────────────────
+// Used by founder_xp_generator.html (the founder-facing quiz) AND
+// the_bot.html (the staff Routing Desk) — both call this exact
+// function so a staff member and a founder giving the same answers
+// always land on the same persona. Do not duplicate this logic
+// elsewhere; if the scoring model changes, it only needs to change
+// here.
+function calcPersonaFromAnswers(answers) {
+  const { stage, goal, time, sector } = answers;
+
+  // Hard overrides first
+  if (sector === 'socialimpact') return 'impact';
+  if (time === 'light')          return 'community';
+
+  const s = { explorer:0, validator:0, builder:0, propeller:0 };
+
+  if (stage === 'explore') { s.explorer  += 5; }
+  if (stage === 'test')    { s.validator += 3; s.builder   += 2; }
+  if (stage === 'propel')  { s.propeller += 5; s.builder   += 1; }
+
+  if (goal === 'feedback')   { s.explorer  += 2; s.validator += 3; }
+  if (goal === 'milestones') { s.validator += 1; s.builder   += 3; }
+  if (goal === 'community')  { s.explorer  += 2; s.validator += 1; }
+  if (goal === 'funding')    { s.propeller += 3; s.builder   += 1; }
+
+  if (time === 'moderate') { s.validator += 2; s.explorer  += 1; }
+  if (time === 'heavy')    { s.builder   += 3; s.propeller += 1; }
+
+  return Object.entries(s).sort((a,b) => b[1]-a[1])[0][0];
 }`;
 }
 
