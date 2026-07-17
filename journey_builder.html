@@ -1,0 +1,296 @@
+
+<style>
+:root{
+  --bg:#F7F6F3; --surface:#FFFFFF; --border:#E2E0D8; --border-strong:#CBC8BC;
+  --ink:#1F2320; --muted:#6B6F68; --faint:#9A978C;
+  --accent:#3D6B5C; --accent-soft:#E4EDE8; --accent-ink:#20402F;
+  --tier2:#B8863B; --tier2-soft:#F3E9D6; --tier2-ink:#5C4114;
+  --tier3:#5B6B7A; --tier3-soft:#E7EBEE; --tier3-ink:#31404C;
+  --radius:10px;
+}
+*{box-sizing:border-box;}
+body,div,input,select,button{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);}
+h1,h2,h3{margin:0;font-weight:600;}
+button{cursor:pointer;}
+.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:600;}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+</style>
+<h2 class="sr-only">Journey builder: configure a hypothetical founder's quiz answers, then drag catalog resources into primary, secondary, and tertiary slots to design their recommended journey, and save it for the team.</h2>
+ 
+<div style="background:var(--bg);border-radius:16px;padding:20px;display:grid;grid-template-columns:230px 1fr 260px;gap:16px;align-items:start;">
+ 
+  <div id="scenario-panel" style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;">
+    <div class="eyebrow">Founder scenario</div>
+    <h3 style="font-size:15px;margin-top:4px;">Set their answers</h3>
+    <div id="q-container" style="margin-top:12px;display:flex;flex-direction:column;gap:16px;"></div>
+  </div>
+ 
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 18px;">
+      <div class="eyebrow">Resulting journey</div>
+      <div id="persona-line" style="font-size:15px;font-weight:600;margin-top:4px;">—</div>
+      <div id="persona-sub" style="font-size:12px;color:var(--muted);margin-top:2px;"></div>
+    </div>
+    <div id="tiers" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;"></div>
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 18px;">
+      <div class="eyebrow">Save this journey</div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <input id="journey-name" placeholder="e.g. Idea-stage climate founder, low bandwidth" style="flex:1;height:36px;border:0.5px solid var(--border-strong);border-radius:8px;padding:0 10px;font-size:13px;">
+        <button onclick="saveJourney()" style="height:36px;padding:0 16px;border-radius:8px;border:0.5px solid var(--border-strong);background:var(--accent-soft);color:var(--accent-ink);font-weight:600;font-size:13px;">Save</button>
+      </div>
+      <div id="save-status" style="font-size:12px;color:var(--muted);margin-top:6px;min-height:14px;"></div>
+    </div>
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 18px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <div class="eyebrow">Saved journeys — visible to your whole team</div>
+        <button onclick="exportAll()" style="font-size:12px;border:none;background:none;color:var(--accent-ink);font-weight:600;">Export all as JSON ↓</button>
+      </div>
+      <div id="saved-list" style="margin-top:8px;display:flex;flex-direction:column;gap:6px;"></div>
+    </div>
+  </div>
+ 
+  <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;">
+    <div class="eyebrow">Catalog</div>
+    <input id="catalog-search" oninput="renderCatalog()" placeholder="Filter resources…" style="width:100%;height:32px;border:0.5px solid var(--border-strong);border-radius:8px;padding:0 10px;font-size:12px;margin-top:8px;">
+    <div style="font-size:11px;color:var(--faint);margin-top:6px;">Drag a card into primary, secondary, or tertiary. Highlighted cards match the current scenario's sector or participation type.</div>
+    <div id="catalog-list" style="margin-top:10px;display:flex;flex-direction:column;gap:8px;max-height:640px;overflow:auto;"></div>
+  </div>
+</div>
+ 
+<script>
+const QUESTIONS = [
+  { key:'accomplishments', label:'What have they accomplished so far?', multi:true,
+    opts:[['idea','Settled on one idea'],['customer','Discovered their customer'],['mvp','Built an MVP'],['demand','Validated demand'],['revenue','Started getting revenue'],['funding','Successfully fundraised'],['team','Built their team']] },
+  { key:'goal30', label:'What do they want in the next 30 days?', multi:false,
+    opts:[['validate','Validate idea'],['mvp','Build MVP'],['customers','Get customers/pilots'],['cofounder','Find cofounder'],['fundraise','Fundraise'],['community','Community & identity'],['deeptech','Commercialize deep tech']] },
+  { key:'sector', label:'What sector?', multi:false,
+    opts:[['lifesci','Health / life sciences'],['deeptech','Deep tech'],['ai','AI'],['socialimpact','Social impact'],['climate','Climate'],['general','General']] },
+  { key:'participation', label:'What kind of participation?', multi:true,
+    opts:[['workshops','Workshops'],['networking','Networking events'],['experts','Meeting with experts'],['incubation','Incubation'],['acceleration','Acceleration'],['pitchcomps','Pitch competitions']] },
+  { key:'time', label:'Time commitment per week', multi:false,
+    opts:[['light','1–3 hrs'],['part','3–7 hrs'],['heavy','10+ hrs'],['fulltime','Full-time']] },
+];
+ 
+const CATALOG = [
+  {id:'primer', name:'Customer Validation Primer', type:'Self-paced resource', sector:['general'], part:[], stage:['idea']},
+  {id:'sprint', name:'Customer Discovery Sprint', type:'Cohort', sector:['general'], part:['workshops'], stage:['idea','validation']},
+  {id:'fundamentals', name:'Founder Fundamentals', type:'Cohort', sector:['general'], part:['workshops'], stage:['idea']},
+  {id:'opencommunity', name:'Open Community', type:'Recurring event', sector:['general'], part:['networking'], stage:['idea']},
+  {id:'foundercircles', name:'Founder Circles', type:'Recurring event', sector:['general'], part:['networking'], stage:['idea','validation']},
+  {id:'joinerpizza', name:'Founder/Joiner Pizza + Pitch', type:'Event', sector:['general'], part:['networking'], stage:['idea']},
+  {id:'expertoh', name:'Venture Growth Expert Office Hours', type:'Office hours', sector:['general'], part:['experts'], stage:['validation','traction']},
+  {id:'themedoh', name:'Themed Office Hours', type:'Office hours', sector:['general'], part:['experts'], stage:['idea','validation']},
+  {id:'investorprep', name:'Investor Prep Workshop', type:'Event', sector:['general'], part:['experts','workshops'], stage:['traction']},
+  {id:'mixer', name:'Founder Mixer', type:'Event', sector:['general'], part:['networking'], stage:['idea','validation','traction']},
+  {id:'accelinfo', name:'Accelerator Info Session', type:'Event', sector:['general'], part:['workshops'], stage:['traction']},
+  {id:'lifelab', name:'Life Lab Incubation', type:'Cohort', sector:['lifesci'], part:['incubation'], stage:['validation','traction']},
+  {id:'climatecircle', name:'Climate Circle', type:'Cohort', sector:['climate'], part:['incubation'], stage:['validation','traction']},
+  {id:'llx', name:'LLX / Acceleration', type:'Cohort', sector:['climate','general'], part:['acceleration'], stage:['traction']},
+  {id:'svp', name:'Summer Venture Program', type:'Cohort', sector:['general'], part:['incubation'], stage:['validation','traction']},
+  {id:'siff', name:'Social Impact Fellowship', type:'Selective program', sector:['socialimpact'], part:['pitchcomps','incubation'], stage:['traction']},
+  {id:'deeptechoh', name:'Deep Tech / AI Office Hours', type:'Office hours', sector:['deeptech','ai'], part:['experts'], stage:['idea','validation']},
+  {id:'pitchcomp', name:'Pitch Competition', type:'Event', sector:['general'], part:['pitchcomps'], stage:['traction']},
+];
+ 
+let scenario = { accomplishments:[], goal30:'', sector:'', participation:[], time:'' };
+let tiers = { primary:[], secondary:[], tertiary:[] };
+const TIER_META = { primary:{label:'Primary', soft:'var(--accent-soft)', ink:'var(--accent-ink)', border:'var(--accent)'},
+  secondary:{label:'Secondary', soft:'var(--tier2-soft)', ink:'var(--tier2-ink)', border:'var(--tier2)'},
+  tertiary:{label:'Tertiary', soft:'var(--tier3-soft)', ink:'var(--tier3-ink)', border:'var(--tier3)'} };
+ 
+function toggleMulti(key, val){
+  const i = scenario[key].indexOf(val);
+  if(i>-1) scenario[key].splice(i,1); else scenario[key].push(val);
+  renderPersona(); renderCatalog();
+}
+function setSingle(key, val){ scenario[key]=val; renderPersona(); renderCatalog(); }
+ 
+function renderQuestions(){
+  const c = document.getElementById('q-container');
+  c.innerHTML = '';
+  QUESTIONS.forEach(q=>{
+    const block = document.createElement('div');
+    block.innerHTML = `<div style="font-size:12px;font-weight:600;margin-bottom:6px;">${q.label}</div>`;
+    const wrap = document.createElement('div');
+    wrap.style.display='flex'; wrap.style.flexDirection='column'; wrap.style.gap='4px';
+    q.opts.forEach(([val,txt])=>{
+      const row = document.createElement('label');
+      row.style.display='flex'; row.style.alignItems='center'; row.style.gap='6px';
+      row.style.fontSize='12.5px'; row.style.cursor='pointer';
+      const input = document.createElement('input');
+      input.type = q.multi ? 'checkbox' : 'radio';
+      input.name = q.key;
+      input.onchange = () => q.multi ? toggleMulti(q.key,val) : setSingle(q.key,val);
+      row.appendChild(input);
+      row.appendChild(document.createTextNode(txt));
+      wrap.appendChild(row);
+    });
+    block.appendChild(wrap);
+    c.appendChild(block);
+  });
+}
+ 
+function derivePersonaLabel(){
+  const order = ['team','funding','revenue','demand','mvp','customer','idea'];
+  const labelMap = {team:'traction (team built)',funding:'traction (fundraised)',revenue:'traction (revenue)',demand:'validation (demand)',mvp:'validation (MVP)',customer:'exploring (found customer)',idea:'exploring (idea set)'};
+  const furthest = order.find(k=>scenario.accomplishments.includes(k));
+  const stageTxt = furthest ? labelMap[furthest] : 'no accomplishments yet';
+  const sectorTxt = scenario.sector ? QUESTIONS[2].opts.find(o=>o[0]===scenario.sector)[1] : 'sector unset';
+  const goalTxt = scenario.goal30 ? QUESTIONS[1].opts.find(o=>o[0]===scenario.goal30)[1] : 'goal unset';
+  const anomaly = (['funding','revenue'].some(k=>scenario.accomplishments.includes(k)) && !scenario.accomplishments.includes('mvp'))
+    ? ' — flag: traction signal without an MVP checked' : '';
+  return { line: `${stageTxt} · ${sectorTxt}`, sub: `30-day goal: ${goalTxt}${anomaly}` };
+}
+function renderPersona(){
+  const p = derivePersonaLabel();
+  document.getElementById('persona-line').textContent = p.line;
+  document.getElementById('persona-sub').textContent = p.sub;
+}
+ 
+function renderTiers(){
+  const el = document.getElementById('tiers');
+  el.innerHTML = '';
+  Object.keys(TIER_META).forEach(tierKey=>{
+    const meta = TIER_META[tierKey];
+    const col = document.createElement('div');
+    col.style = `background:${meta.soft};border:0.5px solid var(--border);border-radius:10px;padding:10px;min-height:220px;`;
+    col.ondragover = e => e.preventDefault();
+    col.ondrop = e => { e.preventDefault(); const id = e.dataTransfer.getData('text/plain'); addToTier(tierKey,id); };
+    col.innerHTML = `<div style="font-size:12px;font-weight:600;color:${meta.ink};margin-bottom:8px;">${meta.label}</div>`;
+    const list = document.createElement('div');
+    list.style.display='flex'; list.style.flexDirection='column'; list.style.gap='6px';
+    tiers[tierKey].forEach(id=>{
+      const item = CATALOG.find(c=>c.id===id);
+      if(!item) return;
+      const card = document.createElement('div');
+      card.style = `background:var(--surface);border:0.5px solid ${meta.border};border-radius:8px;padding:6px 8px;font-size:12px;display:flex;justify-content:space-between;align-items:center;gap:6px;`;
+      card.innerHTML = `<span>${item.name}</span>`;
+      const x = document.createElement('button');
+      x.textContent='×'; x.style='border:none;background:none;font-size:14px;color:var(--muted);';
+      x.onclick = ()=>{ tiers[tierKey] = tiers[tierKey].filter(v=>v!==id); renderTiers(); };
+      card.appendChild(x);
+      list.appendChild(card);
+    });
+    if(tiers[tierKey].length===0){
+      const empty = document.createElement('div');
+      empty.style='font-size:11px;color:var(--faint);border:1px dashed var(--border-strong);border-radius:6px;padding:10px;text-align:center;';
+      empty.textContent='Drop a resource here';
+      list.appendChild(empty);
+    }
+    col.appendChild(list);
+    el.appendChild(col);
+  });
+}
+function addToTier(tierKey,id){
+  Object.keys(tiers).forEach(k=> tiers[k]=tiers[k].filter(v=>v!==id));
+  tiers[tierKey].push(id);
+  renderTiers();
+}
+ 
+function matchesScenario(item){
+  const sectorMatch = scenario.sector && item.sector.includes(scenario.sector);
+  const partMatch = scenario.participation.some(p=>item.part.includes(p));
+  return sectorMatch || partMatch;
+}
+function renderCatalog(){
+  const q = document.getElementById('catalog-search').value.toLowerCase();
+  const list = document.getElementById('catalog-list');
+  list.innerHTML='';
+  CATALOG.filter(c=>c.name.toLowerCase().includes(q)).forEach(item=>{
+    const highlight = matchesScenario(item);
+    const card = document.createElement('div');
+    card.draggable = true;
+    card.ondragstart = e => e.dataTransfer.setData('text/plain', item.id);
+    card.style = `background:var(--surface);border:0.5px solid ${highlight?'var(--accent)':'var(--border)'};border-radius:8px;padding:8px 10px;cursor:grab;`;
+    card.innerHTML = `<div style="font-size:12.5px;font-weight:600;">${item.name}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px;">${item.type}</div>`;
+    list.appendChild(card);
+  });
+}
+ 
+async function saveJourney(){
+  const nameInput = document.getElementById('journey-name');
+  const status = document.getElementById('save-status');
+  const name = nameInput.value.trim();
+  if(!name){ status.textContent='Give this journey a name first.'; return; }
+  const id = 'jr_' + Date.now();
+  const record = { id, name, scenario: JSON.parse(JSON.stringify(scenario)), tiers: JSON.parse(JSON.stringify(tiers)), savedAt: new Date().toISOString() };
+  try{
+    const res = await window.storage.set('journey:'+id, JSON.stringify(record), true);
+    if(res){ status.textContent='Saved — visible to your whole team.'; nameInput.value=''; loadSavedList(); }
+    else status.textContent='Save failed, try again.';
+  }catch(err){ status.textContent='Save failed: '+err.message; }
+}
+ 
+async function loadSavedList(){
+  const el = document.getElementById('saved-list');
+  el.innerHTML = '<div style="font-size:12px;color:var(--faint);">Loading…</div>';
+  try{
+    const listRes = await window.storage.list('journey:', true);
+    const keys = (listRes && listRes.keys) || [];
+    if(keys.length===0){ el.innerHTML='<div style="font-size:12px;color:var(--faint);">No saved journeys yet.</div>'; return; }
+    const records = [];
+    for(const k of keys){
+      try{ const r = await window.storage.get(k, true); if(r) records.push(JSON.parse(r.value)); }catch(e){}
+    }
+    records.sort((a,b)=> new Date(b.savedAt) - new Date(a.savedAt));
+    el.innerHTML='';
+    records.forEach(rec=>{
+      const row = document.createElement('div');
+      row.style='display:flex;justify-content:space-between;align-items:center;border:0.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12.5px;';
+      row.innerHTML = `<span>${rec.name}</span>`;
+      const actions = document.createElement('div');
+      actions.style='display:flex;gap:8px;';
+      const loadBtn = document.createElement('button');
+      loadBtn.textContent='Load'; loadBtn.style='border:none;background:none;color:var(--accent-ink);font-weight:600;font-size:12px;';
+      loadBtn.onclick = ()=> applyJourney(rec);
+      const delBtn = document.createElement('button');
+      delBtn.textContent='Delete'; delBtn.style='border:none;background:none;color:var(--muted);font-size:12px;';
+      delBtn.onclick = async ()=>{ try{ await window.storage.delete('journey:'+rec.id, true); loadSavedList(); }catch(e){} };
+      actions.appendChild(loadBtn); actions.appendChild(delBtn);
+      row.appendChild(actions);
+      el.appendChild(row);
+    });
+  }catch(err){
+    el.innerHTML = '<div style="font-size:12px;color:var(--muted);">Could not load saved journeys.</div>';
+  }
+}
+function applyJourney(rec){
+  scenario = JSON.parse(JSON.stringify(rec.scenario));
+  tiers = JSON.parse(JSON.stringify(rec.tiers));
+  renderQuestions();
+  QUESTIONS.forEach(q=>{
+    document.querySelectorAll(`input[name="${q.key}"]`).forEach(input=>{
+      const val = input.parentElement.textContent.trim();
+      const opt = q.opts.find(o=>o[1]===val);
+      if(!opt) return;
+      if(q.multi) input.checked = scenario[q.key].includes(opt[0]);
+      else input.checked = scenario[q.key]===opt[0];
+    });
+  });
+  renderPersona(); renderTiers(); renderCatalog();
+}
+async function exportAll(){
+  try{
+    const listRes = await window.storage.list('journey:', true);
+    const keys = (listRes && listRes.keys) || [];
+    const records = [];
+    for(const k of keys){ try{ const r = await window.storage.get(k, true); if(r) records.push(JSON.parse(r.value)); }catch(e){} }
+    const blob = new Blob([JSON.stringify(records, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ilab_journeys_export.json';
+    a.click();
+  }catch(err){ alert('Export failed: '+err.message); }
+}
+ 
+renderQuestions();
+renderPersona();
+renderTiers();
+renderCatalog();
+loadSavedList();
+</script>
+ 
+
+
+
